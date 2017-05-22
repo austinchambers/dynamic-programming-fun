@@ -1,3 +1,6 @@
+.instruction-title{
+	text-align: center; padding-top: 20px; font-size:36px; color: rgba(89,140,225,100);
+}
 
 .instruction{
 	text-align:center; font-weight:bold; font-size:25px
@@ -11,10 +14,7 @@
 	text-align: center; font-weight: bold; color: rgba(41,140,26,100);
 }
 
-
-
 body{
-
 	margin:0;
 	background: #eee;
 
@@ -27,7 +27,6 @@ body{
 	background-repeat: no-repeat;
 
 	overflow-x:hidden;
-
 }
 
 a{
@@ -62,32 +61,10 @@ a:hover{
 	text-align: center;
 	width:800px;
 }
-.playable{
-	width: 100%;
-	background: #222;
-	overflow: hidden;
-}
-.playable > #play_title{
-	color: #fff;
-	margin-top: 30px;
-	text-align: center;
-}
-.playable iframe{
-	display: block;
-	margin: 25px auto;
-	border: none;
-}
 iframe[embedded]{
 	overflow: hidden;
 	border: none;
 	margin:40px;
-}
-
-#references{
-	width: 100%;
-	background: #222;
-	overflow: hidden;
-	color:#eee;
 }
 
 #cartoon_container{

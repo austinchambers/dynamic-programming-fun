@@ -43,7 +43,7 @@
 			specific amount of <span class="time">time:</span>
 		<p>
 
-		<!-- TIME VISUAL HERE -->
+        <img src="figures/intro-hours-visual.png" alt="Hours Visual" display: block; margin: auto; width: 40%;> 
 
 		<p>
 			Naturally, you get different amounts of pleasure from different things. 
@@ -53,13 +53,12 @@
 			call this each item's "<span class="enjoyment">e.v.</span>" and make up some values for each activity:
 		</p>
 
-		<!-- ENJOYMENT VISUAL HERE -->
+		<img src="figures/intro-enjoyment-visual.png" alt="Enjoyment Visual" display: block; margin: auto; width: 40%;> 
 
 		<p>
 			If you were given a block of seven hours of time, how would you
 			schedule your activities to maximize your enjoyment score? 
 		</p>
-
 
 		<p>
 			While you certainly can use trial and error to figure this out, there is 
@@ -67,40 +66,36 @@
 			solve this problem. 
 		</p>
 
-		<!-- DRAG HOUR VISUAL HERE -->
+		<!-- INTERACTION 01: How would you? -->
+		<iframe playable src="interactions/how-would-you.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px; margin-top: 20px; border:1px solid lightgrey;"  embedded></iframe>
 
-		<!-- INTERACTION 01 -->
-		<iframe playable src="interactions/interact01.html" width="750" height="320" scrolling="no" style="float:left; margin:0; margin-left:10px"  embedded></iframe>
+		<div class="instruction-title">
+			It's a bit confusing, right?
+		</div>
 
 		<p>
-			No matter how many hours of time you have, if you only consider the
-			gym, the maximum value you get is to include the gym in your schedule
-			so you can get its value of 1. 
+			(If you played around with the above interaction long enough, you
+			might have figured out that the max score would have been created
+			by scheduling a date and a hike together.)
 		</p>
 
-		<!-- GYM IN ONE TIME SLOT HERE --> 
-
+		<div class="instruction-title">
+			But what if you had 10 different
+			events and 12 hours? Or 100? 
+		</div>
 		<p>
-			But obviously, you have many more activities you want to do than just the
-			gym. So let's include another activity, a <span class='hour'>3-hour</span> date, that gives you an
-			<span class="enjoyment">enjoyment value of 4.</span>
+			It would take a much longer time to figure everything out using the above 
+			method.
+		</p>
+		<p>
+		 	This is where the concept of Dynamic Programming canm be used to help create a
+			systemic method to solving this larger problem.
 		</p>	
 
-		<!-- GOING ON DATE VISUAL HERE --> 
+		<img src="figures/remember-visual.png" alt="Remember Visual" display: block; margin: auto; width: 40%;> 
 
-		<p>
-			We need to figure out a way to calculate our maximum enjoyment for both
-			the gym and going on a date. For this new case, let's consider what happens at each hour.
-		</p>
-
-		<!-- INTERACTION 02 -->
-		<iframe playable src="interactions/interact02.html" width="750" height="320" scrolling="no" style="float:left; margin:0; margin-left:10px"  embedded></iframe>
-
-		<p>
-			Let's take this one step further and see what happens...
-			You now have a 3-hour block of time. What do you schedule to
-			maximize your value?
-		</p>
+		<!-- INTERACTION 02: Down to Subproblems -->
+		<iframe playable src="interactions/down-to-subproblems.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"  embedded></iframe>
 	</div>
 
 	<!-- SPLASH -->
