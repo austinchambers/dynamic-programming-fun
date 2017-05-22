@@ -1,3 +1,51 @@
-#section-2 button {
-  /* background-color: blue; */
+.zone {
+	min-height: 200px;
+	padding: 10px;
 }
+
+#events-not-considered {
+	background-color: grey;
+	height: 90%;
+}
+
+#scheduler {
+	background-color: grey;
+	width: 700px;
+	height: 70px;
+}
+
+#events-considered {
+	background-color: grey;
+	height: 90%;
+}
+
+.block {
+	height: 70px;
+	border: solid 1px black;
+}
+
+#scoreboard {
+	background-color: grey;
+	height: 90%;
+}
+
+.draggable {
+	background-color: yellow;
+}
+
+#gym {
+	width: 100px;
+}
+
+#hiking {
+	width: 400px;
+}
+
+#date {
+	width: 300px;
+}
+
+#beach {
+	width: 500px;
+}
+
