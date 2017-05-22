@@ -48,7 +48,7 @@ interact('.draggable')
 
   var activities = {
     "hiking": {
-      "value": 1,
+      "value": 5,
       "duration": 4
     },
     "date": {
@@ -60,7 +60,7 @@ interact('.draggable')
       "duration": 1
     },
     "beach": {
-      "value": 5,
-      "duration": 7
+      "value": 7,
+      "duration": 5
     }
   }
