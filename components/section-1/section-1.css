@@ -1,22 +1,38 @@
+.holder {
+  width: 800px;
+  height: 800px;
+}
+.dropzone {
+  background-color: #ccc;
+  padding: 10px;
+  width: 425px;
+  height: 200px;
+  border: dashed 4px transparent;
+  float:left;
+}
+
+.drop-active {
+  border-color: #aaa;
+}
+
+.drop-target {
+  background-color: #000;
+  color: #FFF;
+  border-color: #fff;
+  border-style: solid;
+}
+
 .zone {
 	min-height: 200px;
 	padding: 10px;
 }
 
-#events-not-considered {
-	background-color: grey;
-	height: 90%;
+.notdropped {
+	background-color: yellow;
 }
 
-#scheduler {
-	background-color: grey;
-	width: 700px;
-	height: 70px;
-}
-
-#events-considered {
-	background-color: grey;
-	height: 90%;
+.dropped {
+	background-color: #ccc;
 }
 
 .block {
@@ -24,14 +40,27 @@
 	border: solid 1px black;
 }
 
-#scoreboard {
-	background-color: grey;
+#events-not-considered {
+	background-color: #ccc;
 	height: 90%;
 }
 
-.draggable {
-	background-color: yellow;
+#scheduler {
+	background-color: #ccc;
+	width: 700px;
+	height: 70px;
 }
+
+#events-considered {
+	background-color: #ccc;
+	height: 90%;
+}
+
+#scoreboard {
+	background-color: #ccc;
+	height: 90%;
+	width: 225px;
+}	
 
 #gym {
 	width: 100px;
