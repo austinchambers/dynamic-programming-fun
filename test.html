@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test</title>
+
+    <!-- Add Boostrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <!-- Add our own CSS and JS -->
+
+    <link href="components/main.css" rel="stylesheet" type="text/css">
+
+    <!-- Add individual sections -->
+
+    <link href="components/section-1/section-1.css" rel="stylesheet" type="text/css">
+    <script src="components/section-1/section-1.js" defer></script>
+
+    <link href="components/section-2/section-2.css" rel="stylesheet" type="text/css">
+    <script src="components/section-2/section-2.js" defer></script>
+
+  </head>
+  <body>
+
+    <header id="header">
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">Your article</h1>
+          <p class="lead">Your names or sth</p>
+        </div>
+      </div>
+    </header>
+
+    <section id="section-1">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h2>Heading 1</h2>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata.</p>
+            <button class="btn btn-primary" id="button-1">Button 1</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr/>
+
+    <section id="section-2">
+      <div class="container">
+        <h2>Heading 2</h2>
+        <div class="row">
+          <div class="col-sm-9">
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <button class="btn btn-primary" id="button-2">Button 2</button>
+          </div>
+          <div class="col">
+            <img class="img-fluid img-thumbnail" id="triangle-1" src="figures/triangle.svg"></img>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-5 pt-5 pb-5" id="footer">
+      <div class="container">
+        <p class="lead text-muted">Your names or sth</p>
+      </div>
+    </footer>
+
+  </body>
+</html>

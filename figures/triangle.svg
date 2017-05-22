@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 300 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #EEEEEE;">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard">
+            <polyline id="Path-3" fill="#A77D2A" points="119.845568 157.068491 118.640167 176.489322 107 182.042771 126.578034 178.970013 131.305203 155"></polyline>
+            <polyline id="Path-3-Copy" fill="#A77D2A" points="175.459635 157.068491 176.665035 176.489322 188.305203 182.042771 168.727169 178.970013 164 155"></polyline>
+            <polygon id="Triangle" stroke="#A77D2A" stroke-width="6" fill="#FFD177" points="147.847656 17 217.847656 155 83 160.800781"></polygon>
+            <circle id="Oval" fill="#A77D2A" cx="120.5" cy="116.5" r="6.5"></circle>
+            <circle id="Oval-Copy" fill="#A77D2A" cx="180.5" cy="113.5" r="6.5"></circle>
+            <path d="M139,121.222656 C139,131.191406 143.188212,133.964844 150.145944,133.570312 C157.103676,133.175781 163.305203,121 163.305203,121" id="Path-2" stroke="#A77D2A" stroke-width="3" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg>

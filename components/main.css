@@ -1,0 +1,20 @@
+section {
+  /* padding: 3rem 0 3rem 0; */
+}
+
+hr {
+  margin: 3rem 0 3rem 0;
+}
+
+button {
+  /* width: 100px; */
+  /* height: 100px; */
+}
+
+header#header {
+  background-color: #eceff2;
+}
+
+footer#footer {
+  background-color: #eceff2
+}
