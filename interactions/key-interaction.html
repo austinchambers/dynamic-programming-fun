@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+	<link href="key-interaction.css" rel="stylesheet" type="text/css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/interact.js"></script>
+	<script src="key-interaction.js"></script>
+</head>
+<body onload="main()">
+	<h1>Key Interaction</h1>
+	<table id="grid">
+	  <tr>
+	  	<th>activity</th>
+	    <th>0h</th>
+	    <th>1h</th> 
+	    <th>2h</th>
+	    <th>3h</th>
+	    <th>4h</th> 
+	    <th>5h</th>
+	    <th>6h</th> 
+	    <th>7h</th>
+	  </tr>
+	</table>
+
+	<div id="computation">
+		<div id="consider">
+			Consider:
+			<span class="value"> _ </span>
+			+
+			<span class="subvalue"> _ </span>
+			=
+			<span class="sum"> _ </span>
+		</div>
+		<div id="forget">
+			Forget:
+			<span class="value"> _ </span>
+			+
+			<span class="subvalue"> _ </span>
+			=
+			<span class="sum"> _ </span>
+		</div>
+		<button id="forget-button" onclick="onForgetButtonClick()">Forget</button>
+	</div>
+
+	<div id="schedule" class="dropzone"></div>
+	Hours left:<span id="hours-left"></span>
+
+	<div id="gym" class="activity draggable"></div>
+	<div id="date" class="activity draggable"></div>
+	<div id="hike" class="activity draggable"></div>
+	<div id="beach" class="activity draggable"></div>
+</body>
+</html>

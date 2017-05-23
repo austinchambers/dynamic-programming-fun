@@ -1,0 +1,35 @@
+#grid {
+	background-color: white;
+}
+
+#schedule {
+	background-color: grey;
+/*	padding: 5px;*/
+}
+
+.activity {
+	background-color: yellow;
+}
+
+.highlight {
+	background-color: yellow;
+}
+
+/*Interact JS*/
+
+.drop-target {
+  background-color: #29e;
+  border-color: #fff;
+  border-style: solid;
+}
+
+.can-drop {
+  color: #000;
+  background-color: #4e4;
+}
+
+.drop-target {
+  background-color: #29e;
+  border-color: #fff;
+  border-style: solid;
+}
