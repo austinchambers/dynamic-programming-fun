@@ -41,7 +41,7 @@
 }
 
 #events-not-considered {
-	background-color: #ccc;
+	background-color: #ddd;
 	height: 90%;
 }
 
@@ -52,14 +52,13 @@
 }
 
 #events-considered {
-	background-color: #ccc;
-	height: 90%;
+	background-color: #ddd;
+	height: 200px;
 }
 
 #scoreboard {
-	background-color: #ccc;
-	height: 90%;
-	width: 225px;
+	background-color: #ddd;
+	height: 200px;
 }	
 
 #gym {
