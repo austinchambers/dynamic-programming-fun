@@ -1,3 +1,7 @@
+h2 {
+	text-align: center; padding-top: 20px; font-size:36px; color: rgba(89,140,225,100);
+}
+
 .table th {
    text-align: center;   
 }
@@ -28,24 +32,35 @@ td {
 
 #grid {
   background-color: white;
-  margin: 15px;
   font-size: 20pt;
   text-align: center;
   border-collapse: separate;
   border-spacing: 0px;
   border-color: grey;
+	text-align: center;
+  margin: 0px auto;
+  float: none;
 }
 
 #schedule {
-	background-color: grey;
+	background-color: #ccc;
 }
 
 .activity {
-	background-color: yellow;
+	background-color: #c9daf8;
 }
 
 .highlight {
-	background-color: yellow;
+	background-color: #c9daf8;
+}
+
+.dropzone {
+  background-color: #ccc;
+  padding: 10px;
+  width: 425px;
+  height: 200px;
+  border: dashed 4px transparent;
+  float:left;
 }
 
 .drop-target {
