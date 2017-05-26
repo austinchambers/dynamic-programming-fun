@@ -38,14 +38,30 @@
 		</tr>
 	</table>
 
-	<br>
-	<div class="col-1"></div>
-	<div class="row col-2" style="text-align: left">Schedule</div>
+	<div class="col-12"><br></div>
 	<div class="row">
-		<div class="col-5 dropzone" id="scheduler">
-			<div style="padding-top: 20px"><span style="text-align: center; font-style: italic" class="scheduler-hours-remaining"> 7h </span></div>
+		<div class="col-1"></div>
+		<div class="col-1" style="text-align: left">Schedule</div>
+		<div class="col-3" style="text-align: left"></div>
+		<div class="col-1" style="text-align: left">Value</div>
+	</div>
+	<div class="row">
+		<div class="col-1"></div>
+		<div class="col-4 dropzone" id="scheduler">
+			<div style="padding-top: 20px">
+				<span style="text-align: center; font-style: italic">
+					<span class="scheduler-hours-remaining"> 7h</span>
+					<span> (</span>
+					<span id="hours-left"></span>
+					<span> hours unused) </span>
+				</span>
+			</div>
 		</div>
-		Hours left:<span id="hours-left"></span>
+		<div class="col-1">
+			<div class="block">
+				<div style="padding-top: 15px;"><strong><span style="text-align: center;" class="scheduler-value"> 0 </span></strong></div>
+			</div>
+		</div>
 		<div class="col-1"></div>
 		<div class="col-4" id="computation">
 			<div id="consider">
@@ -68,11 +84,15 @@
 		</div>
 	</div>
 
-
-	<div id="gym" class="block notdropped draggable drag-drop"></div>
-	<div id="date" class="block notdropped draggable drag-drop"></div>
-	<div id="hike" class="block notdropped draggable drag-drop"></div>
-	<div id="beach" class="block notdropped draggable drag-drop"></div>
+	<div class="row">
+		<div class="col-1"></div>
+		<div class="col-11">
+			<div id="gym" class="block notdropped draggable drag-drop"></div>
+			<div id="date" class="block notdropped draggable drag-drop"></div>
+			<div id="hike" class="block notdropped draggable drag-drop"></div>
+			<div id="beach" class="block notdropped draggable drag-drop"></div>
+		</div>
+	</div>
 </div>
 </body>
 </html>
