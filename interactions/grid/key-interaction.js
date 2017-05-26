@@ -158,6 +158,10 @@ function displayActivities(num) {
 }
 
 function onDragEnter() {
+
+}
+
+function onDrop() {
     // update current value
     let elem = document.getElementById('consider').getElementsByClassName('value')[0];
     elem.innerHTML = ' ' + currActivity.value + ' ';
@@ -322,7 +326,6 @@ interact('.dropzone').dropzone({
         dropzoneElement.classList.add('drop-target');
         draggableElement.classList.add('can-drop');
         //draggableElement.textContent = 'Dragged in';
-        onDragEnter();
     },
     ondragleave: function (event) {
         // remove the drop feedback style
@@ -332,6 +335,7 @@ interact('.dropzone').dropzone({
     },
     ondrop: function (event) {
         //event.relatedTarget.classList.remove('notdropped');
+        onDrop();
     },
     ondropdeactivate: function (event) {
         // remove active dropzone feedback
