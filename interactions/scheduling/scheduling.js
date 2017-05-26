@@ -25,9 +25,9 @@
 var currActivity;
 var startX;
 var startY;
-var currHoursTotal = 3;
+var currHoursTotal = 7;
 var currHoursUsed = 0;
-var currNumActivities = 2;
+var currNumActivities = 4;
 
 var activityArr = [ // ORDER MATTERS
     {
