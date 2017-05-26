@@ -1,3 +1,14 @@
 #computation {
     border: 2px dashed lightblue;
 }
+
+.not-draggable {
+	background-color: grey;
+}
+
+/*.value, .subvalue, .sum {
+	border: 1px dashed grey;
+	min-height: 60px;
+	min-width: 60px;
+	display: inline-block;
+}*/

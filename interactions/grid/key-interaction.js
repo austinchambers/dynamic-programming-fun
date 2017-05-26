@@ -25,7 +25,7 @@
 var currActivity;
 var startX;
 var startY;
-var currHoursTotal = 3;
+var currHoursTotal = 4;
 var currHoursUsed = 0;
 var currNumActivities = 2;
 
@@ -119,7 +119,11 @@ function displayTable() {
         cell.innerHTML = '+ ' + activityArr[i].name;
         for (let j = 0; j < NUM_COLS; j++) {
             let cell = row.insertCell(j + 1);
-            cell.innerHTML = table[i][j];
+
+            // dynamic display of table
+            if (!(i >= currNumActivities || (i == currNumActivities - 1 && j >= currHoursTotal))) {
+                cell.innerHTML = table[i][j];
+            }
         }
     }
 }
@@ -131,6 +135,24 @@ function highlightCellAt(r, c) {
     let grid = document.getElementById('grid');
     let cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
+}
+
+function updateTableCell(r, c) {
+    let grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.innerHTML = table[r-1][c-1];
+}
+
+function highlightOnHover(r, c) {
+    let grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    // cell.onmouseover = console.log('hi');
+
+    $(cell).hover(function(){
+        $(this).addClass('highlight');
+        }, function(){
+        $(this).removeClass('highlight');
+    });
 }
 
 function displaySchedule() {
@@ -153,6 +175,13 @@ function displayActivities(num) {
         }
         else {
             display.style.display = 'none';
+        }
+
+        if (i == num-1) {
+            display.classList += ' draggable';
+        }
+        else {
+            display.classList += ' not-draggable';
         }
     }
 }
@@ -181,8 +210,14 @@ function onDrop() {
     let row = sub_i + 1;
     let col = sub_j + 1;
     elem = document.getElementById('grid').rows[row].cells[col];
-    highlightCellAt(row, col);
+
+    highlightOnHover(row, col);
+
     elem.addEventListener('click', updateConsiderComputation);
+
+    // help text
+    elem = document.getElementById('help-text');
+    elem.innerHTML = 'What is the most thrill we can get out of our remaining time and activities? Find it in the table.';
 }
 
 function updateConsiderComputation(event) {
@@ -193,6 +228,12 @@ function updateConsiderComputation(event) {
     let sumElem = document.getElementById('consider').getElementsByClassName('sum')[0];
     let sum = parseInt(subvalue.innerHTML) + parseInt(value.innerHTML);
     sumElem.innerHTML = ' ' + sum + ' ';
+
+    // help text
+    let elem = document.getElementById('help-text');
+    elem.innerHTML = 'What thrill would we get if we forget the date? Click on the Forget button.';
+
+    document.getElementById("forget-button").disabled = false;
 }
 
 function updateForgetComputation(event) {
@@ -203,6 +244,17 @@ function updateForgetComputation(event) {
     let sumElem = document.getElementById('forget').getElementsByClassName('sum')[0];
     let sum = parseInt(subvalue.innerHTML) + parseInt(value.innerHTML);
     sumElem.innerHTML = ' ' + sum + ' ';
+
+    // help text
+    let elem = document.getElementById('help-text');
+    elem.innerHTML = 'We want to maximize thrill. Should we consider or forget the date? Click on the value to fill in the table.';
+
+    elem = document.getElementById('consider').getElementsByClassName('sum')[0];
+    elem.addEventListener('click', updateTable)
+}
+
+function updateTable(event) {
+    updateTableCell(currNumActivities, currHoursTotal + 1);
 }
 
 function onForgetButtonClick(event) {
@@ -212,8 +264,10 @@ function onForgetButtonClick(event) {
     console.log(elem);
     elem.style.position = 'absolute';
     console.log(startX, startY);
-    elem.style.top = startX + 'px';
-    elem.style.left = startY + 'px';
+    elem.style.top = 220 + 'px';
+    elem.style.left = 10 + 'px';
+    //elem.classList.remove('drop-active');
+    elem.classList.remove('can-drop');
 
     let value = document.getElementById('forget').getElementsByClassName('value')[0];
     value.innerHTML = ' 0 ';
@@ -233,8 +287,19 @@ function onForgetButtonClick(event) {
     let row = sub_i + 1;
     let col = sub_j + 1;
     elem = document.getElementById('grid').rows[row].cells[col];
-    highlightCellAt(row, col);
+    highlightOnHover(row, col);
     elem.addEventListener('click', updateForgetComputation);
+
+    // help text
+    elem = document.getElementById('help-text');
+    elem.innerHTML = 'What is the most thrill we can get out of our remaining time and activities? Find it in the table.';
+
+    // disable button
+    document.getElementById("forget-button").disabled = true;
+}
+
+function onDropLeave() {
+    onForgetButtonClick();
 }
 
 function main() {
@@ -254,6 +319,10 @@ function main() {
     // highlight current
     highlightCellAt(currNumActivities, currHoursTotal + 1);
     interact('.dropzone').accept('#' + currActivity.name);
+
+    // help text
+    elem = document.getElementById('help-text');
+    elem.innerHTML = 'What thrill would we get out of a date? Show what our schedule would look like.';
 }
 
 // --------------------- InteractJS ---------------------
@@ -306,6 +375,7 @@ function dragMoveListener (event) {
 // this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
 
+var alreadyDropped = false;
 
 // enable draggables to be dropped into this
 interact('.dropzone').dropzone({
@@ -331,15 +401,26 @@ interact('.dropzone').dropzone({
         // remove the drop feedback style
         event.target.classList.remove('drop-target');
         event.relatedTarget.classList.remove('can-drop');
-        //event.relatedTarget.textContent = 'Dragged out';
+        // event.relatedTarget.textContent = 'Dragged out';
+        //dragLeave = true;
+        console.log('drag leave');
     },
     ondrop: function (event) {
         //event.relatedTarget.classList.remove('notdropped');
+        console.log('on drop');
+        alreadyDropped = true;
         onDrop();
     },
     ondropdeactivate: function (event) {
         // remove active dropzone feedback
         event.target.classList.remove('drop-active');
         event.target.classList.remove('drop-target');
+
+        console.log('on drop deactivate');
+
+        // if (alreadyDropped) {
+        //     console.log('already dropped');
+        //     onDropLeave();
+        // }
     }
 });

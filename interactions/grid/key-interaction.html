@@ -14,8 +14,8 @@
             crossorigin="anonymous"></script>
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="key-interaction.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
+    <link href="key-interaction.css" rel="stylesheet" type="text/css">
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
     <script src="key-interaction.js"></script>
@@ -23,7 +23,8 @@
 <body onload="main()">
 <div
 <div class="container">
-    <h2>Key Interaction</h2>
+    <h2>Maximizing Thrill</h2>
+    <strong><p id="help-text">Help text here.</p></strong>
     <table id="grid">
         <tr>
             <th></th>
@@ -43,7 +44,7 @@
         <div class="col-1"></div>
         <div class="col-1" style="text-align: left">Schedule</div>
         <div class="col-4" style="text-align: left"></div>
-        <div class="col-1" style="text-align: left; margin-left: 15px">Value</div>
+<!--         <div class="col-1" style="text-align: left; margin-left: 15px">Value</div> -->
     </div>
     <div class="row">
         <div class="col-1"></div>
@@ -60,9 +61,9 @@
             </div>
         </div>
         <div class="col-1">
-            <div class="block" style="margin-left: 15px">
+<!--             <div class="block" style="margin-left: 15px">
                 <div style="padding-top: 15px;"><strong><span style="text-align: center;" class="scheduler-value"> 0 </span></strong></div>
-            </div>
+            </div> -->
         </div>
         <div class="col-1"></div>
         <div class="col-4" id="computation">
@@ -82,17 +83,17 @@
                 =
                 <span class="sum"> _ </span>
             </div>
-            <button id="forget-button" onclick="onForgetButtonClick()">Forget</button>
+            <button id="forget-button" onclick="onForgetButtonClick()" disabled>Forget</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-1"></div>
         <div class="col-11">
-            <div id="gym" class="block notdropped draggable"></div>
-            <div id="date" class="block notdropped draggable"></div>
-            <div id="hike" class="block notdropped draggable"></div>
-            <div id="beach" class="block notdropped draggable"></div>
+            <div id="gym" class="block notdropped"></div>
+            <div id="date" class="block notdropped"></div>
+            <div id="hike" class="block notdropped"></div>
+            <div id="beach" class="block notdropped"></div>
         </div>
     </div>
 </div>
