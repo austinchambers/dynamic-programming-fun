@@ -158,6 +158,10 @@ function displayActivities(num) {
 }
 
 function onDragEnter() {
+
+}
+
+function onDrop() {
     // update current value
     let elem = document.getElementById('consider').getElementsByClassName('value')[0];
     elem.innerHTML = ' ' + currActivity.value + ' ';
@@ -179,6 +183,9 @@ function onDragEnter() {
     elem = document.getElementById('grid').rows[row].cells[col];
     highlightCellAt(row, col);
     elem.addEventListener('click', updateConsiderComputation);
+}
+
+function onDragLeave() {
 }
 
 function updateConsiderComputation(event) {
@@ -249,12 +256,7 @@ function main() {
 
     // highlight current
     highlightCellAt(currNumActivities, currHoursTotal + 1);
-
-    // Accept all activities here
-    var index;
-    for (index = 0; index < activityArr.length; ++index) {
-        interact('.dropzone').accept('#' + activityArr[index].name);
-    }
+    interact('.dropzone').accept('#' + currActivity.name);
 }
 
 // --------------------- InteractJS ---------------------
@@ -264,12 +266,14 @@ interact('.draggable')
     .draggable({
         // enable inertial throwing
         inertia: true,
+
         // keep the element within the area of it's parent
-        restrict: {
-            restriction: "parent",
-            endOnly: true,
-            elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },
+        //restrict: {
+        //    restriction: "parent",
+        //    endOnly: true,
+        //    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        //},
+
         // enable autoScroll
         autoScroll: true,
 
@@ -318,22 +322,31 @@ interact('.dropzone').dropzone({
         event.target.classList.add('drop-active');
     },
     ondragenter: function (event) {
-        var draggableElement = event.relatedTarget,
-            dropzoneElement = event.target;
-
-        event.relatedTarget.classList.add('notdropped');
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
         // feedback the possibility of a drop
         dropzoneElement.classList.add('drop-target');
-        event.relatedTarget.classList.add('can-drop');
+        draggableElement.classList.add('can-drop');
+        //draggableElement.textContent = 'Dragged in';
     },
     ondragleave: function (event) {
         // remove the drop feedback style
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         event.target.classList.remove('drop-target');
+        event.relatedTarget.classList.remove('can-drop');
+        //event.relatedTarget.textContent = 'Dragged out';
+
+        draggableElement.classList.remove('dropped');
+        draggableElement.classList.add('notdropped');
+
+        //onDragLeave();
     },
     ondrop: function (event) {
-        event.relatedTarget.classList.remove('notdropped');
-        event.relatedTarget.classList.remove('can-drop');
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+
+        draggableElement.classList.remove('notdropped');
+        draggableElement.classList.add('dropped');
+        onDrop();
     },
     ondropdeactivate: function (event) {
         // remove active dropzone feedback
