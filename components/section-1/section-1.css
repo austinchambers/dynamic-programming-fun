@@ -1,79 +1,80 @@
 .holder {
-  width: 800px;
-  height: 800px;
+    width: 800px;
+    height: 800px;
 }
+
 .dropzone {
-  background-color: #ccc;
-  padding: 10px;
-  width: 425px;
-  height: 200px;
-  border: dashed 4px transparent;
-  float:left;
+    background-color: #ccc;
+    padding: 10px;
+    width: 425px;
+    height: 200px;
+    border: dashed 4px transparent;
+    float: left;
 }
 
 .drop-active {
-  border-color: #aaa;
+    border-color: #aaa;
 }
 
 .drop-target {
-  background-color: #000;
-  color: #FFF;
-  border-color: #fff;
-  border-style: solid;
+    background-color: #000;
+    color: #FFF;
+    border-color: #fff;
+    border-style: solid;
 }
 
 .zone {
-	min-height: 200px;
-	padding: 10px;
+    min-height: 200px;
+    padding: 10px;
 }
 
 .notdropped {
-	background-color: yellow;
+    background-color: yellow;
 }
 
 .dropped {
-	background-color: #ccc;
+    background-color: #ccc;
 }
 
 .block {
-	height: 70px;
-	border: solid 1px black;
+    height: 70px;
+    border: solid 1px black;
 }
 
 #events-not-considered {
-	background-color: #ddd;
-	height: 90%;
+    background-color: #ddd;
+    height: 90%;
 }
 
 #scheduler {
-	background-color: #ccc;
-	width: 700px;
-	height: 70px;
+    background-color: #ccc;
+    width: 700px;
+    height: 70px;
 }
 
 #events-considered {
-	background-color: #ddd;
-	height: 200px;
+    background-color: #ddd;
+    height: 200px;
 }
 
 #scoreboard {
-	background-color: #ddd;
-	height: 200px;
-}	
+    background-color: #ddd;
+    height: 200px;
+}
 
 #gym {
-	width: 100px;
+    width: 100px;
 }
 
 #hiking {
-	width: 400px;
+    width: 400px;
 }
 
 #date {
-	width: 300px;
+    width: 300px;
 }
 
 #beach {
-	width: 500px;
+    width: 500px;
 }
 

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <link href="key-interaction.css" rel="stylesheet" type="text/css">
+    <link href="../interactions.css" rel="stylesheet" type="text/css">
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/interact.js"></script>
+    <script src="key-interaction.js"></script>
+</head>
+<body onload="main()">
+<div class="container">
+    <h2>Key Interaction</h2>
+    <table id="grid">
+        <tr>
+            <th></th>
+            <th>0h</th>
+            <th>1h</th>
+            <th>2h</th>
+            <th>3h</th>
+            <th>4h</th>
+            <th>5h</th>
+            <th>6h</th>
+            <th>7h</th>
+        </tr>
+    </table>
+
+    <br>
+    <div class="row col-2">Schedule</div>
+
+    <div class="row">
+        <div class="col-5" id="schedule" class="dropzone"></div>
+        Hours left:<span id="hours-left"></span>
+        <div class="col-1"></div>
+        <div class="col-4" id="computation">
+            <div id="consider">
+                Consider:
+                <span class="value"> _ </span>
+                +
+                <span class="subvalue"> _ </span>
+                =
+                <span class="sum"> _ </span>
+            </div>
+            <div id="forget">
+                Forget:
+                <span class="value"> _ </span>
+                +
+                <span class="subvalue"> _ </span>
+                =
+                <span class="sum"> _ </span>
+            </div>
+            <button id="forget-button" onclick="onForgetButtonClick()">Forget</button>
+        </div>
+    </div>
+
+
+    <div id="gym" class="activity draggable"></div>
+    <div id="date" class="activity draggable"></div>
+    <div id="hike" class="activity draggable"></div>
+    <div id="beach" class="activity draggable"></div>
+</div>
+</body>
+</html>

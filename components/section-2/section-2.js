@@ -1,7 +1,7 @@
 "use strict";
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 
-  var triangle = document.getElementById("triangle-1")
+    var triangle = document.getElementById("triangle-1")
 
 });

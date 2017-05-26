@@ -2,120 +2,136 @@
 <html>
 <head>
 
-	<!-- Place this data between the <head> tags of your website -->
-	<title>Dynamic Programming with Systematic Scheduling -- An Interactive Explanation</title>
-	<meta name="description" content="Dynamic Programming with Systematic Scheduling -- An Interactive Explanation" />
-	<link rel="icon" type="image/png" href="favicon.png">
+    <!-- Place this data between the <head> tags of your website -->
+    <title>Dynamic Programming with Systematic Scheduling -- An Interactive Explanation</title>
+    <meta name="description" content="Dynamic Programming with Systematic Scheduling -- An Interactive Explanation"/>
+    <link rel="icon" type="image/png" href="favicon.png">
 
-	<!-- CSS -->
-	<link href="css/index.css" rel="stylesheet" type="text/css">
+    <!-- CSS -->
+    <link href="css/index.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
-	<div id="cartoon_container">
-		<img id="cartoon" width="270" src=""/>
-		<div id="cartoon_arrow"></div>
-	</div>
-	
-	<!-- SPLASH -->
-	<div id="intro_container">
-		<div id="intro">
-			<iframe src="intro/intro.html" id="intro_background" scrolling="no"></iframe>
-		</div>
-	</div>
+<div id="cartoon_container">
+    <img id="cartoon" width="270" src=""/>
+    <div id="cartoon_arrow"></div>
+</div>
 
-	<!-- CHAPTER -->
-	<div class="chapter">
+<!-- SPLASH -->
+<div id="intro_container">
+    <div id="intro">
+        <iframe src="intro/intro.html" id="intro_background" scrolling="no"></iframe>
+    </div>
+</div>
 
-		<p>Dynamic Programming is a concept in computer science, mathematics,
-		management science and bioinformatics, involving a method for solving a
-		complex problem by breaking it down into a collection of simpler 
-		subproblems, solving each once, then saving and reusing each solution 
-		to solve a larger problem.</p>
-		
-		<div class="instruction">
-			How does this work?
-		</div>
+<!-- CHAPTER -->
+<div class="chapter">
 
-		<p>
-			Let's walk through an example of this using something we all do on a daily basis: scheduling our free time. 
-			Imagine that there are four daily activities that you would like to do once, but each one takes a 
-			specific amount of <span class="time">time:</span>
-		<p>
+    <p>Dynamic Programming is a concept in computer science, mathematics,
+        management science and bioinformatics, involving a method for solving a
+        complex problem by breaking it down into a collection of simpler
+        subproblems, solving each once, then saving and reusing each solution
+        to solve a larger problem.</p>
 
-        <img src="figures/intro-hours-visual.png" alt="Hours Visual" display: block; margin: auto; width: 40%;> 
+    <div class="instruction">
+        How does this work?
+    </div>
 
-		<p>
-			Naturally, you get different amounts of pleasure from different things. 
-			Now, imagine if you gave each activity an "<span class="enjoyment">enjoyment value</span>" where 
-			the number of points indicate a value of how much happiness and 
-			enjoyment you get from something (higher number = more enjoyment). Let's
-			call this each item's "<span class="enjoyment">e.v.</span>" and make up some values for each activity:
-		</p>
+    <p>
+        Let's walk through an example of this using something we all do on a daily basis: scheduling our free time.
+        Imagine that there are four daily activities that you would like to do once, but each one takes a
+        specific amount of <span class="time">time:</span>
+    <p>
 
-		<img src="figures/intro-enjoyment-visual.png" alt="Enjoyment Visual" display: block; margin: auto; width: 40%;> 
+        <img src="figures/intro-hours-visual.png" alt="Hours Visual" display: block; margin: auto; width: 40%;>
 
-		<p>
-			If you were given a block of seven hours of time, how would you
-			schedule your activities to maximize your enjoyment score? 
-		</p>
+    <p>
+        Naturally, you get different amounts of pleasure from different things.
+        Now, imagine if you gave each activity an "<span class="enjoyment">enjoyment value</span>" where
+        the number of points indicate a value of how much happiness and
+        enjoyment you get from something (higher number = more enjoyment). Let's
+        call this each item's "<span class="enjoyment">e.v.</span>" and make up some values for each activity:
+    </p>
 
-		<p>
-			While you certainly can use trial and error to figure this out, there is 
-			actually a systematic way using dynamic programming techniques to 
-			solve this problem. 
-		</p>
+    <img src="figures/intro-enjoyment-visual.png" alt="Enjoyment Visual" display: block; margin: auto; width: 40%;>
 
-		<!-- INTERACTION 01: How would you? -->
-		<iframe playable src="interactions/how-would-you.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px; margin-top: 20px; border:1px solid lightgrey;"  embedded></iframe>
+    <p>
+        If you were given a block of seven hours of time, how would you
+        schedule your activities to maximize your enjoyment score?
+    </p>
 
-		<div class="instruction-title">
-			Alternative Layout: 
-			
-		</div>
+    <p>
+        While you certainly can use trial and error to figure this out, there is
+        actually a systematic way using dynamic programming techniques to
+        solve this problem.
+    </p>
 
-		<!-- INTERACTION 01: How would you? -->
-		<iframe playable src="interactions/02-how-would-you.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px; margin-top: 20px; border:1px solid lightgrey;"  embedded></iframe>
+    <!-- INTERACTION 01: How would you? -->
+    <iframe playable src="interactions/how-would-you.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px; margin-top: 20px; border:1px solid lightgrey;"
+            embedded></iframe>
+
+    <div class="instruction-title">
+        Alternative Layout:
+
+    </div>
+
+    <!-- INTERACTION 01: How would you? -->
+    <iframe playable src="interactions/02-how-would-you.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px; margin-top: 20px; border:1px solid lightgrey;"
+            embedded></iframe>
 
 
-		<div class="instruction-title">
-			It's a bit confusing, right?
-		</div>
+    <div class="instruction-title">
+        It's a bit confusing, right?
+    </div>
 
-		<p>
-			(If you played around with the above interaction long enough, you
-			might have figured out that the max score would have been created
-			by scheduling a date and a hike together.)
-		</p>
+    <p>
+        (If you played around with the above interaction long enough, you
+        might have figured out that the max score would have been created
+        by scheduling a date and a hike together.)
+    </p>
 
-		<div class="instruction-title">
-			But what if you had 10 different
-			events and 12 hours? Or 100? 
-		</div>
-		<p>
-			It would take a much longer time to figure everything out using the above 
-			method.
-		</p>
-		<p>
-		 	This is where the concept of Dynamic Programming canm be used to help create a
-			systemic method to solving this larger problem.
-		</p>	
+    <div class="instruction-title">
+        But what if you had 10 different
+        events and 12 hours? Or 100?
+    </div>
+    <p>
+        It would take a much longer time to figure everything out using the above
+        method.
+    </p>
+    <p>
+        This is where the concept of Dynamic Programming canm be used to help create a
+        systemic method to solving this larger problem.
+    </p>
 
-		<img src="figures/remember-visual.png" alt="Remember Visual" display: block; margin: auto; width: 40%;> 
+    <img src="figures/remember-visual.png" alt="Remember Visual" display: block; margin: auto; width: 40%;>
 
-		<!-- INTERACTION 02: Down to Subproblems -->
-		<iframe playable src="interactions/down-to-subproblems.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"  embedded></iframe>
+    <!-- INTERACTION 02: Down to Subproblems -->
+    <iframe src="interactions/down-to-subproblems.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"
+            embedded></iframe>
 
-		<!-- Key Interaction (Karen) -->
-		<iframe playable src="interactions/key-interaction.html" width="800" height="800" scrolling="no" style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"  embedded></iframe>
-	</div>
+    <!-- Key Interaction (Karen) -->
+    <iframe src="interactions/grid/key-interaction.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"
+            embedded></iframe>
 
-	<!-- SPLASH -->
-	<div id="outro_container">
-		<div id="outro">
-			<iframe src="intro/intro.html" id="outro_background" scrolling="no"></iframe>
-		</div>
-	</div>
+    <iframe src="components/redips-math/index.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"
+            embedded></iframe>
+
+    <iframe src="interactions/scheduling/scheduling.html" width="800" height="800" scrolling="no"
+            style="float:left; margin:0; margin-bottom: 40px;  margin-top: 40px; border:1px solid lightgrey;"
+            embedded></iframe>
+</div>
+
+<!-- SPLASH -->
+<div id="outro_container">
+    <div id="outro">
+        <iframe src="intro/intro.html" id="outro_background" scrolling="no"></iframe>
+    </div>
+</div>
 
 </body>
 

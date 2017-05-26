@@ -48,7 +48,7 @@ setTable = function (e) {
 	for (i = 0; i < tables.length; i++) {
 		// skip mini table
 		if (tables[i].id === 'mini') {
-			continue;
+
 		}
 		// show selected table
 		else if (tables[i].id === value) {

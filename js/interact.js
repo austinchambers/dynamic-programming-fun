@@ -3143,7 +3143,7 @@
 
             if (prevent === 'always') {
                 event.preventDefault();
-                return;
+
             }
         },
 

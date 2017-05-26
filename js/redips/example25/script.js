@@ -219,7 +219,7 @@ redips.setOperation = function (el) {
 	for (i = 0; i < tables.length; i++) {
 		// skip number table (upper table) or mini table (table with "trash" cell)
 		if (tables[i].id === 'number' || tables[i].id === 'mini') {
-			continue;
+
 		}
 		// show selected table
 		else if (tables[i].id === redips.operation) {
