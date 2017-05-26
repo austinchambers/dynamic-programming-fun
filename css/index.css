@@ -95,10 +95,10 @@ a:hover {
 }
 
 .chapter {
-    margin: 50px auto;
-    text-align: center;
-    width: 800px;
-}
+     margin: 50px auto;
+     text-align: center;
+     width: 1000px;
+ }
 
 iframe[embedded] {
     overflow: hidden;

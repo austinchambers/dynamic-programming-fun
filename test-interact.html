@@ -27,6 +27,7 @@
     <!-- Add individual sections -->
 
     <link href="components/section-1/section-1.css" rel="stylesheet" type="text/css">
+    <link href="interactions/interactions.css" rel="stylesheet" type="text/css">
     <script src="components/section-1/section-1.js" defer></script>
 
     <link href="components/section-2/section-2.css" rel="stylesheet" type="text/css">
@@ -56,20 +57,16 @@
             <!--           <div class="col-12 zone">events not considered yet
                         <div id="events-not-considered" class="dropzone"></div>
                       </div> -->
-            <div class="col-12">scheduler
-                <div id="scheduler" class="block dropzone"></div>
+            <div class="col-1"></div>
+            <div class="col-11">
+                <div style="text-align: left">Scheduler</div>
+                <div id="schedule" class="dropzone"></div>
             </div>
-            <div class="col-6 zone">events considered but not used
-                <div id="events-considered" class="dropzone"></div>
-            </div>
-            <div class="col-6 zone">scoreboard
-                <div id="scoreboard" class=""></div>
-            </div>
-
-            <div id="gym" class="block draggable drag-drop"> gym </br>e.v. 1</br>1 hour</div>
-            <div id="hiking" class="block draggable drag-drop"> hiking excursion </br>e.v. 5</br>4 hours</div>
-            <div id="date" class="block draggable drag-drop"> going on a date </br>e.v. 4</br>3 hours</div>
-            <div id="beach" class="block draggable drag-drop"> awesome beachtrip </br> e.v. 7</br> 5 hours</div>
+            <div class="col-12"><br></div>
+            <div id="gym" class="block notdropped draggable drag-drop"> gym </br>e.v. 1</br>1 hour</div>
+            <div id="date" class="block notdropped draggable drag-drop"> going on a date </br>e.v. 4</br>3 hours</div>
+            <div id="hiking" class="block notdropped draggable drag-drop"> hiking excursion </br>e.v. 5</br>4 hours</div>
+            <div id="beach" class="block notdropped draggable drag-drop"> awesome beachtrip </br> e.v. 7</br> 5 hours</div>
 
         </div>
     </div>

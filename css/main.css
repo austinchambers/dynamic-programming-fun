@@ -13,6 +13,12 @@ h2 {
     color: rgba(89, 140, 225, 100);
 }
 
+body {
+    margin: 50px auto;
+    text-align: center;
+    width: 1000px;
+}
+
 button {
     /* width: 100px; */
     /* height: 100px; */

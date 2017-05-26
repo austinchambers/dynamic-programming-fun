@@ -3,78 +3,7 @@
     height: 800px;
 }
 
-.dropzone {
-    background-color: #ccc;
-    padding: 10px;
-    width: 425px;
-    height: 200px;
-    border: dashed 4px transparent;
-    float: left;
-}
-
-.drop-active {
-    border-color: #aaa;
-}
-
-.drop-target {
-    background-color: #000;
-    color: #FFF;
-    border-color: #fff;
-    border-style: solid;
-}
-
 .zone {
     min-height: 200px;
     padding: 10px;
 }
-
-.notdropped {
-    background-color: yellow;
-}
-
-.dropped {
-    background-color: #ccc;
-}
-
-.block {
-    height: 70px;
-    border: solid 1px black;
-}
-
-#events-not-considered {
-    background-color: #ddd;
-    height: 90%;
-}
-
-#scheduler {
-    background-color: #ccc;
-    width: 700px;
-    height: 70px;
-}
-
-#events-considered {
-    background-color: #ddd;
-    height: 200px;
-}
-
-#scoreboard {
-    background-color: #ddd;
-    height: 200px;
-}
-
-#gym {
-    width: 100px;
-}
-
-#hiking {
-    width: 400px;
-}
-
-#date {
-    width: 300px;
-}
-
-#beach {
-    width: 500px;
-}
-
