@@ -220,6 +220,9 @@ function onDrop() {
     elem.innerHTML = 'What is the most thrill we can get out of our remaining time and activities? Find it in the table.';
 }
 
+function onDragLeave() {
+}
+
 function updateConsiderComputation(event) {
     let target = event.target;
     let subvalue = document.getElementById('consider').getElementsByClassName('subvalue')[0];
@@ -389,8 +392,7 @@ interact('.dropzone').dropzone({
         event.target.classList.add('drop-active');
     },
     ondragenter: function (event) {
-        var draggableElement = event.relatedTarget,
-            dropzoneElement = event.target;
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
         // feedback the possibility of a drop
         dropzoneElement.classList.add('drop-target');
@@ -399,16 +401,21 @@ interact('.dropzone').dropzone({
     },
     ondragleave: function (event) {
         // remove the drop feedback style
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         event.target.classList.remove('drop-target');
         event.relatedTarget.classList.remove('can-drop');
-        // event.relatedTarget.textContent = 'Dragged out';
-        //dragLeave = true;
-        console.log('drag leave');
+        //event.relatedTarget.textContent = 'Dragged out';
+
+        draggableElement.classList.remove('dropped');
+        draggableElement.classList.add('notdropped');
+
+        //onDragLeave();
     },
     ondrop: function (event) {
-        //event.relatedTarget.classList.remove('notdropped');
-        console.log('on drop');
-        alreadyDropped = true;
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+
+        draggableElement.classList.remove('notdropped');
+        draggableElement.classList.add('dropped');
         onDrop();
     },
     ondropdeactivate: function (event) {
