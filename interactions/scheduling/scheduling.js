@@ -33,22 +33,26 @@ var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
-        'value': 1
+        'value': 1,
+        'index': 1
     },
     {
         'name': 'date',
         'duration': 3,
-        'value': 4
+        'value': 4,
+        'index': 2
     },
     {
         'name': 'hike',
         'duration': 4,
-        'value': 5
+        'value': 5,
+        'index': 3
     },
     {
         'name': 'beach',
         'duration': 5,
-        'value': 7
+        'value': 7,
+        'index': 4
     },
 ];
 
@@ -133,6 +137,12 @@ function highlightCellAt(r, c) {
     cell.classList.add('highlight');
 }
 
+function unhighlightCellAt(r, c) {
+    let grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.classList.remove('highlight');
+}
+
 function displaySchedule() {
     let display = document.getElementById('scheduler');
     display.style.height = BLOCK_HEIGHT + 'px';
@@ -157,7 +167,7 @@ function displayActivities(num) {
     }
 }
 
-function onDragEnter() {
+function onDrop() {
     // update current value
     let elem = document.getElementById('consider').getElementsByClassName('value')[0];
     elem.innerHTML = ' ' + currActivity.value + ' ';
@@ -178,6 +188,41 @@ function onDragEnter() {
     let col = sub_j + 1;
     elem = document.getElementById('grid').rows[row].cells[col];
     highlightCellAt(row, col);
+    elem.addEventListener('click', updateConsiderComputation);
+}
+
+
+function onDragEnterAction(event) {
+    // remove the drop feedback style
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    currActivity = getCurrActivityFromName(draggableElement.id);
+}
+
+function onDragLeaveAction(event) {
+    // remove the drop feedback style
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    currActivity = getCurrActivityFromName(draggableElement.id);
+
+    // update current value
+    let elem = document.getElementById('consider').getElementsByClassName('value')[0];
+    elem.innerHTML = ' ' + currActivity.value + ' ';
+
+    // update hours left
+    currHoursUsed = currHoursUsed - currActivity.duration;
+    elem = document.getElementById('hours-left');
+    elem.innerHTML = currHoursTotal + currHoursUsed;
+
+    // add event listener to corresponding cell
+    let i = currActivity.index;
+    let j = currHoursTotal;
+    let idx = getSubproblemIdx(i, j);
+    //console.log(idx);
+    let sub_i = idx[0];
+    let sub_j = idx[1];
+    let row = sub_i + 1;
+    let col = sub_j + 1;
+    elem = document.getElementById('grid').rows[row].cells[col];
+    unhighlightCellAt(row, col);
     elem.addEventListener('click', updateConsiderComputation);
 }
 
@@ -233,6 +278,15 @@ function onForgetButtonClick(event) {
     elem.addEventListener('click', updateForgetComputation);
 }
 
+function getCurrActivityFromName(name) {
+    var i;
+    for (i = 0; i < activityArr.length; i++) {
+        if (name == activityArr[i].name) {
+            return activityArr[i];
+        }
+    }
+}
+
 function main() {
     currActivity = activityArr[currNumActivities - 1];
     //console.log('key interaction');
@@ -250,10 +304,9 @@ function main() {
     // highlight current
     highlightCellAt(currNumActivities, currHoursTotal + 1);
 
-    // Accept all activities here
     var index;
-    for (index = 0; index < activityArr.length; ++index) {
-        interact('.dropzone').accept('#' + activityArr[index].name);
+    for (index = 0; index < activityArr.length; index++) {
+        //interact('.dropzone').accept('#' + activityArr[index].name);
     }
 }
 
@@ -264,12 +317,14 @@ interact('.draggable')
     .draggable({
         // enable inertial throwing
         inertia: true,
+
         // keep the element within the area of it's parent
-        restrict: {
-            restriction: "parent",
-            endOnly: true,
-            elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },
+        //restrict: {
+        //    restriction: "parent",
+        //    endOnly: true,
+        //    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        //},
+
         // enable autoScroll
         autoScroll: true,
 
@@ -318,22 +373,32 @@ interact('.dropzone').dropzone({
         event.target.classList.add('drop-active');
     },
     ondragenter: function (event) {
-        var draggableElement = event.relatedTarget,
-            dropzoneElement = event.target;
-
-        event.relatedTarget.classList.add('notdropped');
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
         // feedback the possibility of a drop
         dropzoneElement.classList.add('drop-target');
-        event.relatedTarget.classList.add('can-drop');
+        draggableElement.classList.add('can-drop');
+        //draggableElement.textContent = 'Dragged in';
+        onDragEnterAction(event);
     },
     ondragleave: function (event) {
         // remove the drop feedback style
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         event.target.classList.remove('drop-target');
+        event.relatedTarget.classList.remove('can-drop');
+        //event.relatedTarget.textContent = 'Dragged out';
+
+        draggableElement.classList.remove('dropped');
+        draggableElement.classList.add('notdropped');
+
+        onDragLeaveAction(event);
     },
     ondrop: function (event) {
-        event.relatedTarget.classList.remove('notdropped');
-        event.relatedTarget.classList.remove('can-drop');
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+
+        draggableElement.classList.remove('notdropped');
+        draggableElement.classList.add('dropped');
+        onDrop();
     },
     ondropdeactivate: function (event) {
         // remove active dropzone feedback
