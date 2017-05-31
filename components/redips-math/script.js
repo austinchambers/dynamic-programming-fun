@@ -29,12 +29,13 @@ redips.init = function () {
     // REDIPS.drag initialization
     rd.init();
     // set shift mode drop mode
-    rd.dropMode = 'shift';
+    rd.dropMode = 'overwrite';
     // set shift properties
     rd.shift.mode = 'vertical2';	// set vertical shift (each column is treated separately)
     rd.shift.overflow = 'delete';	// overflowed element will be deleted
     rd.shift.animation = true;		// shift animation (shift animation must be turned on because moveObject uses animation)
     // event handler called in a moment before DIV is dropped (create result box in the most right column)
+
     rd.event.droppedBefore = function (targetTD) {
         // TD in 4th column
         var td4 = targetTD.parentNode.cells[4];
@@ -48,6 +49,7 @@ redips.init = function () {
             redips.obj = rd.obj;
         }
     };
+
     // even handler called when DIV element is moved (delete result box if DIV is moved in the bottom table)
     rd.event.moved = function () {
         // set source row
@@ -61,60 +63,7 @@ redips.init = function () {
             rd.obj.innerHTML = '?';
         }
     };
-    // called before each DIV element is shifted (needed move orange box pn the right side)
-    rd.event.relocateBefore = function (div, to) {
-        var tr = rd.findParent('TR', div),							// set current TR from DIV element that will be shifted by REDIPS.drag
-            resultDiv = tr.cells[4].getElementsByTagName('div')[0],	// define result DIV (right orange DIV element)
-            target = to.parentNode.cells[4],						// define target TD
-            num1 = redips.readNumber(div);							// set first number (from DIV element that will be shifted by REDIPS.drag)
-        // if numbers in upper tables are hidden, then hide number in left DIV when they are shifted
-        if (redips.mode === 'mode2') {
-            div.innerHTML = '?';
-        }
-        // move right (orange) box (moveObject moves DIV element with animation)
-        rd.moveObject({
-            obj: resultDiv,
-            target: target,
-            // call after result DIV is moved (el is reference to the moved DIV element)
-            callback: function (el) {
-                var targetTR = rd.findParent('TR', el),			// set target TR
-                    num2 = targetTR.cells[2].innerHTML * 1,		// set number2 from target TR
-                    result = redips.math(num1, num2);
-                // save (hide) new result to the class r(n+) and display "?"
-                el.className = el.className.replace(/n\d+/g, 'n' + result);
-                // if redips.mode is set to "mode2" then result in orange box should be displayed
-                if (redips.mode === 'mode2') {
-                    el.innerHTML = result;
-                }
-                else {
-                    el.innerHTML = '?';
-                }
-            }
-        });
-    };
-    // call after all shifting is finished (create orange DIV element for the dropped DIV)
-    rd.event.relocateEnd = function () {
-        // reference and DIV element is the same
-        redips.createOrangeBox(redips.obj, redips.obj);
-    };
-    // delete last orange box when overflow happen (target is TD where overflow occurs) but not when DIV is dropped to the last row
-    rd.event.shiftOverflow = function (target) {
-        // if DIV is dropped to the last row from upper table and target cell is not empty then overflow will happen
-        // in this case relocateEnd will not be called because there isn't any element for shifting
-        // so it's needed to recreate orange box in the right column
-        // rd.td.target is target cell where DIV element is dropped (this is defined within REDIPS.drag library)
-        if (rd.td.target.parentElement.rowIndex === 9) {
-            redips.createOrangeBox(target, redips.obj);
-        }
-        // for overflow in all other cases delete right cell
-        else {
-            // set right cell
-            var rightCell = target.parentNode.cells[4];
-            // delete right cell
-            rd.emptyCell(rightCell);
 
-        }
-    };
     // if left DIV element is dbl clicked then show number
     rd.event.dblClicked = function () {
         rd.obj.innerHTML = redips.readNumber(rd.obj);

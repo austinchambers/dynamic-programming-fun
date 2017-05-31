@@ -42,25 +42,25 @@ var NUM_ROWS = 4;
 var NUM_COLS = 8;
 function initTable() {
     table = [];
-    for (let i = 0; i < NUM_ROWS; i++) {
-        let row = [];
-        for (let j = 0; j < NUM_COLS; j++) {
+    for (var i = 0; i < NUM_ROWS; i++) {
+        var row = [];
+        for (var j = 0; j < NUM_COLS; j++) {
             row.push(0);
         }
         table.push(row);
     }
 
     // set up base cases
-    for (let i = 0; i < NUM_ROWS; i++) {
-        for (let j = 0; j < NUM_COLS; j++) {
+    for (var i = 0; i < NUM_ROWS; i++) {
+        for (var j = 0; j < NUM_COLS; j++) {
             if (i == 0) table[i][j] = 1; // first row
             if (j == 0) table[i][j] = 0; // first col (overrides first cell)
         }
     }
 
     // populate rest of table
-    for (let i = 1; i < NUM_ROWS; i++) {
-        for (let j = 1; j < NUM_COLS; j++) {
+    for (var i = 1; i < NUM_ROWS; i++) {
+        for (var j = 1; j < NUM_COLS; j++) {
             table[i][j] = computeCell(i, j);
         }
     }
@@ -73,10 +73,10 @@ function getCellAt(coords) {
 }
 
 function computeCell(i, j) {
-    let activity = activityArr[i];
-    let aboveIdx = getAboveIdx(i, j);
+    var activity = activityArr[i];
+    var aboveIdx = getAboveIdx(i, j);
     if (j - activity.duration >= 0) {
-        let idx = getSubproblemIdx(i, j);
+        var idx = getSubproblemIdx(i, j);
         return Math.max(
             activity.value + getCellAt(idx),
             getCellAt(aboveIdx));
@@ -87,7 +87,7 @@ function computeCell(i, j) {
 }
 
 function getSubproblemIdx(i, j) {
-    let activity = activityArr[i];
+    var activity = activityArr[i];
     return [i - 1, j - activity.duration];
 }
 
@@ -96,19 +96,19 @@ function getAboveIdx(i, j) {
 }
 
 function displayTable() {
-    let grid = document.getElementById('grid');
+    var grid = document.getElementById('grid');
 
-    for (let i = 0; i < NUM_ROWS; i++) {
-        let row = grid.insertRow(i + 1);
-        let cell = row.insertCell(0);
+    for (var i = 0; i < NUM_ROWS; i++) {
+        var row = grid.insertRow(i + 1);
+        var cell = row.insertCell(0);
         var thisarray = [];
-        for (let k = 0; k <= i; k++) {
+        for (var k = 0; k <= i; k++) {
             thisarray[k] = activityArr[k].name;
         }
         cell.innerHTML = thisarray.join(", ");
 
-        for (let j = 0; j < NUM_COLS; j++) {
-            let cell = row.insertCell(j + 1);
+        for (var j = 0; j < NUM_COLS; j++) {
+            var cell = row.insertCell(j + 1);
             cell.innerHTML = table[i][j];
         }
     }
@@ -118,19 +118,19 @@ var BLOCK_HEIGHT = 60;
 var BLOCK_WIDTH = 60;
 
 function highlightCellAt(r, c) {
-    let grid = document.getElementById('grid');
-    let cell = grid.rows[r].cells[c];
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
 }
 
 function unhighlightCellAt(r, c) {
-    let grid = document.getElementById('grid');
-    let cell = grid.rows[r].cells[c];
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c];
     cell.classList.remove('highlight');
 }
 
 function displaySchedule() {
-    let display = document.getElementById('scheduler');
+    var display = document.getElementById('scheduler');
     display.style.height = BLOCK_HEIGHT + 'px';
     display.style.width = BLOCK_WIDTH * currHoursTotal + 'px';
     display = document.getElementById('hours-left');
@@ -138,9 +138,9 @@ function displaySchedule() {
 }
 
 function displayActivities(num) {
-    for (let i = 0; i < activityArr.length; i++) {
-        let activity = activityArr[i];
-        let display = document.getElementById(activity.name);
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
 
         if (i < num) {
             display.style.height = BLOCK_HEIGHT + 'px';
@@ -195,7 +195,7 @@ function main() {
     displaySchedule();
     displayActivities(currNumActivities);
 
-    let elem = document.getElementById(currActivity.name);
+    var elem = document.getElementById(currActivity.name);
     //console.log(elem);
     startX = elem.getBoundingClientRect().top;
     startY = elem.getBoundingClientRect().left;
@@ -216,7 +216,7 @@ function main() {
 interact('.draggable')
     .draggable({
         // enable inertial throwing
-        inertia: true,
+        inertia: false,
 
         // keep the element within the area of it's parent
         //restrict: {
@@ -226,7 +226,7 @@ interact('.draggable')
         //},
 
         // enable autoScroll
-        autoScroll: true,
+        autoScroll: false,
 
         // call this function on every dragmove event
         onmove: dragMoveListener,
@@ -260,7 +260,6 @@ function dragMoveListener (event) {
 // this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
 
-
 // enable draggables to be dropped into this
 interact('.dropzone').dropzone({
     // Require a 50% element overlap for a drop to be possible
@@ -278,31 +277,26 @@ interact('.dropzone').dropzone({
         // feedback the possibility of a drop
         dropzoneElement.classList.add('drop-target');
         draggableElement.classList.add('can-drop');
-        //draggableElement.textContent = 'Dragged in';
-        onDragEnterAction(event);
     },
     ondragleave: function (event) {
-        // remove the drop feedback style
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
-        event.target.classList.remove('drop-target');
-        event.relatedTarget.classList.remove('can-drop');
-        //event.relatedTarget.textContent = 'Dragged out';
 
-        draggableElement.classList.remove('dropped');
-        draggableElement.classList.add('notdropped');
-
-        onDragLeaveAction(event);
+        // remove the drop feedback style
+        dropzoneElement.classList.remove('drop-target');
+        draggableElement.classList.remove('can-drop');
     },
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
-        draggableElement.classList.remove('notdropped');
-        draggableElement.classList.add('dropped');
-        onDrop();
+        //draggableElement.classList.remove('notdropped');
+        //draggableElement.classList.add('dropped');
+        //onDrop();
     },
     ondropdeactivate: function (event) {
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+
         // remove active dropzone feedback
-        event.target.classList.remove('drop-active');
-        event.target.classList.remove('drop-target');
+        dropzoneElement.classList.remove('drop-active');
+        dropzoneElement.classList.remove('drop-target');
     }
 });
