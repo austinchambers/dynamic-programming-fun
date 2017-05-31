@@ -39,8 +39,8 @@ var activityArr = [ // ORDER MATTERS
 ];
 
 var table;
-var NUM_ROWS = 0;
-var NUM_COLS = 0;
+var NUM_ROWS = 3;
+var NUM_COLS = 8;
 function initTable() {
     table = [];
     for (var i = 0; i < NUM_ROWS; i++) {
