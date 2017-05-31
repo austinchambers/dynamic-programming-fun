@@ -21,8 +21,7 @@
     <script src="schedule01.js"></script>
 </head>
 <body onload="main()">
-<div
-<div class="container" style="width:1000px; height: 1000px">
+<div class="container schedule01" style="width:1000px; height: 1000px">
     <h2>
         If you were given a block of seven hours of time, how would you schedule your activities to maximize your enjoyment score?
     </h2>
@@ -30,14 +29,14 @@
     <table id="grid">
         <tr>
             <th></th>
-            <th>0h</th>
-            <th>1h</th>
-            <th>2h</th>
-            <th>3h</th>
-            <th>4h</th>
-            <th>5h</th>
-            <th>6h</th>
-            <th>7h</th>
+            <th>0 hour free</th>
+            <th>1 hour free</th>
+            <th>2 hour free</th>
+            <th>3 hour free</th>
+            <th>4 hour free</th>
+            <th>5 hour free</th>
+            <th>6 hour free</th>
+            <th>7 hour free</th>
         </tr>
     </table>
 
@@ -65,24 +64,8 @@
             </div>
         </div>
         <div class="col-4">
-            <div id="computation">
-                <div id="consider">
-                    Consider:
-                    <span class="value"> _ </span>
-                    +
-                    <span class="subvalue"> _ </span>
-                    =
-                    <span class="sum"> _ </span>
-                </div>
-                <div id="forget">
-                    Forget:
-                    <span class="value"> _ </span>
-                    +
-                    <span class="subvalue"> _ </span>
-                    =
-                    <span class="sum"> _ </span>
-                </div>
-                <button id="forget-button" onclick="onForgetButtonClick()">Forget</button>
+            <div id="instruction">
+                This is a bunch of instructive text.
             </div>
         </div>
     </div>

@@ -1,24 +1,5 @@
 "use strict";
 
-// var things = {
-// 	'gym': {
-// 		'duration': 1,
-// 		'value': 1
-// 	},
-// 	'hike': {
-// 		'duration': 3,
-// 		'value': 4
-// 	},
-// 	'date': {
-// 		'duration': 4,
-// 		'value': 5
-// 	},
-// 	'beach': {
-// 		'duration': 5,
-// 		'value': 7
-// 	}
-// };
-
 // --------------------- my logic ---------------------
 
 // GLOBALS
@@ -120,7 +101,12 @@ function displayTable() {
     for (let i = 0; i < NUM_ROWS; i++) {
         let row = grid.insertRow(i + 1);
         let cell = row.insertCell(0);
-        cell.innerHTML = '+ ' + activityArr[i].name;
+        var thisarray = [];
+        for (let k = 0; k <= i; k++) {
+            thisarray[k] = activityArr[k].name;
+        }
+        cell.innerHTML = thisarray.join(", ");
+
         for (let j = 0; j < NUM_COLS; j++) {
             let cell = row.insertCell(j + 1);
             cell.innerHTML = table[i][j];
@@ -168,27 +154,10 @@ function displayActivities(num) {
 }
 
 function onDrop() {
-    // update current value
-    let elem = document.getElementById('consider').getElementsByClassName('value')[0];
-    elem.innerHTML = ' ' + currActivity.value + ' ';
-
     // update hours left
     currHoursUsed = currActivity.duration;
     elem = document.getElementById('hours-left');
     elem.innerHTML = currHoursTotal - currHoursUsed;
-
-    // add event listener to corresponding cell
-    let i = currNumActivities - 1;
-    let j = currHoursTotal;
-    let idx = getSubproblemIdx(i, j);
-    //console.log(idx);
-    let sub_i = idx[0];
-    let sub_j = idx[1];
-    let row = sub_i + 1;
-    let col = sub_j + 1;
-    elem = document.getElementById('grid').rows[row].cells[col];
-    highlightCellAt(row, col);
-    elem.addEventListener('click', updateConsiderComputation);
 }
 
 
@@ -203,79 +172,10 @@ function onDragLeaveAction(event) {
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
     currActivity = getCurrActivityFromName(draggableElement.id);
 
-    // update current value
-    let elem = document.getElementById('consider').getElementsByClassName('value')[0];
-    elem.innerHTML = ' ' + currActivity.value + ' ';
-
     // update hours left
     currHoursUsed = currHoursUsed - currActivity.duration;
     elem = document.getElementById('hours-left');
     elem.innerHTML = currHoursTotal + currHoursUsed;
-
-    // add event listener to corresponding cell
-    let i = currActivity.index;
-    let j = currHoursTotal;
-    let idx = getSubproblemIdx(i, j);
-    //console.log(idx);
-    let sub_i = idx[0];
-    let sub_j = idx[1];
-    let row = sub_i + 1;
-    let col = sub_j + 1;
-    elem = document.getElementById('grid').rows[row].cells[col];
-    unhighlightCellAt(row, col);
-    elem.addEventListener('click', updateConsiderComputation);
-}
-
-function updateConsiderComputation(event) {
-    let target = event.target;
-    let subvalue = document.getElementById('consider').getElementsByClassName('subvalue')[0];
-    subvalue.innerHTML = ' ' + target.innerHTML + ' ';
-    let value = document.getElementById('consider').getElementsByClassName('value')[0];
-    let sumElem = document.getElementById('consider').getElementsByClassName('sum')[0];
-    let sum = parseInt(subvalue.innerHTML) + parseInt(value.innerHTML);
-    sumElem.innerHTML = ' ' + sum + ' ';
-}
-
-function updateForgetComputation(event) {
-    let target = event.target;
-    let subvalue = document.getElementById('forget').getElementsByClassName('subvalue')[0];
-    subvalue.innerHTML = ' ' + target.innerHTML + ' ';
-    let value = document.getElementById('forget').getElementsByClassName('value')[0];
-    let sumElem = document.getElementById('forget').getElementsByClassName('sum')[0];
-    let sum = parseInt(subvalue.innerHTML) + parseInt(value.innerHTML);
-    sumElem.innerHTML = ' ' + sum + ' ';
-}
-
-function onForgetButtonClick(event) {
-    // move current activity back
-    // not working
-    let elem = document.getElementById(currActivity.name);
-    console.log(elem);
-    elem.style.position = 'absolute';
-    console.log(startX, startY);
-    elem.style.top = startX + 'px';
-    elem.style.left = startY + 'px';
-
-    let value = document.getElementById('forget').getElementsByClassName('value')[0];
-    value.innerHTML = ' 0 ';
-
-    // update hours left
-    currHoursUsed = 0;
-    elem = document.getElementById('hours-left');
-    elem.innerHTML = currHoursTotal - currHoursUsed;
-
-    // add event listener to corresponding cell
-    let i = currNumActivities - 1;
-    let j = currHoursTotal;
-    let idx = getAboveIdx(i, j);
-    console.log(idx);
-    let sub_i = idx[0];
-    let sub_j = idx[1];
-    let row = sub_i + 1;
-    let col = sub_j + 1;
-    elem = document.getElementById('grid').rows[row].cells[col];
-    highlightCellAt(row, col);
-    elem.addEventListener('click', updateForgetComputation);
 }
 
 function getCurrActivityFromName(name) {
