@@ -1,14 +1,15 @@
 "use strict";
 
-// --------------------- my logic ---------------------
-
-// GLOBALS
-var currActivity;
+// Global Constants
+const HOURS_TOTAL = 7;
+const NUM_ACTIVITIES = 4;
 var startX;
 var startY;
-var currHoursTotal = 7;
+
+// Global Variables
+var currActivity;
 var currHoursUsed = 0;
-var currNumActivities = 4;
+var currValue = 0;
 
 var activityArr = [ // ORDER MATTERS
     {
@@ -132,9 +133,9 @@ function unhighlightCellAt(r, c) {
 function displaySchedule() {
     var display = document.getElementById('scheduler');
     display.style.height = BLOCK_HEIGHT + 'px';
-    display.style.width = BLOCK_WIDTH * currHoursTotal + 'px';
+    display.style.width = BLOCK_WIDTH * HOURS_TOTAL + 'px';
     display = document.getElementById('hours-left');
-    display.innerHTML = currHoursTotal - currHoursUsed;
+    display.innerHTML = HOURS_TOTAL - currHoursUsed;
 }
 
 function displayActivities(num) {
@@ -153,18 +154,19 @@ function displayActivities(num) {
     }
 }
 
-function onDrop() {
-    // update hours left
-    currHoursUsed = currActivity.duration;
-    elem = document.getElementById('hours-left');
-    elem.innerHTML = currHoursTotal - currHoursUsed;
-}
-
-
-function onDragEnterAction(event) {
-    // remove the drop feedback style
+function onDropAction(event) {
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
     currActivity = getCurrActivityFromName(draggableElement.id);
+
+    // update hours left
+    currHoursUsed += currActivity.duration;
+    var elem = document.getElementById('hours-left');
+    elem.innerHTML = HOURS_TOTAL - currHoursUsed;
+
+    // update value
+    currValue += currActivity.value;
+    elem = document.getElementById('scheduler-value');
+    elem.innerHTML = currValue;
 }
 
 function onDragLeaveAction(event) {
@@ -173,9 +175,21 @@ function onDragLeaveAction(event) {
     currActivity = getCurrActivityFromName(draggableElement.id);
 
     // update hours left
-    currHoursUsed = currHoursUsed - currActivity.duration;
-    elem = document.getElementById('hours-left');
-    elem.innerHTML = currHoursTotal + currHoursUsed;
+    currHoursUsed -= currActivity.duration;
+    var elem = document.getElementById('hours-left');
+    elem.innerHTML = HOURS_TOTAL - currHoursUsed;
+
+    // update value
+    currValue -= currActivity.value;
+    elem = document.getElementById('scheduler-value');
+    elem.innerHTML = currValue;
+}
+
+
+function onDragEnterAction(event) {
+    // remove the drop feedback style
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    currActivity = getCurrActivityFromName(draggableElement.id);
 }
 
 function getCurrActivityFromName(name) {
@@ -188,12 +202,12 @@ function getCurrActivityFromName(name) {
 }
 
 function main() {
-    currActivity = activityArr[currNumActivities - 1];
+    currActivity = activityArr[NUM_ACTIVITIES - 1];
     //console.log('key interaction');
     initTable();
     displayTable();
     displaySchedule();
-    displayActivities(currNumActivities);
+    displayActivities(NUM_ACTIVITIES);
 
     var elem = document.getElementById(currActivity.name);
     //console.log(elem);
@@ -202,7 +216,7 @@ function main() {
     console.log(startX, startY);
 
     // highlight current
-    highlightCellAt(currNumActivities, currHoursTotal + 1);
+    highlightCellAt(NUM_ACTIVITIES, HOURS_TOTAL + 1);
 
     var index;
     for (index = 0; index < activityArr.length; index++) {
@@ -284,13 +298,15 @@ interact('.dropzone').dropzone({
         // remove the drop feedback style
         dropzoneElement.classList.remove('drop-target');
         draggableElement.classList.remove('can-drop');
+
+        onDragLeaveAction(event);
     },
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
         //draggableElement.classList.remove('notdropped');
         //draggableElement.classList.add('dropped');
-        //onDrop();
+        onDropAction(event);
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
