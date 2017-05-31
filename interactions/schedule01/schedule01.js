@@ -146,7 +146,7 @@ function displayActivities(num) {
         if (i < num) {
             display.style.height = BLOCK_HEIGHT + 'px';
             display.style.width = BLOCK_WIDTH * activity.duration + 'px';
-            display.innerHTML = activity.name + '</br> + ' + activity.value
+            display.innerHTML = activity.name
         }
         else {
             display.style.display = 'none';
@@ -279,34 +279,49 @@ interact('.dropzone').dropzone({
     // Require a 50% element overlap for a drop to be possible
     overlap: 0.75,
 
-    // listen for drop related events:
-
     ondropactivate: function (event) {
-        // add active dropzone feedback
-        event.target.classList.add('drop-active');
+        var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+        currActivity = getCurrActivityFromName(draggableElement.id);
+
+        // Only activate the dropzone if there is enough time.
+        if ((HOURS_TOTAL - currHoursUsed) >= currActivity.duration) {
+            // add active dropzone feedback
+            event.target.classList.add('drop-active');
+        }
     },
     ondragenter: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+        currActivity = getCurrActivityFromName(draggableElement.id);
 
-        // feedback the possibility of a drop
-        dropzoneElement.classList.add('drop-target');
-        draggableElement.classList.add('can-drop');
+        // Only activate the dropzone if there is enough time.
+        if ((HOURS_TOTAL - currHoursUsed) >= currActivity.duration) {
+            // feedback the possibility of a drop
+            dropzoneElement.classList.add('drop-target');
+            draggableElement.classList.add('can-drop');
+        }
     },
     ondragleave: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+        currActivity = getCurrActivityFromName(draggableElement.id);
 
         // remove the drop feedback style
-        dropzoneElement.classList.remove('drop-target');
         draggableElement.classList.remove('can-drop');
+        dropzoneElement.classList.remove('drop-target');
 
-        onDragLeaveAction(event);
+        // If the item was dropped, then it can be removed
+        if (draggableElement.classList.contains('dropped')) {
+            draggableElement.classList.remove('dropped');
+            onDragLeaveAction(event);
+        }
     },
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
-        //draggableElement.classList.remove('notdropped');
-        //draggableElement.classList.add('dropped');
-        onDropAction(event);
+        // Only drop if the dropzone is active
+        if (dropzoneElement.classList.contains('drop-active')) {
+            draggableElement.classList.add('dropped');
+            onDropAction(event);
+        }
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
