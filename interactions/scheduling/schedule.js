@@ -196,7 +196,7 @@ function main() {
     displayActivities(schedulerMaxActivities);
 
     // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < activityArr.length; i++) {
+    for (var i = 0; i < schedulerMaxActivities; i++) {
         var elem = document.getElementById(activityArr[i]);
         var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
         var y = $("#"+activityArr[i].name).offset().left;
@@ -220,6 +220,9 @@ function onDropAction(event) {
     scheduleValue += selectedActivity.value;
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
+
+    // update helpful text
+    updateHelpfulText();
 }
 
 function onDragLeaveAction(event) {
@@ -233,10 +236,77 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
+    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
+
+    // update helpful text
+    updateHelpfulText();
 }
+
+// This is a bit lazy, but it gets the point across.
+function updateHelpfulText() {
+    var elem = document.getElementById('instruction');
+
+    var doBetterText = "That's progress, but you could do better.";
+    var instructionText = "Drag activities to your schedule to get the most value.";
+    var optimalScheduleText = "Awesome! This is an optimal schedule!.";
+    if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 3) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 4)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 5)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if ((schedulerMaxHours == 7 )) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 9)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 6)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 5) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 7)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 6) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 8)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+ }
 
 
 function onDragEnterAction(event) {
