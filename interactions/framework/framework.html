@@ -14,17 +14,14 @@
             crossorigin="anonymous"></script>
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="schedule.css" rel="stylesheet" type="text/css">
+    <link href="framework.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
-    <script src="schedule.js"></script>
 </head>
-<body>
+<body onload="main()">
 <div class="container schedule01" style="width:1000px; height: 1000px">
-    <h2>
-        Considering the date, gym, hike, and breach options, how can we get the most value when there are from 1 to 7 hours free?
-    </h2>
+    <h2>Header here</h2>
 
     <table id="grid">
         <tr>
@@ -37,6 +34,50 @@
             <th>5 hour free</th>
             <th>6 hour free</th>
             <th>7 hour free</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
         </tr>
     </table>
 
@@ -60,36 +101,36 @@
         </div>
         <div class="col-1">
             <div class="block"">
-                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
-            </div>
-        </div>
-        <div class="col-4">
-            <div id="instruction">
-                This is a bunch of instructive text.
-            </div>
+            <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
         </div>
     </div>
+    <div class="col-4">
+        <div id="instruction">
+            This is a bunch of instructive text.
+        </div>
+    </div>
+</div>
 
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-6">
-            <div style="text-align: center; margin-top: -20px; width: 420px;">
-                <span> (</span>
-                <span id="hours-left"></span>
-                <span> hours unused) </span>
-            </div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-6">
+        <div style="text-align: center; margin-top: -20px; width: 420px;">
+            <span> (</span>
+            <span id="hours-left"></span>
+            <span> hours unused) </span>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-11">
-            <div id="gym" class="block notdropped draggable"></div>
-            <div id="date" class="block notdropped draggable"></div>
-            <div id="hike" class="block notdropped draggable"></div>
-            <div id="beach" class="block notdropped draggable"></div>
-        </div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-11">
+        <div id="gym" class="block notdropped draggable"></div>
+        <div id="date" class="block notdropped draggable"></div>
+        <div id="hike" class="block notdropped draggable"></div>
+        <div id="beach" class="block notdropped draggable"></div>
     </div>
+</div>
 </div>
 </body>
 </html>
