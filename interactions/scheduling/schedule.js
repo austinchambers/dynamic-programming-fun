@@ -15,30 +15,40 @@ const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CS
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startX;
 var startY;
+var gymStartTop;
+var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
-        'index': 1
+        'index': 1,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
-        'index': 2
+        'index': 2,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
-        'index': 3
+        'index': 3,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
-        'index': 4
+        'index': 4,
+        'startTop': 0,
+        'startLeft': 0,
     },
 ];
 
@@ -133,14 +143,22 @@ function unhighlightCellAt(r, c) {
 
 // ********************************** SCHEDULING ***************************************
 function displaySchedule() {
-    var display = document.getElementById('scheduler');
-    display.style.height = BLOCK_HEIGHT + 'px';
-    display.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
-    display = document.getElementById('hours-left');
-    display.innerHTML = schedulerMaxHours - scheduleHoursUsed;
+    // Update the scheduler width and height.
+    var elem = document.getElementById('scheduler');
+    elem.style.height = BLOCK_HEIGHT + 'px';
+    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
-    display = document.getElementById('scheduler-total-hours');
-    display.innerHTML = schedulerMaxHours + 'h';
+    // Update hours left if the corresponding ID element exists.
+    elem = document.getElementById('hours-left');
+    if (elem != null) {
+        elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
+    }
+
+    // Update total hours if the corresponding ID element exists.
+    elem = document.getElementById('scheduler-total-hours');
+    if (elem != null) {
+        elem.innerHTML = schedulerMaxHours + 'h';
+    }
 }
 
 function displayActivities(num) {
@@ -159,6 +177,36 @@ function displayActivities(num) {
     }
 }
 
+// Used to get properties about the activity object using its name.
+function getselectedActivityFromName(name) {
+    var i;
+    for (i = 0; i < activityArr.length; i++) {
+        if (name == activityArr[i].name) {
+            return activityArr[i];
+        }
+    }
+}
+
+// Set everything up
+function main() {
+    selectedActivity = activityArr[schedulerMaxActivities - 1];
+    initTable();
+    displayTable();
+    displaySchedule();
+    displayActivities(schedulerMaxActivities);
+
+    // Get the initial locations of the activities, and store in the activity array.
+    for (var i = 0; i < activityArr.length; i++) {
+        var elem = document.getElementById(activityArr[i]);
+        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
+        var y = $("#"+activityArr[i].name).offset().left;
+        activityArr[i].startLeft = x;
+        activityArr[i].startTop = y;
+        console.log('x, y:', x, y);
+    }
+}
+
+// ********************************** INTERACT JS ***************************************
 function onDropAction(event) {
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
     selectedActivity = getselectedActivityFromName(draggableElement.id);
@@ -197,55 +245,24 @@ function onDragEnterAction(event) {
     selectedActivity = getselectedActivityFromName(draggableElement.id);
 }
 
-function getselectedActivityFromName(name) {
-    var i;
-    for (i = 0; i < activityArr.length; i++) {
-        if (name == activityArr[i].name) {
-            return activityArr[i];
-        }
-    }
+function onDragMove() {
 }
 
-function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    //console.log('key interaction');
-    initTable();
-    displayTable();
-    displaySchedule();
-    displayActivities(schedulerMaxActivities);
-
-    var elem = document.getElementById(selectedActivity.name);
-    //console.log(elem);
-    startX = elem.getBoundingClientRect().top;
-    startY = elem.getBoundingClientRect().left;
-    console.log(startX, startY);
-
-    // highlight current
-    highlightCellAt(schedulerMaxActivities, schedulerMaxHours + 1);
-
-    var index;
-    for (index = 0; index < activityArr.length; index++) {
-        //interact('.dropzone').accept('#' + activityArr[index].name);
-    }
-}
-
-// --------------------- InteractJS ---------------------
+interact('.draggable').snap({
+    mode: 'anchor',
+    anchors: [],
+    range: Infinity,
+    elementOrigin: { x: 0.5, y: 0.5 },
+    endOnly: true
+});
 
 // target elements with the "draggable" class
-interact('.draggable')
-    .draggable({
+interact('.draggable').draggable({
         // enable inertial throwing
-        inertia: false,
-
-        // keep the element within the area of it's parent
-        //restrict: {
-        //    restriction: "parent",
-        //    endOnly: true,
-        //    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        //},
+        inertia: true,
 
         // enable autoScroll
-        autoScroll: false,
+        autoScroll: true,
 
         // call this function on every dragmove event
         onmove: dragMoveListener,
@@ -261,6 +278,7 @@ interact('.draggable')
     });
 
 function dragMoveListener (event) {
+    onDragMove();
     var target = event.target,
         // keep the dragged position in the data-x/data-y attributes
         x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -281,8 +299,8 @@ window.dragMoveListener = dragMoveListener;
 
 // enable draggables to be dropped into this
 interact('.dropzone').dropzone({
-    // Require a 50% element overlap for a drop to be possible
-    overlap: 0.75,
+    // Required element overlap for a drop to be possible
+    overlap: 0.35,
 
     ondropactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -294,6 +312,7 @@ interact('.dropzone').dropzone({
             event.target.classList.add('drop-active');
         }
     },
+
     ondragenter: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         selectedActivity = getselectedActivityFromName(draggableElement.id);
@@ -303,8 +322,24 @@ interact('.dropzone').dropzone({
             // feedback the possibility of a drop
             dropzoneElement.classList.add('drop-target');
             draggableElement.classList.add('can-drop');
+
+            var dropRect = interact.getElementRect(event.target),
+                dropCenter = {
+                    // To snap to the first location on left, uncomment following line
+                    // x: dropRect.left + (scheduleHoursUsed * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+            event.draggable.snap({
+                anchors: [ dropCenter ]
+            });
+        }
+        else {
+            event.draggable.snap(false);
         }
     },
+
     ondragleave: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         selectedActivity = getselectedActivityFromName(draggableElement.id);
@@ -318,13 +353,17 @@ interact('.dropzone').dropzone({
             draggableElement.classList.remove('dropped');
             onDragLeaveAction(event);
         }
+
+        event.draggable.snap(false);
     },
+
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
         // Only drop if the dropzone is active
         if (dropzoneElement.classList.contains('drop-active')) {
             draggableElement.classList.add('dropped');
+            console.log('on drop');
             onDropAction(event);
         }
     },
@@ -334,5 +373,7 @@ interact('.dropzone').dropzone({
         // remove active dropzone feedback
         dropzoneElement.classList.remove('drop-active');
         dropzoneElement.classList.remove('drop-target');
+
+        console.log('on drop deactivate');
     }
 });
