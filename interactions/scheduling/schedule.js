@@ -157,7 +157,7 @@ function displaySchedule() {
     // Update total hours if the corresponding ID element exists.
     elem = document.getElementById('scheduler-total-hours');
     if (elem != null) {
-        elem.innerHTML = schedulerMaxHours + 'h';
+        elem.innerHTML = schedulerMaxHours + ' hours total';
     }
 }
 
