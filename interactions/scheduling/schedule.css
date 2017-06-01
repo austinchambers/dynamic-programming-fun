@@ -29,3 +29,15 @@
     text-align: right;
     padding-right: 5px;
 }
+
+#hours-left-text {
+    text-align: left;
+    margin-top: -5px;
+    width: 420px;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+#title {
+    padding-bottom: 20px;
+}

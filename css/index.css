@@ -159,3 +159,13 @@ iframe[embedded] {
     left: 140px;
 
 }
+
+iframe {
+    width: 900px;
+    height: 400px;
+    /*float:left; */
+    margin:0;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border:1px solid lightgrey;"
+}

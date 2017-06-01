@@ -3,14 +3,18 @@
 // Global Variables + Settings
 var schedulerMaxHours = 2;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
-var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
-var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
+var gridMaxRows = 0;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
+var gridMaxCols = 0;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
 // Other stuff
+var doBetterText = "That's progress, but you could do better.";
+var instructionText = "Drag the gym to your timeline to get the most value.";
+var optimalScheduleText = "Awesome! Your maximized your value!";
+
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startX;
@@ -145,7 +149,7 @@ function unhighlightCellAt(r, c) {
 function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
-    elem.style.height = BLOCK_HEIGHT + 'px';
+    elem.style.height = BLOCK_HEIGHT + 20 + 'px'; // Temp transparent fix
     elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
     // Update hours left if the corresponding ID element exists.
@@ -187,10 +191,6 @@ function getselectedActivityFromName(name) {
     }
 }
 
-function reset() {
-
-}
-
 // Set everything up
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
@@ -198,6 +198,8 @@ function main() {
     //displayTable();
     displaySchedule();
     displayActivities(schedulerMaxActivities);
+
+    setHelpfulText(instructionText);
 
     // Get the initial locations of the activities, and store in the activity array.
     for (var i = 0; i < schedulerMaxActivities; i++) {
@@ -253,9 +255,6 @@ function onDragLeaveAction(event) {
 function updateHelpfulText() {
     var elem = document.getElementById('instruction');
 
-    var doBetterText = "That's progress, but you could do better.";
-    var instructionText = "Drag activities to your schedule to get the most value.";
-    var optimalScheduleText = "Awesome! This is an optimal schedule!.";
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
@@ -312,6 +311,10 @@ function updateHelpfulText() {
     }
 }
 
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
+}
 
 function onDragEnterAction(event) {
     // remove the drop feedback style
@@ -406,7 +409,7 @@ interact('.dropzone').dropzone({
             var dropRect = interact.getElementRect(event.target),
                 dropCenter = {
                     // To snap to the first location on left, uncomment following line
-                    // x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    //x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     y: dropRect.top + dropRect.height / 2
                 };

@@ -21,45 +21,35 @@
     <script src="schedule.js"></script>
 </head>
 <body onload="main()">
-<div class="container schedule" style="width:1000px; height: 1000px">
-    <h2>
-        Considering the date, gym, hike, and beach options, how can we get the most value when there are from 1 to 7 hours free?
-    </h2>
+<div class="container schedule">
 
-    <!--<table id="grid">-->
-        <!--<tr>-->
-            <!--<th></th>-->
-            <!--<th>0 hour free</th>-->
-            <!--<th>1 hour free</th>-->
-            <!--<th>2 hour free</th>-->
-            <!--<th>3 hour free</th>-->
-            <!--<th>4 hour free</th>-->
-            <!--<th>5 hour free</th>-->
-            <!--<th>6 hour free</th>-->
-            <!--<th>7 hour free</th>-->
-        <!--</tr>-->
-    <!--</table>-->
+    <table id="grid">
+    </table>
 
-    <div class="row">
+    <div id="title" class="row">
         <div class="col-1"></div>
-        <div class="col-11">
-            <div id="gym" class="block notdropped draggable"></div>
-            <div id="date" class="block notdropped draggable"></div>
-            <div id="hike" class="block notdropped draggable"></div>
-            <div id="beach" class="block notdropped draggable"></div>
+        <div class="col-10">
+            <div id="instruction"></div><!--Will be populated by JS!-->
         </div>
+        <div class="col-1"></div>
     </div>
 
-    <div class="col-12"><br></div>
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-1" style="text-align: left">Timeline</div>
-        <div class="col-5" style="text-align: left"></div>
-        <div class="col-1" style="text-align: left">Value</div>
+        <div class="col-1" style="text-align: center">Value</div>
+        <div class="col-1"></div>
+        <div class="col-5"></div>
+
     </div>
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-6">
+        <div class="col-1">
+            <div class="block">
+                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
+            </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-9">
             <div class="dropzone" id="scheduler">
                 <div>
 					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
@@ -69,36 +59,29 @@
             </div>
             <div id="scheduler-arrow"></div>
         </div>
-        <div class="col-1">
-            <div class="block"">
-                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div id="hours-left-text">
+                <span>Timeline: </span>
+                <span id="hours-left"></span>
+                <span> hours left</span>
             </div>
-        </div>
-        <div class="col-4">
-            <div id="instruction"></div><!--Will be populated by JS!-->
         </div>
     </div>
 
     <div class="row">
-        <div class="col-1"></div>
-        <div class="col-6">
-            <div style="text-align: center; margin-top: -20px; width: 420px;">
-                <span> (</span>
-                <span id="hours-left"></span>
-                <span> hours unused) </span>
-            </div>
+        <div class="col-3"></div>
+        <div class="col-7">
+            <div id="gym" class="block notdropped draggable"></div>
+            <div id="date" class="block notdropped draggable"></div>
+            <div id="hike" class="block notdropped draggable"></div>
+            <div id="beach" class="block notdropped draggable"></div>
         </div>
     </div>
+</div>
 
-    <!--<div class="row">-->
-        <!--<div class="col-1"></div>-->
-        <!--<div class="col-11">-->
-            <!--<div id="gym" class="block notdropped draggable"></div>-->
-            <!--<div id="date" class="block notdropped draggable"></div>-->
-            <!--<div id="hike" class="block notdropped draggable"></div>-->
-            <!--<div id="beach" class="block notdropped draggable"></div>-->
-        <!--</div>-->
-    <!--</div>-->
 </div>
 </body>
 </html>

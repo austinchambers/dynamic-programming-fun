@@ -14,25 +14,74 @@
             crossorigin="anonymous"></script>
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="01-1-hour.css" rel="stylesheet" type="text/css">
+    <link href="01.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
     <script src="01-1-hour.js"></script>
 </head>
-<body >
-<div class="container">
-    <h2>Header here</h2>
-    <div id="gym" class="block notdropped draggable"></div>
-    <div class="dropzone" id="scheduler">
-        <div>
+<body onload="main()">
+<div class="container schedule">
+
+    <table id="grid">
+    </table>
+
+    <div id="title" class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div id="instruction"></div><!--Will be populated by JS!-->
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1" style="text-align: center">Value</div>
+        <div class="col-1"></div>
+        <div class="col-5"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1">
+            <div class="block">
+                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
+            </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-6">
+            <div class="dropzone" id="scheduler">
+                <div>
 					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
 						<!--<span id="scheduler-total-hours">7 hours total</span>-->
 					</span>
+                </div>
+            </div>
+            <div id="scheduler-arrow"></div>
         </div>
     </div>
-    <div id="scheduler-arrow"></div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div id="hours-left-text">
+                <span>Timeline: </span>
+                <span id="hours-left"></span>
+                <span> hours left</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-7">
+            <div id="gym" class="block notdropped draggable"></div>
+            <div id="date" class="block notdropped draggable"></div>
+            <div id="hike" class="block notdropped draggable"></div>
+            <div id="beach" class="block notdropped draggable"></div>
+        </div>
+    </div>
 </div>
 
+</div>
 </body>
 </html>

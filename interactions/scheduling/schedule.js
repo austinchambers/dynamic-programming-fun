@@ -11,6 +11,10 @@ var scheduleHoursUsed = 0;      // Tracks the current number of hours used in sc
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
 // Other stuff
+var doBetterText = "That's progress, but you could do better.";
+var instructionText = "Drag the activities to your timeline to get the most value.";
+var optimalScheduleText = "Awesome! You maximized your value!";
+
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startX;
@@ -187,6 +191,11 @@ function getselectedActivityFromName(name) {
     }
 }
 
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
+}
+
 // Set everything up
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
@@ -194,6 +203,8 @@ function main() {
     //displayTable();
     displaySchedule();
     displayActivities(schedulerMaxActivities);
+
+    setHelpfulText(instructionText);
 
     // Get the initial locations of the activities, and store in the activity array.
     for (var i = 0; i < schedulerMaxActivities; i++) {

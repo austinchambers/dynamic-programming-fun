@@ -1,7 +1,7 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 1;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 0;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 0;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
@@ -13,7 +13,7 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 // Other stuff
 var doBetterText = "That's progress, but you could do better.";
 var instructionText = "Drag the gym to your timeline to get the most value.";
-var optimalScheduleText = "Awesome! You maximized your value!";
+var optimalScheduleText = "Awesome! Your maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -149,7 +149,6 @@ function unhighlightCellAt(r, c) {
 function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
-    //elem.style.height = BLOCK_HEIGHT + 'px';
     elem.style.height = BLOCK_HEIGHT + 20 + 'px'; // Temp transparent fix
     elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
