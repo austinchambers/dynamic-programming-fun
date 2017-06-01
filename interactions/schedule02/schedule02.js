@@ -1,9 +1,9 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
-var schedulerMaxActivities = 4; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
-var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
+var schedulerMaxHours = 2;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxActivities = 3; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
+var gridMaxRows = 3;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
