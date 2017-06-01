@@ -29,12 +29,3 @@
 	text-align: right;
 	padding-right: 5px;
 }
-
-.container {
-	display:flex;
-	flex-direction: column;
-	text-align:center;
-}
-
-#gym { order: 2 }
-#scheduler { order: 1 }

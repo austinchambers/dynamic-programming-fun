@@ -23,27 +23,37 @@
 <body onload="main()">
 <div class="container schedule" style="width:1000px; height: 1000px">
     <h2>
-        Considering the date, gym, hike, and breach options, how can we get the most value when there are from 1 to 7 hours free?
+        Considering the date, gym, hike, and beach options, how can we get the most value when there are from 1 to 7 hours free?
     </h2>
 
-    <table id="grid">
-        <tr>
-            <th></th>
-            <th>0 hour free</th>
-            <th>1 hour free</th>
-            <th>2 hour free</th>
-            <th>3 hour free</th>
-            <th>4 hour free</th>
-            <th>5 hour free</th>
-            <th>6 hour free</th>
-            <th>7 hour free</th>
-        </tr>
-    </table>
+    <!--<table id="grid">-->
+        <!--<tr>-->
+            <!--<th></th>-->
+            <!--<th>0 hour free</th>-->
+            <!--<th>1 hour free</th>-->
+            <!--<th>2 hour free</th>-->
+            <!--<th>3 hour free</th>-->
+            <!--<th>4 hour free</th>-->
+            <!--<th>5 hour free</th>-->
+            <!--<th>6 hour free</th>-->
+            <!--<th>7 hour free</th>-->
+        <!--</tr>-->
+    <!--</table>-->
+
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div id="gym" class="block notdropped draggable"></div>
+            <div id="date" class="block notdropped draggable"></div>
+            <div id="hike" class="block notdropped draggable"></div>
+            <div id="beach" class="block notdropped draggable"></div>
+        </div>
+    </div>
 
     <div class="col-12"><br></div>
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-1" style="text-align: left">Schedule</div>
+        <div class="col-1" style="text-align: left">Timeline</div>
         <div class="col-5" style="text-align: left"></div>
         <div class="col-1" style="text-align: left">Value</div>
     </div>
@@ -80,15 +90,15 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-11">
-            <div id="gym" class="block notdropped draggable"></div>
-            <div id="date" class="block notdropped draggable"></div>
-            <div id="hike" class="block notdropped draggable"></div>
-            <div id="beach" class="block notdropped draggable"></div>
-        </div>
-    </div>
+    <!--<div class="row">-->
+        <!--<div class="col-1"></div>-->
+        <!--<div class="col-11">-->
+            <!--<div id="gym" class="block notdropped draggable"></div>-->
+            <!--<div id="date" class="block notdropped draggable"></div>-->
+            <!--<div id="hike" class="block notdropped draggable"></div>-->
+            <!--<div id="beach" class="block notdropped draggable"></div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 </body>
 </html>

@@ -1,8 +1,8 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
-var schedulerMaxActivities = 4; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
+var schedulerMaxHours = 2;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 
@@ -187,6 +187,10 @@ function getselectedActivityFromName(name) {
     }
 }
 
+function reset() {
+
+}
+
 // Set everything up
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
@@ -306,7 +310,7 @@ function updateHelpfulText() {
         else
             elem.innerHTML = optimalScheduleText;
     }
- }
+}
 
 
 function onDragEnterAction(event) {
@@ -328,24 +332,24 @@ interact('.draggable').snap({
 
 // target elements with the "draggable" class
 interact('.draggable').draggable({
-        // enable inertial throwing
-        inertia: true,
+    // enable inertial throwing
+    inertia: true,
 
-        // enable autoScroll
-        autoScroll: true,
+    // enable autoScroll
+    autoScroll: true,
 
-        // call this function on every dragmove event
-        onmove: dragMoveListener,
-        // call this function on every dragend event
-        onend: function (event) {
-            var textEl = event.target.querySelector('p');
+    // call this function on every dragmove event
+    onmove: dragMoveListener,
+    // call this function on every dragend event
+    onend: function (event) {
+        var textEl = event.target.querySelector('p');
 
-            textEl && (textEl.textContent =
-                'moved a distance of '
-                + (Math.sqrt(event.dx * event.dx +
-                    event.dy * event.dy)|0) + 'px');
-        }
-    });
+        textEl && (textEl.textContent =
+            'moved a distance of '
+            + (Math.sqrt(event.dx * event.dx +
+                event.dy * event.dy)|0) + 'px');
+    }
+});
 
 function dragMoveListener (event) {
     onDragMove();

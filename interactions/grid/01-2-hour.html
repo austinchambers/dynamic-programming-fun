@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <link href="../../css/main.css" rel="stylesheet" type="text/css">
+    <link href="01-2-hour.css" rel="stylesheet" type="text/css">
+    <link href="../interactions.css" rel="stylesheet" type="text/css">
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/interact.js"></script>
+    <script src="01-2-hour.js"></script>
+</head>
+<body onload="main()">
+<div class="container schedule" style="width:1000px; height: 1000px">
+    <h2>2 hours 1 activity</h2>
+
+    <!--<table id="grid">-->
+    <!--<tr>-->
+    <!--<th></th>-->
+    <!--<th>0 hour free</th>-->
+    <!--<th>1 hour free</th>-->
+    <!--<th>2 hour free</th>-->
+    <!--<th>3 hour free</th>-->
+    <!--<th>4 hour free</th>-->
+    <!--<th>5 hour free</th>-->
+    <!--<th>6 hour free</th>-->
+    <!--<th>7 hour free</th>-->
+    <!--</tr>-->
+    <!--</table>-->
+
+    <div class="col-12"><br></div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1" style="text-align: left">Schedule</div>
+        <div class="col-5" style="text-align: left"></div>
+        <div class="col-1" style="text-align: left">Value</div>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-6">
+            <div class="dropzone" id="scheduler">
+                <div>
+					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
+						<!--<span id="scheduler-total-hours">7 hours total</span>-->
+					</span>
+                </div>
+            </div>
+            <div id="scheduler-arrow"></div>
+        </div>
+        <div class="col-1">
+            <div class="block"">
+            <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
+        </div>
+    </div>
+    <div class="col-4">
+        <div id="instruction"></div><!--Will be populated by JS!-->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-6">
+        <div style="text-align: center; margin-top: -20px; width: 420px;">
+            <span> (</span>
+            <span id="hours-left"></span>
+            <span> hours unused) </span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-11">
+        <div id="gym" class="block notdropped draggable"></div>
+        <div id="date" class="block notdropped draggable"></div>
+        <div id="hike" class="block notdropped draggable"></div>
+        <div id="beach" class="block notdropped draggable"></div>
+    </div>
+</div>
+
+</div>
+</body>
+</html>
