@@ -14,11 +14,11 @@
             crossorigin="anonymous"></script>
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="schedule04.css" rel="stylesheet" type="text/css">
+    <link href="schedule.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
-    <script src="schedule04.js"></script>
+    <script src="schedule.js"></script>
 </head>
 <body onload="main()">
 <div class="container schedule01" style="width:1000px; height: 1000px">
@@ -53,14 +53,14 @@
             <div class="dropzone" id="scheduler">
                 <div style="padding-top: 20px">
 					<span style="text-align: center; font-style: italic">
-						<span class="scheduler-total-hours"> 7h</span>
+						<span id="scheduler-total-hours">7h</span><!--Populated by JS!-->
 					</span>
                 </div>
             </div>
         </div>
         <div class="col-1">
             <div class="block"">
-                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div>
+                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
             </div>
         </div>
         <div class="col-4">
