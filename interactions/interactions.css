@@ -96,12 +96,12 @@ td {
 }
 
 .notdropped {
-    background-color: #C9DAF8;
+    background-color: white;
 }
 
 .can-drop {
     color: #000;
-    background-color: #4e4;
+    background-color: #C9DAF8;
     border: dashed 4px;
 }
 

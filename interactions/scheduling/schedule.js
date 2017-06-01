@@ -232,8 +232,8 @@ function onDropAction(event) {
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
 
-    // update helpful text
-    updateHelpfulText();
+    // update
+    updateHelpText();
 }
 
 function onDragLeaveAction(event) {
@@ -253,69 +253,83 @@ function onDragLeaveAction(event) {
     elem.innerHTML = scheduleValue;
 
     // update helpful text
-    updateHelpfulText();
+    updateHelpText();
+
+}
+
+function indicateNotOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = doBetterText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'yellow';
+}
+
+function indicateOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = optimalScheduleText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.
-function updateHelpfulText() {
-    var elem = document.getElementById('instruction');
+function updateHelpText() {
+    let elem = document.getElementById('instruction');
 
-    var doBetterText = "That's progress, but you could do better.";
-    var instructionText = "Drag activities to your schedule to get the most value.";
-    var optimalScheduleText = "Awesome! This is an optimal schedule!.";
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 4)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 5)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if ((schedulerMaxHours == 7 )) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 9)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 6)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 5) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 7)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 6) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 8)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
  }
 
