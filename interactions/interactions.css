@@ -49,7 +49,7 @@ td {
 #scheduler {
     height: 60px;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    background-position: left bottom;
     background-image:url('../figures/schedule_ticklines.png');
     margin: 0px;
 }
