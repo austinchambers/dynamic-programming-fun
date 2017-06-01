@@ -318,17 +318,23 @@ interact('.dropzone').dropzone({
         selectedActivity = getselectedActivityFromName(draggableElement.id);
 
         // Only activate the dropzone if there is enough time.
-        if ((schedulerMaxHours - scheduleHoursUsed) >= selectedActivity.duration) {
+        if (((schedulerMaxHours - scheduleHoursUsed) >= selectedActivity.duration)) {
             // feedback the possibility of a drop
             dropzoneElement.classList.add('drop-target');
             draggableElement.classList.add('can-drop');
 
+            // If the item has already been dropped, don't count it's duration a second time.
+            var dropOffset = 0;
+            if (draggableElement.classList.contains('dropped')) {
+                dropOffset = selectedActivity.duration;
+            }
+
             var dropRect = interact.getElementRect(event.target),
                 dropCenter = {
                     // To snap to the first location on left, uncomment following line
-                    // x: dropRect.left + (scheduleHoursUsed * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
-                    x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
-                    y: dropRect.top  + dropRect.height / 2
+                    // x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    y: dropRect.top + dropRect.height / 2
                 };
 
             event.draggable.snap({
@@ -360,8 +366,8 @@ interact('.dropzone').dropzone({
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
-        // Only drop if the dropzone is active
-        if (dropzoneElement.classList.contains('drop-active')) {
+        // Only drop if the dropzone is active, and don't re-drop something that's already been dropped.
+        if (dropzoneElement.classList.contains('drop-active') && !(draggableElement.classList.contains('dropped'))) {
             draggableElement.classList.add('dropped');
             console.log('on drop');
             onDropAction(event);
