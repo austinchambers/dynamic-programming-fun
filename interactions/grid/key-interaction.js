@@ -25,9 +25,9 @@
 var currActivity;
 var startX;
 var startY;
-var currHoursTotal = 4;
+var currHoursTotal = 1;
 var currHoursUsed = 0;
-var currNumActivities = 2;
+var currNumActivities = 1;
 
 var activityArr = [ // ORDER MATTERS
     {
@@ -406,16 +406,16 @@ interact('.dropzone').dropzone({
         event.relatedTarget.classList.remove('can-drop');
         //event.relatedTarget.textContent = 'Dragged out';
 
-        draggableElement.classList.remove('dropped');
-        draggableElement.classList.add('notdropped');
+        //draggableElement.classList.remove('dropped');
+        //draggableElement.classList.add('notdropped');
 
         //onDragLeave();
     },
     ondrop: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
 
-        draggableElement.classList.remove('notdropped');
-        draggableElement.classList.add('dropped');
+        //draggableElement.classList.remove('notdropped');
+        //draggableElement.classList.add('dropped');
         onDrop();
     },
     ondropdeactivate: function (event) {

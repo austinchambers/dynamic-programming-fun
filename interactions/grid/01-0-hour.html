@@ -15,16 +15,16 @@
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
-    <link href="key-interaction.css" rel="stylesheet" type="text/css">
+    <link href="01-0-hour.css" rel="stylesheet" type="text/css">
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
-    <script src="key-interaction.js"></script>
+    <script src="01-0-hour.js"></script>
 </head>
 <body onload="main()">
 <div
 <div class="container">
-    <h2>Key Interaction 2</h2>
-    <table id="grid">
+<!--     <h2>Zero Hours</h2> -->
+<!--     <table id="grid">
         <tr>
             <th></th>
             <th>0h</th>
@@ -36,20 +36,25 @@
             <th>6h</th>
             <th>7h</th>
         </tr>
-    </table>
+    </table> -->
 
     <div class="col-12"><br></div>
-    <div class="col-12"><strong><p id="help-text">Help text here.</p></strong></div>
+    <div class="col-12">
+        <strong><p id="help-text">Help text here.</p></strong>
+<!--         <button id="next-button" disabled="true" onclick="advance()">Next</button> -->
+    </div>
     <div class="row">
         <div class="col-1"></div>
         <div class="col-1" style="text-align: left">Schedule</div>
         <div class="col-4" style="text-align: left"></div>
-<!--         <div class="col-1" style="text-align: left; margin-left: 15px">Value</div> -->
     </div>
     <div class="row">
         <div class="col-1"></div>
         <div class="col-5">
-            <div class="dropzone" id="scheduler">
+        <div id='zero-hours'><img class='x' src='../../x.png'/></div>
+        <div class="dropzone" id="scheduler"></div>
+
+<!--             <div class="dropzone" id="scheduler">
             </div>
                             <div>
                                 <span style="text-align: center; font-style: italic">
@@ -58,44 +63,33 @@
                                     <span id="hours-left"></span>
                                     <span> hours unused) </span>
                                 </span>
-                            </div>
+                            </div> -->
         </div>
         <div class="col-1">
+            Hearts
+            <div id='hearts'></div>
+<!--             <div id='value'></div> -->
 <!--             <div class="block" style="margin-left: 15px">
                 <div style="padding-top: 15px;"><strong><span style="text-align: center;" class="scheduler-value"> 0 </span></strong></div>
             </div> -->
         </div>
         <div class="col-1"></div>
         <div class="col-4" id="computation">
-            <div id="consider">
-                Consider:
-                <span class="value"> _ </span>
-                +
-                <span class="subvalue"> _ </span>
-                =
-                <span class="sum"> _ </span>
-            </div>
-            <div id="forget">
-                Forget:
-                <span class="value"> _ </span>
-                +
-                <span class="subvalue"> _ </span>
-                =
-                <span class="sum"> _ </span>
-            </div>
-            <button id="forget-button" onclick="onForgetButtonClick()" disabled>Forget</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-1"></div>
         <div class="col-11">
-            <div id="gym" class="block notdropped"></div>
-            <div id="date" class="block notdropped"></div>
-            <div id="hike" class="block notdropped"></div>
-            <div id="beach" class="block notdropped"></div>
+            <div id="gym" class="block draggable">gym</br><img class='heart' src='../../heart.png'/></div>
         </div>
     </div>
+    <button id="reset-button" onclick="reset()">Reset</button>
+<!--     <div class="row"> 
+        <div class="col-12">
+            <button id="reset">Reset</button>
+        </div>
+    </div> -->
 </div>
 </body>
 </html>
