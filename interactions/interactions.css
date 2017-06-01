@@ -50,6 +50,15 @@ td {
     height: 70px;
 }
 
+.dropzone {
+    background-color: white;
+    padding: 10px;
+    width: 420px;
+    height: 70px;
+    border: dashed 4px transparent;
+    float: left;
+}
+
 .activity {
     background-color: #c9daf8;
 }
@@ -58,21 +67,12 @@ td {
     background-color: #c9daf8;
 }
 
-.dropzone {
-    background-color: #ccc;
-    padding: 10px;
-    width: 420px;
-    height: 70px;
-    border: dashed 4px transparent;
-    float: left;
-}
-
 .drop-active {
     border-color: #aaa;
 }
 
 .drop-target {
-    color: #FFF;
+    color: #DDD;
     border-color: #aaa;
 }
 
@@ -104,19 +104,43 @@ td {
 }
 
 #gym {
-    width: 60px;
+    width:60px; /*width of your image*/
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart1_small.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
 }
 
 #date {
     width: 180px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart4_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
 }
 
-#hiking {
+#hike {
     width: 240px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart5_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
 }
 
 #beach {
     width: 300px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart7_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
 }
 
 #reset {
