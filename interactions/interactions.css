@@ -1,9 +1,10 @@
 body {
     background-color: white;
+    text-align: left;
 }
 
 h2 {
-    text-align: center; padding-top: 20px; font-size:36px; color: rgba(89,140,225,100);
+    text-align: left; padding-top: 20px; font-size:36px; color: rgba(89,140,225,100); height: 100px;
 }
 
 .table th {
@@ -55,7 +56,7 @@ td {
 }
 
 #scheduler-arrow {
-    height:63px; /*height of your image*/
+    height:66px; /*height of your image*/
     width:20px;
     background-repeat: no-repeat;
     background-position: right bottom;
@@ -66,6 +67,8 @@ td {
 }
 
 .dropzone {
+    position: relative;
+    z-index: -1000;
     background-color: transparent;
     padding: 10px;
     width: 420px;
@@ -111,11 +114,14 @@ td {
 }
 
 .block {
+    z-index: 1000;
     height: 60px;
     width: 60px;
     border-color: grey;
     border-style: solid;
     border-width: 1px;
+    position: relative;
+    text-align: center;
 }
 
 .notdropped {
