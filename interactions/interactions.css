@@ -118,6 +118,11 @@ td {
     border-width: 1px;
 }
 
+.notdropped {
+    background-color: #EFF1F4;
+}
+
+
 #gym {
     border-radius: 20px;
     width:60px; /*width of your image*/

@@ -5,6 +5,18 @@
     <!-- Place this data between the <head> tags of your website -->
     <title>Dynamic Programming with Systematic Scheduling -- An Interactive Explanation</title>
     <meta name="description" content="Dynamic Programming with Systematic Scheduling -- An Interactive Explanation"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
     <link rel="icon" type="image/png" href="favicon.png">
 
     <!-- CSS -->
@@ -21,7 +33,7 @@
 </div>
 
 <!-- CHAPTER -->
-<div class="chapter">
+<div class="container chapter">
 
     <p>Dynamic Programming is a concept in computer science, mathematics,
         management science and bioinformatics, involving a method for solving a
@@ -36,21 +48,74 @@
     <p>
         Let's walk through an example of this using something we all do on a daily basis: scheduling our free time.
         To do this, let's first talk about what activities you can do.
+    </p>
 
-        For example, you can go on a date:
+    <br>
+    <p>
+        For example, you can go on a hike:
+    </p>
+    <div class="row">
+        <div class="col-12">
+            <img src="figures/hike_activity.png" alt="Hike Activity" display: block; margin: auto; width: 40%;>
+        </div>
+    </div>
 
+    <br>
+    <p>
+        Notice activities have two main characteristics: their <span class="time">duration</span> and how
+        much <span class="enjoyment">enjoyment</span> they give you.
+    </p>
 
-        Notice activities have two main characteristics: their <b>duration</b> and how much <b> enjoyment </b> they give you.
+    <div class="row">
+        <div class="col-6">
+            <div class="col-12">
+                <img src="figures/date_activity_timeline.png" alt="Date Activity" display: block; margin: auto; width: 40%;>
+            </div>
+            <div class="col-12">
+                <span class="commentary-text">This date has a duration of 3 hours.</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="col-12">
+                <img src="figures/date_activity.png" alt="Date Activity" display: block; margin: auto; width: 40%;>
+            </div>
+            <div class="col-12">
+                <span class="commentary-text">
+                The value in the heart represents how much you enjoy each activity.
+                The higher the enjoyment value, the better.
+                    </span>
+            </div>
+        </div>
+    </div>
 
-        [date activity image]                                                       [date activity image]
-        [timeline image]                                                  The value in the heart represents how much you enjoy each activity.
-        This date has a duration of 3 hours.                              The higher the enjoyment value, the better: you want to maximize this in your schedule.
-                                                                            Notice the date has an enjoyment value of 5.
+    <div class="row col-12">
+        This is a schedule.
+    </div>
+    <div class="row col-12">
+        <img src="figures/schedule_6hours_example.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
+    </div>
+    <div class="row col-12">
         A schedule is a given amount of time:
-            [schedule]
-        It can be filled with a set of activities, like this:
-            [filled up schedule]
+        It can contain activities, like this:
+    </div>
+    <div class="row col-12">
+        <img src="figures/schedule_6hours_filled_example.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
+    </div>
 
+    <div class="row col-12">
+        This box shows the total enjoyment value of a schedule. Here the value is 8 because, in the schedule above, 1 + 7 = 8.
+    </div>
+    <div class="row col-12">
+        <img src="figures/ValueBox.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
+    </div>
+
+    <br>
+    <br>
+    <div class="instruction">
+        Find the most enjoyment in a schedule.
+    </div>
+
+    <p>
         Consider four daily activities that you would like to do at most once, but each one takes a
         specific amount of <span class="time">time:</span>
     <p>
