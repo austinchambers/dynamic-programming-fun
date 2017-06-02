@@ -169,3 +169,18 @@ iframe {
     margin-top: 30px;
     border:1px solid lightgrey;"
 }
+
+#grid-01 {
+    background-color: white;
+    margin: auto;
+    display: block;
+    width: 900px;
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*right: 0px;*/
+    /*z-index: 20000;*/
+}
+
+.time-icon {
+    width: 70px;
+}
