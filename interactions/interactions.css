@@ -55,7 +55,7 @@ td {
 }
 
 #scheduler-arrow {
-    height:83px; /*height of your image*/
+    height:63px; /*height of your image*/
     width:20px;
     background-repeat: no-repeat;
     background-position: right bottom;
@@ -69,7 +69,7 @@ td {
     background-color: transparent;
     padding: 10px;
     width: 420px;
-    height: 90px;
+    height: 70px;
     border: dashed 4px transparent;
     float: left;
 }
