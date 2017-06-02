@@ -149,8 +149,7 @@ function unhighlightCellAt(r, c) {
 function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
-    //elem.style.height = BLOCK_HEIGHT + 'px';
-    elem.style.height = BLOCK_HEIGHT + 20 + 'px'; // Temp transparent fix
+    elem.style.height = BLOCK_HEIGHT + 'px';
     elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
     // Update hours left if the corresponding ID element exists.
