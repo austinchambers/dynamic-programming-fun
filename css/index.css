@@ -242,3 +242,164 @@ iframe {
 #title {
     padding-bottom: 20px;
 }
+
+/* interactions */
+#scheduler {
+    height: 60px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-image:url('../figures/schedule_ticklines.png');
+    margin: 0px;
+}
+
+#scheduler-arrow {
+    height:63px; /*height of your image*/
+    width:20px;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-image:url('../figures/schedule_arrow.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
+    float:left;
+}
+
+.dropzone {
+    background-color: transparent;
+    padding: 10px;
+    width: 420px;
+    height: 70px;
+    border: dashed 4px transparent;
+    float: left;
+}
+
+.activity {
+    background-color: #c9daf8;
+}
+
+.highlight {
+    background-color: #c9daf8;
+}
+
+.drop-active {
+    border-color: #aaa;
+}
+
+.drop-target {
+    color: #DDD;
+    border-color: #aaa;
+}
+
+.dropped {
+    background-color: #ccc;
+}
+
+.notdropped {
+    background-color: #EFF1F4;
+}
+
+.can-drop {
+    color: #000;
+    background-color: #C9DAF8;
+    border: dashed 4px;
+}
+
+.drop-target {
+    border-color: #aaa;
+    border: dashed 4px;
+}
+
+.block {
+    height: 60px;
+    width: 60px;
+    border-color: grey;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.notdropped {
+    background-color: #EFF1F4;
+}
+
+
+#gym {
+    border-radius: 20px;
+    width:60px; /*width of your image*/
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart1_small.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
+}
+
+#date {
+    border-radius: 20px;
+    width: 180px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart4_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
+}
+
+#hike {
+    border-radius: 20px;
+    width: 240px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart5_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
+}
+
+#beach {
+    border-radius: 20px;
+    width: 300px;
+    height:60px; /*height of your image*/
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-image:url('../figures/heart7_smallgrid.png');
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
+}
+
+#reset {
+    padding: 5px;
+    background: #aaa;
+    width: 80px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    margin: 5px auto;
+
+    position: relative;
+    top: 0;
+
+    cursor: pointer;
+    border-bottom: 2px solid #888;
+
+    -webkit-transition: top 0.1s linear;
+    -moz-transition: top 0.1s linear;
+    -ms-transition: top 0.1s linear;
+    -o-transition: top 0.1s linear;
+    transition: top 0.1s linear;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+}
+
+#reset:hover {
+    background: #bbb;
+    top: -2px;
+}
+
+#reset:active {
+    background: #999;
+    top: 2px;
+}
