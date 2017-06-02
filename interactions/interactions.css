@@ -66,6 +66,8 @@ td {
 }
 
 .dropzone {
+    position: relative;
+    z-index: -1000;
     background-color: transparent;
     padding: 10px;
     width: 420px;
@@ -111,11 +113,13 @@ td {
 }
 
 .block {
+    z-index: 1000;
     height: 60px;
     width: 60px;
     border-color: grey;
     border-style: solid;
     border-width: 1px;
+    position: relative;
 }
 
 .notdropped {
