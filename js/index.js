@@ -125,6 +125,17 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+// iframe stuff
+function displayActivities(num) {
+    let display = document.getElementById('gym');
+    display.style.height = BLOCK_HEIGHT + 'px';
+    display.style.width = BLOCK_WIDTH * 1 + 'px';
+}
+
+function updateHelpText(newText) {
+    let elem = document.getElementById('help-text');
+    elem.innerHTML = newText;
+}
 
 // Set everything up
 function main() {
@@ -136,4 +147,97 @@ function main() {
 
     let floatTable = initTable(gridMaxRows, gridMaxCols);
     displayTable(floatTable, gridMaxRows, gridMaxCols, 'float-grid');
+
+    // iframe stuff
+    currActivity = activityArr[0];
+    displayActivities(currNumActivities);
+    updateHelpText(questionText);
 }
+
+
+// --------------------- InteractJS ---------------------
+
+function onDragMove() {
+
+    displayInitSchedule();
+    // updateValue(0);
+    updateHearts(0);
+    updateHelpText(answerText);
+    // activateNextButton();
+    activateResetButton();
+
+}
+
+
+var startPos = {x: 0, y: 0};
+
+// target elements with the "draggable" class
+interact('.draggable')
+    .draggable({
+        // enable inertial throwing
+        inertia: true,
+
+        // keep the element within the area of it's parent
+        //restrict: {
+        //    restriction: "parent",
+        //    endOnly: true,
+        //    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        //},
+
+        // enable autoScroll
+        autoScroll: true,
+
+        // call this function on every dragmove event
+        onmove: dragMoveListener,
+        // call this function on every dragend event
+        onend: function (event) {
+            var textEl = event.target.querySelector('p');
+
+            textEl && (textEl.textContent =
+                'moved a distance of '
+                + (Math.sqrt(event.dx * event.dx +
+                    event.dy * event.dy)|0) + 'px');
+        }
+    });
+
+function dragMoveListener (event) {
+    onDragMove();
+    var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+    // translate the element
+    target.style.webkitTransform =
+        target.style.transform =
+            'translate(' + x + 'px, ' + y + 'px)';
+
+    // update the posiion attributes
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+}
+
+// this is used later in the resizing and gesture demos
+window.dragMoveListener = dragMoveListener;
+
+// var alreadyDropped = false;
+
+interact('.draggable').snap({
+    mode: 'anchor',
+    anchors: [],
+    range: Infinity,
+    elementOrigin: { x: 0.5, y: 0.5 },
+    endOnly: true
+});
+
+interact('.draggable')
+    .on('dragstart', function (event) {
+        var rect = interact.getElementRect(event.target);
+
+        // record center point when starting a drag
+        startPos.x = rect.left + rect.width  / 2;
+        startPos.y = rect.top  + rect.height / 2;
+
+        // snap to the start position
+        event.interactable.snap({ anchors: [startPos] });
+    });
