@@ -31,3 +31,7 @@ header#header {
 footer#footer {
     background-color: #eceff2
 }
+
+.time-icon {
+    width: 50px;
+}

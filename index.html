@@ -9,6 +9,7 @@
 
     <!-- CSS -->
     <link href="css/index.css" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
 
     <script src="js/index.js"></script>
 
@@ -72,19 +73,24 @@
     </p>
 
     <!-- One Hour -->
-    <iframe src="interactions/grid/01-1-hour.html" scrolling="no" embedded></iframe>
+    <iframe id="01-1" src="interactions/grid/01-1-hour.html" scrolling="no" embedded></iframe>
 
     <!-- Two Hour -->
-    <iframe src="interactions/grid/01-2-hour.html" scrolling="no" embedded></iframe>
+    <iframe id="01-2" src="interactions/grid/01-2-hour.html" scrolling="no" embedded></iframe>
+
+    <!--Three to Six Hour-->
+    <p id="01-3">
+        The same idea applies when you have a timeline with three hours, four hours, and so on.
+    </p>
 
     <!-- Seven Hour -->
-    <iframe src="interactions/grid/01-7-hour.html" scrolling="no" embedded></iframe>
+    <iframe id="01-7" src="interactions/grid/01-7-hour.html" scrolling="no" embedded></iframe>
 
+    <p><em>Here is where we will explain the concept of a table</em></p>
 
         <table id="grid-01">
             <tr>
                 <th></th>
-                <th><img class="time-icon" src="figures/time_icons/0h.png"></th>
                 <th><img class="time-icon" src="figures/time_icons/1h.png"></th>
                 <th><img class="time-icon" src="figures/time_icons/2h.png"></th>
                 <th><img class="time-icon" src="figures/time_icons/3h.png"></th>
@@ -95,7 +101,28 @@
             </tr>
         </table>
 
+    <p><em>Here is where we will setup the floating table</em></p>
+
+    <div class="meaty-interaction" id="02">
+        <table id="float-grid">
+            <caption>Our Floating Table</caption>
+            <tr>
+                <th></th>
+                <th><img class="time-icon" src="figures/time_icons/1h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/2h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/3h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/4h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/5h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/6h.png"></th>
+                <th><img class="time-icon" src="figures/time_icons/7h.png"></th>
+            </tr>
+        </table>
+
+
+    </div>
+
 </div>
+
 
 </body>
 

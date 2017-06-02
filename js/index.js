@@ -78,9 +78,10 @@ function displayTable(table, gridMaxRows, gridMaxCols, id) {
         }
         cell.innerHTML = thisarray.join(", ");
 
-        for (var j = 0; j < gridMaxCols; j++) {
+        for (var j = 0; j < gridMaxCols-1; j++) {
             var cell = row.insertCell(j + 1);
-            cell.innerHTML = table[i][j];
+            cell.innerHTML = table[i][j+1];
+
         }
     }
 }
@@ -127,9 +128,12 @@ function unhighlightCellAt(r, c) {
 
 // Set everything up
 function main() {
-    let gridMaxRows = 1;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
+    let gridMaxRows = 2;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
     let gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-8
 
     let table1 = initTable(gridMaxRows, gridMaxCols);
     displayTable(table1, gridMaxRows, gridMaxCols, 'grid-01');
+
+    let floatTable = initTable(gridMaxRows, gridMaxCols);
+    displayTable(floatTable, gridMaxRows, gridMaxCols, 'float-grid');
 }

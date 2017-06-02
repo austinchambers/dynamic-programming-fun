@@ -103,7 +103,7 @@ a:hover {
 iframe[embedded] {
     overflow: hidden;
     border: none;
-    margin: 40px;
+    /*margin: 40px;*/
 }
 
 #cartoon_container {
@@ -181,6 +181,19 @@ iframe {
     /*z-index: 20000;*/
 }
 
-.time-icon {
-    width: 70px;
+.meaty-interaction {
+    width: 900px;
+    height: 400px;
+    background-color: white;
+    margin: auto;
+}
+
+#float-grid {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 5px -5px 5px #888888;
+    border-radius: 10px;
 }
