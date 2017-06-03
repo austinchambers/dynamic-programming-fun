@@ -17,6 +17,7 @@ var optimalScheduleText = "Awesome! You maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
+var startPos = {x: 0, y: 0};
 var startX;
 var startY;
 var gymStartTop;
@@ -331,6 +332,19 @@ interact('.draggable').snap({
     range: Infinity,
     elementOrigin: { x: 0.5, y: 0.5 },
     endOnly: true
+});
+
+interact('.draggable')
+    .on('dragstart', function (event) {
+        var rect = interact.getElementRect(event.target);
+        selectedActivity = getselectedActivityFromName(event.target.id);
+        console.log(selectedActivity.name);
+        // record center point when starting a drag
+        startPos.x = rect.left + rect.width  / 2;
+        startPos.y = rect.top  + rect.height / 2;
+
+        // snap to the start position
+        event.interactable.snap({ anchors: [startPos] });
 });
 
 // target elements with the "draggable" class
