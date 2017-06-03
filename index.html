@@ -133,8 +133,7 @@
     <p>
         Naturally, you get different amounts of pleasure from different things.
         Now, imagine if you gave each activity an "<span class="enjoyment">enjoyment value</span>" where
-        the number of points indicate a value of how much happiness and
-        enjoyment you get from something (higher number = more enjoyment). Let's
+        the number of points indicate a value of how much enjoyment you get from something (higher number = more enjoyment). Let's
         call this each item's "<span class="enjoyment">e.v.</span>" and make up some values for each activity:
     </p>
 
@@ -186,82 +185,22 @@
             </tr>
         </table>
 
-    <p><em>Here is where we will setup the floating table</em></p>
-
-    <div class="meaty-interaction" id="02">
-        <table id="float-grid">
-            <caption>Our Floating Table</caption>
-            <tr>
-                <th></th>
-                <th><img class="time-icon" src="figures/time_icons/1h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/2h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/3h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/4h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/5h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/6h.png"></th>
-                <th><img class="time-icon" src="figures/time_icons/7h.png"></th>
-            </tr>
-        </table>
-
-        <div class="container schedule">
-
-            <div id="title" class="row">
-                <div class="col-12">
-                    <h2 id="instruction"></h2><!--Will be populated by JS!-->
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-1" style="text-align: center">Value</div>
-                <div class="col-1"></div>
-                <div class="col-5"></div>
-
-            </div>
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-1">
-                    <div class="block">
-                        <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
-                    </div>
-                </div>
-                <div class="col-1"></div>
-                <div class="col-2">
-                    <div class="dropzone" id="scheduler">
-                        <div>
-					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
-						<!--<span id="scheduler-total-hours">7 hours total</span>-->
-					</span>
-                        </div>
-                    </div>
-                    <div id="scheduler-arrow"></div>
-                </div>
-                <div class="col-1"><img class="time-icon" src="figures/time_icons/1h.png"></div>
-            </div>
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <div id="hours-left-text">
-                        <span>Timeline: </span>
-                        <span id="hours-left"></span>
-                        <span> hours left</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-7">
-                    <div id="gym" class="block notdropped draggable"></div>
-                    <div id="date" class="block notdropped draggable"></div>
-                    <div id="hike" class="block notdropped draggable"></div>
-                    <div id="beach" class="block notdropped draggable"></div>
-                </div>
-            </div>
-        </div>
+    <p>
+        What if we could also choose to go on a date in addition to the gym?
+        If we have only one hour, does the date fit?
+    </p>
 
 
-    </div>
+    <p>
+        You're right, it doesn't fit. So we still have one hour. What can we do in one hour?
+    </p>
+    <p>
+        Let's look at our table. As you can see, we already know that in one hour we can go to the gym!
+    </p>
+
+    <!-- Add date, 1 Hour -->
+    <iframe src="interactions/add_date/1-hour.html" style="height:600px" scrolling="no" embedded></iframe>
+
 
 </div>
 

@@ -1,0 +1,68 @@
+#instruction {
+    /*border: 2px dashed lightblue;*/
+    text-align:center;
+    margin-left: 20px;
+    margin-right: 20px;
+    /*height: 78px;*/
+    padding: 10px;
+}
+
+.schedule th {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 14px;
+    text-align: center;
+    margin: auto;
+}
+
+.schedule th:first-child {
+    border-color: transparent;
+    width: 140px;
+    text-align: right;
+}
+
+.schedule td:first-child {
+    border-color: transparent;
+    width: 140px;
+    font-weight: normal;
+    font-style: italic;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+#hours-left-text {
+    text-align: left;
+    margin-top: -5px;
+    width: 420px;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+#title {
+    padding-bottom: 20px;
+}
+
+#grid {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+}
+
+.too-big {
+    background-color: red;
+}
+
+#x {
+    visibility: hidden;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 120px;
+    left: 200px;
+
+}
+.phantom {
+    display: none;
+    opacity:0.5;
+}

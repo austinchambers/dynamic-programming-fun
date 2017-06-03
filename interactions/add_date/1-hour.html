@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <link href="../../css/main.css" rel="stylesheet" type="text/css">
+    <link href="add_date.css" rel="stylesheet" type="text/css">
+    <link href="../interactions.css" rel="stylesheet" type="text/css">
+
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/interact.js"></script>
+    <script src="1-hour.js"></script>
+</head>
+<body onload="main()">
+<div class="container schedule">
+
+
+    <table id="grid">
+        <tr>
+            <th></th>
+            <th><img id="1h" class="time-icon" src="../../figures/time_icons/1h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/2h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/3h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/4h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/5h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/6h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/7h.png"></th>
+        </tr>
+    </table>
+
+    <div><img id="x" src="../../figures/x.png"></div>
+
+    <div id="title" class="row">
+        <div class="col-12">
+            <h2 id="instruction"></h2><!--Will be populated by JS!-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-7">
+            <div id="gym" class="gym block notdropped draggable"></div>
+            <div id="date" class="date block notdropped draggable"></div>
+            <div id="hike" class="hike block notdropped draggable"></div>
+            <div id="beach" class="beach block notdropped draggable"></div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-7">
+            <div id="phantom-gym" class="gym block notdropped phantom"></div>
+            <div id="phantom-date" class="date block notdropped phantom"></div>
+            <div id="phantom-hike" class="hike block notdropped phantom"></div>
+            <div id="phantom-beach" class="beach block notdropped phantom"></div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1" style="text-align: center">Value</div>
+        <div class="col-1"></div>
+        <div class="col-5"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-1">
+            <div class="block">
+                <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
+            </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2">
+            <div class="dropzone" id="scheduler">
+                <div>
+					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
+						<!--<span id="scheduler-total-hours">7 hours total</span>-->
+					</span>
+                </div>
+            </div>
+            <div id="scheduler-arrow"></div>
+        </div>
+        <div class="col-1"><img class="time-icon" src="../../figures/time_icons/1h.png"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div id="hours-left-text">
+                <span>Timeline: </span>
+                <span id="hours-left"></span>
+                <span> hours left</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</body>
+</html>
