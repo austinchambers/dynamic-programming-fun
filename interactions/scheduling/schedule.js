@@ -356,15 +356,24 @@ interact('.draggable').snap({
 
 interact('.draggable')
     .on('dragstart', function (event) {
-        var rect = interact.getElementRect(event.target);
-        selectedActivity = getselectedActivityFromName(event.target.id);
-        console.log(selectedActivity.name);
-        // record center point when starting a drag
-        startPos.x = rect.left + rect.width  / 2;
-        startPos.y = rect.top  + rect.height / 2;
+        var draggableElement = event.target;
 
-        // snap to the start position
-        event.interactable.snap({ anchors: [startPos] });
+        if (!draggableElement.classList.contains('dropped')) {
+            var rect = interact.getElementRect(event.target);
+            selectedActivity = getselectedActivityFromName(event.target.id);
+
+            // record center point when starting a drag
+            startPos.x = rect.left + rect.width  / 2;
+            startPos.y = rect.top  + rect.height / 2;
+
+            // snap to the start position
+            event.interactable.snap({ anchors: [startPos] });
+            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('on undropped dragstart '.concat(selectedActivity.name));
+        }
+        else {
+            console.log('on dropped dragstart '.concat(selectedActivity.name));
+        }
 });
 
 // target elements with the "draggable" class
@@ -421,6 +430,10 @@ interact('.dropzone').dropzone({
         if ((schedulerMaxHours - scheduleHoursUsed) >= selectedActivity.duration) {
             // add active dropzone feedback
             event.target.classList.add('drop-active');
+            console.log('on drag activate dropzone '.concat(draggableElement.id));
+        }
+        else {
+            console.log('on drag noactivate dropzone '.concat(draggableElement.id));
         }
     },
 
@@ -437,7 +450,11 @@ interact('.dropzone').dropzone({
             // If the item has already been dropped, don't count it's duration a second time.
             var dropOffset = 0;
             if (draggableElement.classList.contains('dropped')) {
+                console.log('on drag enter valid from dropped '.concat(draggableElement.id));
                 dropOffset = selectedActivity.duration;
+            }
+            else {
+                console.log('on drag enter valid from notdropped '.concat(draggableElement.id));
             }
 
             var dropRect = interact.getElementRect(event.target),
@@ -447,13 +464,13 @@ interact('.dropzone').dropzone({
                     x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     y: dropRect.top + dropRect.height / 2
                 };
-
+            console.log('setting snap '.concat(dropCenter.x).concat('-').concat(dropCenter.y));
             event.draggable.snap({
                 anchors: [ dropCenter ]
             });
         }
         else {
-            event.draggable.snap(false);
+            console.log('on drag enter notvalid '.concat(draggableElement.id));
         }
     },
 
@@ -461,17 +478,31 @@ interact('.dropzone').dropzone({
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         selectedActivity = getselectedActivityFromName(draggableElement.id);
 
-        // remove the drop feedback style
-        draggableElement.classList.remove('can-drop');
         dropzoneElement.classList.remove('drop-target');
 
-        // If the item was dropped, then it can be removed
-        if (draggableElement.classList.contains('dropped')) {
-            draggableElement.classList.remove('dropped');
-            onDragLeaveAction(event);
-        }
+        // If the draggable element had 'can-drop' then it was in the drag zone in a valid state.
+        if (draggableElement.classList.contains('can-drop')) {
+            // remove the drop feedback style
+            draggableElement.classList.remove('can-drop');
 
-        event.draggable.snap(false);
+            // If the item was dropped, then it can be removed
+            if (draggableElement.classList.contains('dropped')) {
+                draggableElement.classList.remove('dropped');
+                onDragLeaveAction(event);
+                console.log('on drag leave valid from dropped '.concat(draggableElement.id));
+            }
+            else {
+                console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
+            }
+
+            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.draggable.snap({
+                anchors: [ startPos ]
+            });
+        }
+        else {
+            console.log('on drag leave invalid '.concat(draggableElement.id));
+        }
     },
 
     ondrop: function (event) {
@@ -480,8 +511,11 @@ interact('.dropzone').dropzone({
         // Only drop if the dropzone is active, and don't re-drop something that's already been dropped.
         if (dropzoneElement.classList.contains('drop-active') && !(draggableElement.classList.contains('dropped'))) {
             draggableElement.classList.add('dropped');
-            console.log('on drop');
+            console.log('on drop from notdropped '.concat(draggableElement.id));
             onDropAction(event);
+        }
+        else {
+            console.log('on drop from dropped '.concat(draggableElement.id));
         }
     },
     ondropdeactivate: function (event) {
@@ -491,6 +525,6 @@ interact('.dropzone').dropzone({
         dropzoneElement.classList.remove('drop-active');
         dropzoneElement.classList.remove('drop-target');
 
-        console.log('on drop deactivate');
+        console.log('on drop deactivate '.concat(draggableElement.id));
     }
 });
