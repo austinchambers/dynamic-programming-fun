@@ -74,6 +74,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue();
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -414,11 +415,27 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update
     updateHelpText();
+}
+
+function updateScheduleValue()
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue));
 }
 
 function onDragLeaveAction(event) {
@@ -434,8 +451,7 @@ function onDragLeaveAction(event) {
     // update value
     var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update helpful text
     updateHelpText();
@@ -446,7 +462,7 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '5px 5px yellow';
 }
 
 function indicateOptimal() {
@@ -454,23 +470,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.
