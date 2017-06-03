@@ -5,16 +5,25 @@ var schedulerMaxHours = 3;      // Change the schedulerMaxHours to cause the sch
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
+var tableEnabled = true;       // True, if we have a table
+var displayTableUpToRows = 2;
+var displayTableUpToCols = 2;   // Row and column limit of the table to display, if tableEnabled = true
+var highlightCellRow = 2;
+var highlightCellCol = 3;       // Row and column of cell to highlighjt
+var displayAllActivities = true;//Whether to display all activities or just a single one.
+var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
 
+var instructionText = "Drag the activity to your timeline to get the most value.";
+var initialHelpfulText = "Can we go on a date.";
+var doBetterText = "That's progress, but you could do better.";
+var optimalScheduleText = "Awesome! You maximized your value!";
+
+// Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
-var tableEnabled = true;       // True, if we have a table
-
-// Other stuff
-var doBetterText = "That's progress, but you could do better.";
-var instructionText = "Drag the gym to your timeline to get the most value.";
-var optimalScheduleText = "Awesome! You maximized your value!";
+var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
+var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -48,16 +57,23 @@ var activityArr = [ // ORDER MATTERS
 
 // Set everything up
 function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    initTable();
-    displayTableUpTo(2, 2);
-    highlightCellAt(2,3)
+    // Display all activities or just a single one.
+    if (displayAllActivities == true) {
+        displayActivities(schedulerMaxActivities);
+    }
+    else {
+        displaySingleActivity(singleActivityIndexToDisplay);
+    }
+
+    // Display a table, and if so, set table settings.
+    if (tableEnabled == true) {
+        initTable();
+        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
+        highlightCellAt(highlightCellRow, highlightCellCol)
+    }
+
+    setHelpfulText(initialHelpfulText);
     displaySchedule();
-    //displayActivities(schedulerMaxActivities);
-
-    displaySingleActivity(1);
-
-    setHelpfulText("Can we go on a date?");
 }
 
 // ********************************** DP GRID LOOKUP ***************************************

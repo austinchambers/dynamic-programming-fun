@@ -5,16 +5,25 @@ var schedulerMaxHours = 1;      // Change the schedulerMaxHours to cause the sch
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 0;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 0;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
+var tableEnabled = false;       // True, if we have a table
+var displayTableUpToRows = 2;
+var displayTableUpToCols = 0;   // Row and column limit of the table to display, if tableEnabled = true
+var highlightCellRow = 2;
+var highlightCellCol = 0;       // Row and column of cell to highlighjt
+var displayAllActivities = true;//Whether to display all activities or just a single one.
+var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
 
+var instructionText = "Drag the activity to your timeline to get the most value.";
+var initialHelpfulText = "Drag the gym to your timeline to get the most value.";
+var doBetterText = "That's progress, but you could do better.";
+var optimalScheduleText = "Awesome! You maximized your value!";
+
+// Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
-var tableEnabled = false;       // True, if we have a table
-
-// Other stuff
-var doBetterText = "That's progress, but you could do better.";
-var instructionText = "Drag the gym to your timeline to get the most value.";
-var optimalScheduleText = "Awesome! You maximized your value!";
+var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
+var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -48,23 +57,23 @@ var activityArr = [ // ORDER MATTERS
 
 // Set everything up
 function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    //initTable();
-    //displayTable();
-    displaySchedule();
-    displayActivities(schedulerMaxActivities);
-
-    setHelpfulText(instructionText);
-
-    // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < schedulerMaxActivities; i++) {
-        var elem = document.getElementById(activityArr[i]);
-        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
-        var y = $("#"+activityArr[i].name).offset().left;
-        activityArr[i].startLeft = x;
-        activityArr[i].startTop = y;
-        console.log('x, y:', x, y);
+    // Display all activities or just a single one.
+    if (displayAllActivities == true) {
+        displayActivities(schedulerMaxActivities);
     }
+    else {
+        displaySingleActivity(singleActivityIndexToDisplay);
+    }
+
+    // Display a table, and if so, set table settings.
+    if (tableEnabled == true) {
+        initTable();
+        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
+        highlightCellAt(highlightCellRow, highlightCellCol)
+    }
+
+    setHelpfulText(initialHelpfulText);
+    displaySchedule();
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -180,6 +189,7 @@ function highlightCellAt(r, c) {
     var grid = document.getElementById('grid');
     var cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
+    cell.innerHTML = '?';
 }
 
 function unhighlightCellAt(r, c) {
@@ -192,16 +202,33 @@ function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r].cells[c];
     cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
     cell.addEventListener('click', onCellClick)
+}
+
+function onCellMouseLeave(event) {
+    console.log('mouse leave', event.target);
+    //showX();
+    hidePhantomActivity('gym');
+    setHelpfulText(doesntFitText);
+    hidePhantomValue();
+    hidePhantomHoursLeft();
+    event.target.classList.remove('target-time-highlight');
+}
+
+function highlightCellBorderAt(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.classList.add('highlight-border');
 }
 
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     hideX();
-    // hack, fix this
-    $('#date').animate({
-        'left' : "+=300px"
-    }, "slow");
+    // // hack, fix this
+    // $('#date').animate({
+    //     'left' : "+=300px"
+    // }, "slow");
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
@@ -219,10 +246,18 @@ function highlightTargetTime(filename) {
 
 }
 
+var oldValue;
 function showPhantomValue(phantomValue) {
     let elem = document.getElementById('scheduler-value');
+    oldValue = elem.innerHTML;
     elem.innerHTML = phantomValue;
     elem.style.opacity = 0.5;
+}
+
+function hidePhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.innerHTML = oldValue;
+    elem.style.opacity = 1;
 }
 
 function fillInPhantomValue() {
@@ -230,10 +265,18 @@ function fillInPhantomValue() {
     elem.style.opacity = 1;
 }
 
+var oldHoursLeft;
 function showPhantomHoursLeft(phantomHoursLeft) {
     let elem = document.getElementById('hours-left');
+    oldHoursLeft = elem.innerHTML;
     elem.innerHTML = phantomHoursLeft;
     elem.style.opacity = 0.5;
+}
+
+function hidePhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.innerHTML = oldHoursLeft;
+    elem.style.opacity = 1;
 }
 
 function fillInPhantomHoursLeft() {
@@ -247,6 +290,11 @@ function showPhantomActivity(name) {
     elem.innerHTML = name;
 }
 
+function hidePhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.display = 'none';
+}
+
 function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
@@ -257,17 +305,32 @@ function onCellClick(event) {
     fillInPhantomActivity('gym');
     fillInPhantomValue();
     fillInPhantomHoursLeft();
+
+    event.target.removeEventListener('mouseover', onCellMouseOver);
+    event.target.removeEventListener('mouseleave', onCellMouseLeave);
+
+    showCheck();
+
 }
 
 function showX() {
     let elem = document.getElementById('x');
-    //elem.style.backgroundColor = 'red';
     elem.style.visibility = 'visible';
 }
 
 function hideX() {
     let elem = document.getElementById('x');
     //elem.style.backgroundColor = 'red';
+    elem.style.visibility = 'hidden';
+}
+
+function showCheck() {
+    let elem = document.getElementById('check');
+    elem.style.visibility = 'visible';
+}
+
+function hideCheck() {
+    let elem = document.getElementById('check');
     elem.style.visibility = 'hidden';
 }
 
@@ -484,12 +547,15 @@ function onDragEnterAction(event) {
 function onDragMove() {
 }
 
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
+
 function onDropDeactivate() {
     if (tableEnabled == true) {
         showX();
-        setHelpfulText("That's right, it doesn't fit. So, what can we do in an hour?");
-        addCellEvents(1, 1);
-        highlightTargetTime('1h.png');
+        setHelpfulText(doesntFitText);
+        addCellEvents(1,1);
+        //highlightTargetTime('1h.png');
+        highlightCellBorderAt(1, 1);
     }
 }
 
