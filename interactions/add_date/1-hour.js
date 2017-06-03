@@ -9,6 +9,7 @@ var gridMaxCols = 8;            // Total number of columns to display in the gri
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
+var tableEnabled = true;       // True, if we have a table
 
 // Other stuff
 var doBetterText = "That's progress, but you could do better.";
@@ -174,6 +175,89 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+function addCellEvents(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('click', onCellClick)
+}
+
+function onCellMouseOver(event) {
+    console.log('mouse over', event.target);
+    hideX();
+    // hack, fix this
+    $('#date').animate({
+        'left' : "+=300px"
+    }, "slow");
+    document.getElementById('date').classList.remove('draggable');
+    showPhantomActivity('gym');
+    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+    showPhantomValue(1);
+    showPhantomHoursLeft(0);
+    event.target.classList.add('target-time-highlight');
+}
+
+function highlightTargetTime(filename) {
+    let elems = document.getElementsByClassName('target-time');
+    for (let i = 0; i < elems.length; i++) {
+        let elem = elems[i];
+        elem.src = '../../figures/yellow_time_icons/' + filename;
+    }
+
+}
+
+function showPhantomValue(phantomValue) {
+    let elem = document.getElementById('scheduler-value');
+    elem.innerHTML = phantomValue;
+    elem.style.opacity = 0.5;
+}
+
+function fillInPhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.style.opacity = 1;
+}
+
+function showPhantomHoursLeft(phantomHoursLeft) {
+    let elem = document.getElementById('hours-left');
+    elem.innerHTML = phantomHoursLeft;
+    elem.style.opacity = 0.5;
+}
+
+function fillInPhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.style.opacity = 1;
+}
+
+function showPhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.display = 'block';
+    elem.innerHTML = name;
+}
+
+function fillInPhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.opacity = 1;
+}
+function onCellClick(event) {
+    console.log('click', event.target);
+    fillInTable(2,1);
+    fillInPhantomActivity('gym');
+    fillInPhantomValue();
+    fillInPhantomHoursLeft();
+}
+
+function showX() {
+    let elem = document.getElementById('x');
+    //elem.style.backgroundColor = 'red';
+    elem.style.visibility = 'visible';
+}
+
+function hideX() {
+    let elem = document.getElementById('x');
+    //elem.style.backgroundColor = 'red';
+    elem.style.visibility = 'hidden';
+}
+
 // ********************************** SCHEDULING ***************************************
 function displaySchedule() {
     // Update the scheduler width and height.
@@ -275,8 +359,8 @@ function onDropAction(event) {
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
 
-    // update helpful text
-    updateHelpfulText();
+    // update
+    updateHelpText();
 }
 
 function onDragLeaveAction(event) {
@@ -296,66 +380,98 @@ function onDragLeaveAction(event) {
     elem.innerHTML = scheduleValue;
 
     // update helpful text
-    updateHelpfulText();
+    updateHelpText();
+}
+
+function indicateNotOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = doBetterText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'yellow';
+}
+
+function indicateOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = optimalScheduleText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'lightgreen';
+}
+
+function indicateNotOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = doBetterText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'yellow';
+}
+
+function indicateOptimal() {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = optimalScheduleText;
+
+    elem = document.getElementById('value-box');
+    elem.style.backgroundColor = 'lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.
-function updateHelpfulText() {
-    var elem = document.getElementById('instruction');
+function updateHelpText() {
+    let elem = document.getElementById('instruction');
 
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 4)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 5)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if ((schedulerMaxHours == 7 )) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 9)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 6)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 5) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 7)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
     else if (schedulerMaxHours == 6) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 8)
-            elem.innerHTML = doBetterText;
+            indicateNotOptimal();
         else
-            elem.innerHTML = optimalScheduleText;
+            indicateOptimal();
     }
 }
 
@@ -373,95 +489,13 @@ function onDragEnterAction(event) {
 function onDragMove() {
 }
 
-function addCellEvents(r, c) {
-    let elem = document.getElementById('grid');
-    let cell = elem.rows[r].cells[c];
-    cell.addEventListener('mouseover', onCellMouseOver);
-    cell.addEventListener('click', onCellClick)
-}
-
-function onCellMouseOver(event) {
-    console.log('mouse over', event.target);
-    hideX();
-    // hack, fix this
-    $('#date').animate({
-        'left' : "+=300px"
-    }, "slow");
-    document.getElementById('date').classList.remove('draggable');
-    showPhantomActivity('gym');
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(1);
-    showPhantomHoursLeft(0);
-    event.target.classList.add('target-time-highlight');
-}
-
-function highlightTargetTime(filename) {
-    let elems = document.getElementsByClassName('target-time');
-    for (let i = 0; i < elems.length; i++) {
-        let elem = elems[i];
-        elem.src = '../../figures/yellow_time_icons/' + filename;
-    }
-
-}
-
-function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
-}
-
-function fillInPhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.style.opacity = 1;
-}
-
-function showPhantomHoursLeft(phantomHoursLeft) {
-    let elem = document.getElementById('hours-left');
-    elem.innerHTML = phantomHoursLeft;
-    elem.style.opacity = 0.5;
-}
-
-function fillInPhantomHoursLeft() {
-    let elem = document.getElementById('hours-left');
-    elem.style.opacity = 1;
-}
-
-function showPhantomActivity(name) {
-    let elem = document.getElementById('phantom-'+name);
-    elem.style.display = 'block';
-    elem.innerHTML = name;
-}
-
-function fillInPhantomActivity(name) {
-    let elem = document.getElementById('phantom-'+name);
-    elem.style.opacity = 1;
-}
-function onCellClick(event) {
-    console.log('click', event.target);
-    fillInTable(2,1);
-    fillInPhantomActivity('gym');
-    fillInPhantomValue();
-    fillInPhantomHoursLeft();
-}
-
-function showX() {
-    let elem = document.getElementById('x');
-    //elem.style.backgroundColor = 'red';
-    elem.style.visibility = 'visible';
-}
-
-function hideX() {
-    let elem = document.getElementById('x');
-    //elem.style.backgroundColor = 'red';
-    elem.style.visibility = 'hidden';
-}
-
-
 function onDropDeactivate() {
-    showX();
-    setHelpfulText("That's right, it doesn't fit. So, what can we do in an hour?");
-    addCellEvents(1,1);
-    highlightTargetTime('1h.png');
+    if (tableEnabled == true) {
+        showX();
+        setHelpfulText("That's right, it doesn't fit. So, what can we do in an hour?");
+        addCellEvents(1, 1);
+        highlightTargetTime('1h.png');
+    }
 }
 
 interact('.draggable').snap({
@@ -474,16 +508,25 @@ interact('.draggable').snap({
 
 interact('.draggable')
     .on('dragstart', function (event) {
-        var rect = interact.getElementRect(event.target);
-        selectedActivity = getselectedActivityFromName(event.target.id);
-        console.log(selectedActivity.name);
-        // record center point when starting a drag
-        startPos.x = rect.left + rect.width  / 2;
-        startPos.y = rect.top  + rect.height / 2;
+        var draggableElement = event.target;
 
-        // snap to the start position
-        event.interactable.snap({ anchors: [startPos] });
-});
+        if (!draggableElement.classList.contains('dropped')) {
+            var rect = interact.getElementRect(event.target);
+            selectedActivity = getselectedActivityFromName(event.target.id);
+
+            // record center point when starting a drag
+            startPos.x = rect.left + rect.width  / 2;
+            startPos.y = rect.top  + rect.height / 2;
+
+            // snap to the start position
+            event.interactable.snap({ anchors: [startPos] });
+            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('on undropped dragstart '.concat(selectedActivity.name));
+        }
+        else {
+            console.log('on dropped dragstart '.concat(selectedActivity.name));
+        }
+    });
 
 // target elements with the "draggable" class
 interact('.draggable').draggable({
@@ -539,6 +582,10 @@ interact('.dropzone').dropzone({
         if ((schedulerMaxHours - scheduleHoursUsed) >= selectedActivity.duration) {
             // add active dropzone feedback
             event.target.classList.add('drop-active');
+            console.log('on drag activate dropzone '.concat(draggableElement.id));
+        }
+        else {
+            console.log('on drag noactivate dropzone '.concat(draggableElement.id));
         }
     },
 
@@ -555,23 +602,28 @@ interact('.dropzone').dropzone({
             // If the item has already been dropped, don't count it's duration a second time.
             var dropOffset = 0;
             if (draggableElement.classList.contains('dropped')) {
+                console.log('on drag enter valid from dropped '.concat(draggableElement.id));
                 dropOffset = selectedActivity.duration;
             }
+            else {
+                console.log('on drag enter valid from notdropped '.concat(draggableElement.id));
+            }
+
 
             var dropRect = interact.getElementRect(event.target),
                 dropCenter = {
                     // To snap to the first location on left, uncomment following line
-                    //x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    // x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     y: dropRect.top + dropRect.height / 2
                 };
-
+            console.log('setting snap '.concat(dropCenter.x).concat('-').concat(dropCenter.y));
             event.draggable.snap({
                 anchors: [ dropCenter ]
             });
         }
         else {
-            event.draggable.snap(false);
+            console.log('on drag enter notvalid '.concat(draggableElement.id));
         }
     },
 
@@ -579,17 +631,31 @@ interact('.dropzone').dropzone({
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         selectedActivity = getselectedActivityFromName(draggableElement.id);
 
-        // remove the drop feedback style
-        draggableElement.classList.remove('can-drop');
         dropzoneElement.classList.remove('drop-target');
 
-        // If the item was dropped, then it can be removed
-        if (draggableElement.classList.contains('dropped')) {
-            draggableElement.classList.remove('dropped');
-            onDragLeaveAction(event);
-        }
+        // If the draggable element had 'can-drop' then it was in the drag zone in a valid state.
+        if (draggableElement.classList.contains('can-drop')) {
+            // remove the drop feedback style
+            draggableElement.classList.remove('can-drop');
 
-        event.draggable.snap(false);
+            // If the item was dropped, then it can be removed
+            if (draggableElement.classList.contains('dropped')) {
+                draggableElement.classList.remove('dropped');
+                onDragLeaveAction(event);
+                console.log('on drag leave valid from dropped '.concat(draggableElement.id));
+            }
+            else {
+                console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
+            }
+
+            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.draggable.snap({
+                anchors: [ startPos ]
+            });
+        }
+        else {
+            console.log('on drag leave invalid '.concat(draggableElement.id));
+        }
     },
 
     ondrop: function (event) {
@@ -598,8 +664,11 @@ interact('.dropzone').dropzone({
         // Only drop if the dropzone is active, and don't re-drop something that's already been dropped.
         if (dropzoneElement.classList.contains('drop-active') && !(draggableElement.classList.contains('dropped'))) {
             draggableElement.classList.add('dropped');
-            console.log('on drop');
+            console.log('on drop from notdropped '.concat(draggableElement.id));
             onDropAction(event);
+        }
+        else {
+            console.log('on drop from dropped '.concat(draggableElement.id));
         }
     },
     ondropdeactivate: function (event) {
@@ -609,7 +678,7 @@ interact('.dropzone').dropzone({
         dropzoneElement.classList.remove('drop-active');
         dropzoneElement.classList.remove('drop-target');
 
-        console.log('on drop deactivate');
+        console.log('on drop deactivate '.concat(draggableElement.id));
 
         onDropDeactivate();
     }
