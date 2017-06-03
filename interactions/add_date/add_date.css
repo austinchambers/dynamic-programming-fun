@@ -45,8 +45,11 @@
 
 #grid {
     position: fixed;
-    bottom: 0px;
-    right: 0px;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 20px;
+    border: 1px solid lightgray;
 }
 
 .too-big {
@@ -70,6 +73,10 @@
 
 .target-time-highlight {
     background-color: yellow;
+}
+
+.highlight-border {
+    border: 5px solid yellow;
 }
 
 /*#myCanvas {*/

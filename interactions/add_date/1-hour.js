@@ -379,6 +379,12 @@ function addCellEvents(r, c) {
     cell.addEventListener('click', onCellClick)
 }
 
+function highlightCellBorderAt(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.classList.add('highlight-border');
+}
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     hideX();
@@ -458,9 +464,10 @@ function hideX() {
 
 function onDropDeactivate() {
     showX();
-    setHelpfulText("That's right, it doesn't fit. So, what can we do in an hour?");
+    setHelpfulText("That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.");
     addCellEvents(1,1);
-    highlightTargetTime('1h.png');
+    //highlightTargetTime('1h.png');
+    highlightCellBorderAt(1, 1);
 }
 
 interact('.draggable').snap({
