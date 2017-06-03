@@ -103,6 +103,7 @@ iframe[embedded] {
     overflow: hidden;
     border: none;
     /*margin: 40px;*/
+    border-radius: 20px;
 }
 
 #cartoon_container {

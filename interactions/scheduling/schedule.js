@@ -398,16 +398,16 @@ function indicateNotOptimal() {
     let elem = document.getElementById('instruction');
     elem.innerHTML = doBetterText;
 
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    //elem = document.getElementById('value-box');
+    //elem.style.backgroundColor = 'yellow';
 }
 
 function indicateOptimal() {
     let elem = document.getElementById('instruction');
     elem.innerHTML = optimalScheduleText;
 
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    //elem = document.getElementById('value-box');
+    //elem.style.backgroundColor = 'lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.

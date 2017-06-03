@@ -1,12 +1,3 @@
-#instruction {
-    /*border: 2px dashed lightblue;*/
-    text-align:center;
-    margin-left: 20px;
-    margin-right: 20px;
-    /*height: 78px;*/
-    padding: 10px;
-}
-
 .schedule th {
     font-weight: normal;
     font-style: italic;
@@ -40,28 +31,22 @@
 }
 
 #title {
-    padding-bottom: 20px;
+    padding-bottom: 50px;
 }
 
 #grid {
     position: fixed;
-    bottom: 0px;
-    right: 0px;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 20px;
+    border: 1px solid lightgray;
 }
 
 .too-big {
     background-color: red;
 }
 
-#x {
-    visibility: hidden;
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    top: 120px;
-    left: 200px;
-
-}
 .phantom {
     display: none;
     opacity:0.5;
@@ -70,6 +55,10 @@
 
 .target-time-highlight {
     background-color: yellow;
+}
+
+.highlight-border {
+    border: 5px solid yellow;
 }
 
 /*#myCanvas {*/

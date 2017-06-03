@@ -1,12 +1,3 @@
-#instruction {
-	/*border: 2px dashed lightblue;*/
-	text-align:center;
-	margin-left: 20px;
-	margin-right: 20px;
-	/*height: 78px;*/
-	padding: 10px;
-}
-
 .schedule th {
 	font-weight: normal;
 	font-style: italic;

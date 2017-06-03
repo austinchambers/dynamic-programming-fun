@@ -1,7 +1,7 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 1;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxHours = 3;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
@@ -50,8 +50,8 @@ var activityArr = [ // ORDER MATTERS
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
     initTable();
-    displayTableUpTo(2, 0);
-    highlightCellAt(2,1)
+    displayTableUpTo(2, 2);
+    highlightCellAt(2,3)
     displaySchedule();
     //displayActivities(schedulerMaxActivities);
 
@@ -534,12 +534,12 @@ function onDragMove() {
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
 
 function onDropDeactivate() {
-	if (tableEnabled == true) {
-	    showX();
-	    setHelpfulText(doesntFitText);
-	    addCellEvents(1,1);
-	    //highlightTargetTime('1h.png');
-	    highlightCellBorderAt(1, 1);
+    if (tableEnabled == true) {
+        showX();
+        setHelpfulText(doesntFitText);
+        addCellEvents(1,1);
+        //highlightTargetTime('1h.png');
+        highlightCellBorderAt(1, 1);
     }
 }
 

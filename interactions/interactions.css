@@ -17,7 +17,7 @@ th {
     font-weight: normal;
     font-style: italic;
     font-size: 16px;
-    border: 1px solid gray;
+    /*border: 1px solid gray;*/
     height: 30px;
     padding: 1px;
     text-align: center;
@@ -27,7 +27,7 @@ th {
 /* table cells */
 td {
     font-size: 16px;
-    border: 1px solid gray;
+    /*border: 1px solid gray;*/
     height: 60px;
     width: 60px;
     padding: 0px;
@@ -64,10 +64,23 @@ td {
     z-index: 1000;
     height: 60px;
     width: 60px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    text-align: center;
+    box-shadow: 3px 3px 3px #888888;
+}
+
+.value-block {
+    position: relative;
+    z-index: 1000;
+    height: 60px;
+    width: 60px;
     border-color: grey;
     border-style: solid;
     border-width: 1px;
     text-align: center;
+    border-radius: 10px;
 }
 
 #scheduler-arrow {
@@ -95,7 +108,7 @@ td {
 }
 
 .highlight {
-    background-color: #c9daf8;
+    background-color: lightgray;
 }
 
 .drop-active {
@@ -205,4 +218,40 @@ td {
 #reset:active {
     background: #999;
     top: 2px;
+}
+
+.x-check {
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*right: 0px;*/
+    /*width: 60px;*/
+    /*height: 60px;*/
+}
+
+#x {
+    visibility: hidden;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#check {
+    visibility: hidden;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#instruction {
+    /*border: 2px dashed lightblue;*/
+    text-align:center;
+    margin-left: 50px;
+    margin-right: 50px;
+    /*height: 78px;*/
+    padding: 10px;
+    font-family: 'Patua One', cursive;
 }
