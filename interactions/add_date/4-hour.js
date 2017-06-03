@@ -1,7 +1,7 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 3;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxHours = 4;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
@@ -12,8 +12,8 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 // Other stuff
 var doBetterText = "That's progress, but you could do better.";
-var instructionText = "Can we go on a date?";
-var optimalScheduleText = "It fits!";
+var instructionText = "Drag the gym to your timeline to get the most value.";
+var optimalScheduleText = "Awesome! You maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -132,7 +132,7 @@ function displayTableUpTo(maxRows, maxCols) {
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c];
+    cell.innerHTML = table[r][c+1];
 }
 
 function getCellAt(coords) {
@@ -241,8 +241,8 @@ function getselectedActivityFromName(name) {
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
     initTable();
-    displayTableUpTo(2, 2);
-    highlightCellAt(2,3)
+    displayTableUpTo(2, 3);
+    highlightCellAt(2, 4)
     displaySchedule();
     //displayActivities(schedulerMaxActivities);
 
@@ -277,13 +277,7 @@ function onDropAction(event) {
     elem.innerHTML = scheduleValue;
 
     // update helpful text
-    //updateHelpfulText();
-    setHelpfulText("It fits!");
-
-    showCheck();
-    fillInTable(2,3);
-
-    document.getElementById('date').classList.remove('draggable');
+    updateHelpfulText();
 }
 
 function onDragLeaveAction(event) {
@@ -663,7 +657,6 @@ interact('.dropzone').dropzone({
             console.log('on drop');
             onDropAction(event);
         }
-
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -674,6 +667,6 @@ interact('.dropzone').dropzone({
 
         console.log('on drop deactivate');
 
-        //onDropDeactivate();
+        onDropDeactivate();
     }
 });
