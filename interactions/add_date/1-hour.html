@@ -14,21 +14,25 @@
             crossorigin="anonymous"></script>
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="add_date.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
+    <link href="add_date.css" rel="stylesheet" type="text/css">
 
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
     <script src="1-hour.js"></script>
 </head>
 <body onload="main()">
+<!--<canvas id="myCanvas"></canvas>-->
+
+<div id="canvasContainer">
+
 <div class="container schedule">
 
 
     <table id="grid">
         <tr>
             <th></th>
-            <th><img id="1h" class="time-icon" src="../../figures/time_icons/1h.png"></th>
+            <th><img id="1h" class="time-icon target-time" src="../../figures/time_icons/1h.png"></th>
             <th><img class="time-icon" src="../../figures/time_icons/2h.png"></th>
             <th><img class="time-icon" src="../../figures/time_icons/3h.png"></th>
             <th><img class="time-icon" src="../../figures/time_icons/4h.png"></th>
@@ -73,9 +77,9 @@
             </div>
         </div>
         <div class="col-1"></div>
-        <div class="col-2">
+        <div class="col-8">
             <div class="dropzone" id="scheduler">
-                <div id="phantom-gym" class="gym block notdropped phantom"></div>
+                <div id="phantom-gym" class="phantom gym block notdropped"></div>
                 <div>
 					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
 						<!--<span id="scheduler-total-hours">7 hours total</span>-->
@@ -84,7 +88,7 @@
             </div>
             <div id="scheduler-arrow"></div>
         </div>
-        <div class="col-1"><img class="time-icon" src="../../figures/time_icons/1h.png"></div>
+        <div class="col-1"><img class="time-icon target-time" src="../../figures/time_icons/1h.png"></div>
     </div>
     <div class="row">
         <div class="col-3"></div>

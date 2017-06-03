@@ -386,10 +386,44 @@ function onCellMouseOver(event) {
     // hack, fix this
     $('#date').animate({
         'left' : "+=300px"
-    });
+    }, "slow");
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+    showPhantomValue(1);
+    showPhantomHoursLeft(0);
+    event.target.classList.add('target-time-highlight');
+}
+
+function highlightTargetTime(filename) {
+    let elems = document.getElementsByClassName('target-time');
+    for (let i = 0; i < elems.length; i++) {
+        let elem = elems[i];
+        elem.src = '../../figures/yellow_time_icons/' + filename;
+    }
+
+}
+
+function showPhantomValue(phantomValue) {
+    let elem = document.getElementById('scheduler-value');
+    elem.innerHTML = phantomValue;
+    elem.style.opacity = 0.5;
+}
+
+function fillInPhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.style.opacity = 1;
+}
+
+function showPhantomHoursLeft(phantomHoursLeft) {
+    let elem = document.getElementById('hours-left');
+    elem.innerHTML = phantomHoursLeft;
+    elem.style.opacity = 0.5;
+}
+
+function fillInPhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.style.opacity = 1;
 }
 
 function showPhantomActivity(name) {
@@ -398,9 +432,16 @@ function showPhantomActivity(name) {
     elem.innerHTML = name;
 }
 
+function fillInPhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.opacity = 1;
+}
 function onCellClick(event) {
     console.log('click', event.target);
     fillInTable(2,1);
+    fillInPhantomActivity('gym');
+    fillInPhantomValue();
+    fillInPhantomHoursLeft();
 }
 
 function showX() {
@@ -420,6 +461,7 @@ function onDropDeactivate() {
     showX();
     setHelpfulText("That's right, it doesn't fit. So, what can we do in an hour?");
     addCellEvents(1,1);
+    highlightTargetTime('1h.png');
 }
 
 interact('.draggable').snap({
