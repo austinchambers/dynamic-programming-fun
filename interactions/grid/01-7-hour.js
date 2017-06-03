@@ -19,10 +19,6 @@ var optimalScheduleText = "Awesome! Your maximized your value!";
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = {x: 0, y: 0};
-var startX;
-var startY;
-var gymStartTop;
-var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -250,6 +246,7 @@ function displaySchedule() {
     }
 }
 
+
 function displayActivities(num) {
     for (var i = 0; i < activityArr.length; i++) {
         var activity = activityArr[i];
@@ -274,6 +271,11 @@ function getselectedActivityFromName(name) {
             return activityArr[i];
         }
     }
+}
+
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
 }
 
 // Set everything up

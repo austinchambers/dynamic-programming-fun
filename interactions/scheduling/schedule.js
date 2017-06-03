@@ -19,10 +19,6 @@ var optimalScheduleText = "Awesome! You maximized your value!";
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = {x: 0, y: 0};
-var startX;
-var startY;
-var gymStartTop;
-var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',

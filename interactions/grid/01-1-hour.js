@@ -19,10 +19,6 @@ var optimalScheduleText = "Awesome! You maximized your value!";
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = {x: 0, y: 0};
-var startX;
-var startY;
-var gymStartTop;
-var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -106,6 +102,38 @@ function displayTable() {
             cell.innerHTML = table[i][j];
         }
     }
+}
+
+function displayTableUpTo(maxRows, maxCols) {
+    var grid = document.getElementById('grid');
+
+    for (var i = 0; i < maxRows; i++) {
+        var row = grid.insertRow(i + 1);
+        var cell = row.insertCell(0);
+        var thisarray = [];
+        for (var k = 0; k <= i; k++) {
+            thisarray[k] = activityArr[k].name;
+        }
+        cell.innerHTML = thisarray.join(", ");
+
+
+        for (var j = 0; j < gridMaxCols-1; j++) {
+            var cell = row.insertCell(j + 1);
+            if (i == maxRows - 1 && j >= maxCols) {
+                cell.innerHTML = '';
+            }
+            else {
+                cell.innerHTML = table[i][j+1];
+            }
+
+        }
+    }
+}
+
+function fillInTable(r, c) {
+    var grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.innerHTML = table[r][c+1];
 }
 
 function getCellAt(coords) {
@@ -250,12 +278,29 @@ function displaySchedule() {
     }
 }
 
+
 function displayActivities(num) {
     for (var i = 0; i < activityArr.length; i++) {
         var activity = activityArr[i];
         var display = document.getElementById(activity.name);
 
         if (i < num) {
+            display.style.height = BLOCK_HEIGHT + 'px';
+            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
+            display.innerHTML = activity.name
+        }
+        else {
+            display.style.display = 'none';
+        }
+    }
+}
+
+function displaySingleActivity(idx) {
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
+
+        if (i == idx) {
             display.style.height = BLOCK_HEIGHT + 'px';
             display.style.width = BLOCK_WIDTH * activity.duration + 'px';
             display.innerHTML = activity.name
@@ -274,6 +319,11 @@ function getselectedActivityFromName(name) {
             return activityArr[i];
         }
     }
+}
+
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
 }
 
 // Set everything up

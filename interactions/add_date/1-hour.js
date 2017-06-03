@@ -19,40 +19,50 @@ var optimalScheduleText = "Awesome! You maximized your value!";
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = {x: 0, y: 0};
+var startX;
+var startY;
+var gymStartTop;
+var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
         'index': 1,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
         'index': 2,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
         'index': 3,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
         'index': 4,
-        'startTop': 0,
-        'startLeft': 0,
     },
 ];
+
+// Set everything up
+function main() {
+    selectedActivity = activityArr[schedulerMaxActivities - 1];
+    initTable();
+    displayTableUpTo(2, 0);
+    highlightCellAt(2,1)
+    displaySchedule();
+    //displayActivities(schedulerMaxActivities);
+
+    displaySingleActivity(1);
+
+    setHelpfulText("Can we go on a date?");
+}
 
 // ********************************** DP GRID LOOKUP ***************************************
 // Initialize the table
@@ -278,6 +288,7 @@ function displaySchedule() {
     }
 }
 
+
 function displayActivities(num) {
     for (var i = 0; i < activityArr.length; i++) {
         var activity = activityArr[i];
@@ -320,28 +331,9 @@ function getselectedActivityFromName(name) {
     }
 }
 
-// Set everything up
-function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    initTable();
-    displayTableUpTo(2, 0);
-    highlightCellAt(2,1)
-    displaySchedule();
-    //displayActivities(schedulerMaxActivities);
-
-    displaySingleActivity(1);
-
-    setHelpfulText("Can we go on a date?");
-
-    // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < schedulerMaxActivities; i++) {
-        var elem = document.getElementById(activityArr[i]);
-        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
-        var y = $("#"+activityArr[i].name).offset().left;
-        activityArr[i].startLeft = x;
-        activityArr[i].startTop = y;
-        console.log('x, y:', x, y);
-    }
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
 }
 
 // ********************************** INTERACT JS ***************************************
