@@ -123,8 +123,15 @@ function displayTableUpTo(maxRows, maxCols) {
             else {
                 cell.innerHTML = table[i][j+1];
             }
+
         }
     }
+}
+
+function fillInTable(r, c) {
+    var grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.innerHTML = table[r][c+1];
 }
 
 function getCellAt(coords) {
@@ -377,9 +384,11 @@ function onCellMouseOver(event) {
     hideX();
     // hack, fix this
     $('#date').animate({
-        'top' : "+=100px"
+        'left' : "+=300px"
     });
+    document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
+    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
 }
 
 function showPhantomActivity(name) {
@@ -390,6 +399,7 @@ function showPhantomActivity(name) {
 
 function onCellClick(event) {
     console.log('click', event.target);
+    fillInTable(2,1);
 }
 
 function showX() {
