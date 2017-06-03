@@ -25,34 +25,47 @@ var activityArr = [ // ORDER MATTERS
         'duration': 1,
         'value': 1,
         'index': 1,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
         'index': 2,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
         'index': 3,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
         'index': 4,
-        'startTop': 0,
-        'startLeft': 0,
     },
 ];
+
+// Set everything up
+function main() {
+    selectedActivity = activityArr[schedulerMaxActivities - 1];
+    //initTable();
+    //displayTable();
+    displaySchedule();
+    displayActivities(schedulerMaxActivities);
+
+    setHelpfulText(instructionText);
+
+    // Get the initial locations of the activities, and store in the activity array.
+    for (var i = 0; i < schedulerMaxActivities; i++) {
+        var elem = document.getElementById(activityArr[i]);
+        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
+        var y = $("#"+activityArr[i].name).offset().left;
+        activityArr[i].startLeft = x;
+        activityArr[i].startTop = y;
+        console.log('x, y:', x, y);
+    }
+}
 
 // ********************************** DP GRID LOOKUP ***************************************
 // Initialize the table
@@ -324,27 +337,6 @@ function getselectedActivityFromName(name) {
 function setHelpfulText(newText) {
     let elem = document.getElementById('instruction');
     elem.innerHTML = newText;
-}
-
-// Set everything up
-function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    //initTable();
-    //displayTable();
-    displaySchedule();
-    displayActivities(schedulerMaxActivities);
-
-    setHelpfulText(instructionText);
-
-    // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < schedulerMaxActivities; i++) {
-        var elem = document.getElementById(activityArr[i]);
-        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
-        var y = $("#"+activityArr[i].name).offset().left;
-        activityArr[i].startLeft = x;
-        activityArr[i].startTop = y;
-        console.log('x, y:', x, y);
-    }
 }
 
 // ********************************** INTERACT JS ***************************************

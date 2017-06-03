@@ -25,34 +25,47 @@ var activityArr = [ // ORDER MATTERS
         'duration': 1,
         'value': 1,
         'index': 1,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
         'index': 2,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
         'index': 3,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
         'index': 4,
-        'startTop': 0,
-        'startLeft': 0,
     },
 ];
+
+// Set everything up
+function main() {
+    selectedActivity = activityArr[schedulerMaxActivities - 1];
+    //initTable();
+    //displayTable();
+    displaySchedule();
+    displayActivities(schedulerMaxActivities);
+
+    setHelpfulText(instructionText);
+
+    // Get the initial locations of the activities, and store in the activity array.
+    for (var i = 0; i < schedulerMaxActivities; i++) {
+        var elem = document.getElementById(activityArr[i]);
+        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
+        var y = $("#"+activityArr[i].name).offset().left;
+        activityArr[i].startLeft = x;
+        activityArr[i].startTop = y;
+        console.log('x, y:', x, y);
+    }
+}
 
 // ********************************** DP GRID LOOKUP ***************************************
 // Initialize the table
@@ -102,6 +115,38 @@ function displayTable() {
             cell.innerHTML = table[i][j];
         }
     }
+}
+
+function displayTableUpTo(maxRows, maxCols) {
+    var grid = document.getElementById('grid');
+
+    for (var i = 0; i < maxRows; i++) {
+        var row = grid.insertRow(i + 1);
+        var cell = row.insertCell(0);
+        var thisarray = [];
+        for (var k = 0; k <= i; k++) {
+            thisarray[k] = activityArr[k].name;
+        }
+        cell.innerHTML = thisarray.join(", ");
+
+
+        for (var j = 0; j < gridMaxCols-1; j++) {
+            var cell = row.insertCell(j + 1);
+            if (i == maxRows - 1 && j >= maxCols) {
+                cell.innerHTML = '';
+            }
+            else {
+                cell.innerHTML = table[i][j+1];
+            }
+
+        }
+    }
+}
+
+function fillInTable(r, c) {
+    var grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.innerHTML = table[r][c+1];
 }
 
 function getCellAt(coords) {
@@ -263,6 +308,22 @@ function displayActivities(num) {
     }
 }
 
+function displaySingleActivity(idx) {
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
+
+        if (i == idx) {
+            display.style.height = BLOCK_HEIGHT + 'px';
+            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
+            display.innerHTML = activity.name
+        }
+        else {
+            display.style.display = 'none';
+        }
+    }
+}
+
 // Used to get properties about the activity object using its name.
 function getselectedActivityFromName(name) {
     var i;
@@ -276,27 +337,6 @@ function getselectedActivityFromName(name) {
 function setHelpfulText(newText) {
     let elem = document.getElementById('instruction');
     elem.innerHTML = newText;
-}
-
-// Set everything up
-function main() {
-    selectedActivity = activityArr[schedulerMaxActivities - 1];
-    //initTable();
-    //displayTable();
-    displaySchedule();
-    displayActivities(schedulerMaxActivities);
-
-    setHelpfulText(instructionText);
-
-    // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < schedulerMaxActivities; i++) {
-        var elem = document.getElementById(activityArr[i]);
-        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
-        var y = $("#"+activityArr[i].name).offset().left;
-        activityArr[i].startLeft = x;
-        activityArr[i].startTop = y;
-        console.log('x, y:', x, y);
-    }
 }
 
 // ********************************** INTERACT JS ***************************************
