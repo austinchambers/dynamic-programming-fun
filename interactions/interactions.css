@@ -48,11 +48,24 @@ td {
 }
 
 #scheduler {
+    position: relative;
+    z-index: -1000;
     height: 60px;
     background-repeat: no-repeat;
     background-position: left bottom;
     background-image:url('../figures/schedule_ticklines.png');
     margin: 0px;
+}
+
+.block {
+    position: relative;
+    z-index: 1000;
+    height: 60px;
+    width: 60px;
+    border-color: grey;
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
 }
 
 #scheduler-arrow {
@@ -67,8 +80,6 @@ td {
 }
 
 .dropzone {
-    position: relative;
-    z-index: -1000;
     background-color: transparent;
     /*padding: 10px;*/
     width: 420px;
@@ -103,31 +114,13 @@ td {
 }
 
 .can-drop {
-    color: #000;
-    background-color: #C9DAF8;
-    border: dashed 4px;
+    background-color: #C9DAF8 !important;
 }
 
 .drop-target {
     border-color: #aaa;
     border: dashed 4px;
 }
-
-.block {
-    z-index: 1000;
-    height: 60px;
-    width: 60px;
-    border-color: grey;
-    border-style: solid;
-    border-width: 1px;
-    position: relative;
-    text-align: center;
-}
-
-.notdropped {
-    background-color: #EFF1F4;
-}
-
 
 .gym {
     border-radius: 20px;
