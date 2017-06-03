@@ -1,0 +1,102 @@
+.schedule th {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 14px;
+    text-align: center;
+    margin: auto;
+}
+
+.schedule th:first-child {
+    border-color: transparent;
+    width: 140px;
+    text-align: right;
+}
+
+.schedule td:first-child {
+    border-color: transparent;
+    width: 140px;
+    font-weight: normal;
+    font-style: italic;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+#hours-left-text {
+    text-align: left;
+    margin-top: -5px;
+    width: 420px;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+#title {
+    padding-bottom: 50px;
+}
+
+#grid {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 20px;
+    border: 1px solid lightgray;
+}
+
+.too-big {
+    background-color: red;
+}
+
+.phantom {
+    display: none;
+    opacity:0.5;
+    margin-left: -3px;
+}
+
+.target-time-highlight {
+    background-color: yellow;
+}
+
+.highlight-border {
+    border: 5px solid yellow;
+}
+
+#phantom-gym {
+    /* hack */
+    left: 60px;
+}
+
+#phantom-hike {
+    /* hack */
+    right: 0px;
+    width: 236px;
+}
+
+#phantom-date {
+    width: 176px;
+}
+
+
+/*#myCanvas {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background-color: red;*/
+    /*positin: absolute;*/
+    /*top: 0px;*/
+    /*left: 0px;*/
+    /*z-index: 3;*/
+/*}*/
+
+/*#canvasContainer {*/
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*left: 0px;*/
+    /*z-index: 1;*/
+    /*width:100%;*/
+    /*height: 100%;*/
+    /*margin-top: 50px;*/
+/*}*/
+
+/*body {*/
+    /*margin: 0px auto;*/
+/*}*/

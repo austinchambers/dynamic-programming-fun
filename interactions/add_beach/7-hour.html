@@ -13,22 +13,37 @@
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
 
+
     <!--Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Patua+One" rel="stylesheet">
 
     <link href="../../css/main.css" rel="stylesheet" type="text/css">
-    <link href="01.css" rel="stylesheet" type="text/css">
     <link href="../interactions.css" rel="stylesheet" type="text/css">
+    <link href="add_beach.css" rel="stylesheet" type="text/css">
 
     <script src="../../js/jquery.js"></script>
     <script src="../../js/interact.js"></script>
-    <script src="01-0-hour.js"></script>
+    <script src="7-hour.js"></script>
 </head>
 <body onload="main()">
+
 <div class="container schedule">
 
-    <!--<table id="grid">-->
-    <!--</table>-->
+
+    <table id="grid">
+        <tr>
+            <th></th>
+            <th><img id="1h" class="time-icon target-time" src="../../figures/time_icons/1h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/2h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/3h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/4h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/5h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/6h.png"></th>
+            <th><img class="time-icon" src="../../figures/time_icons/7h.png"></th>
+        </tr>
+    </table>
+
+    <div class="x-check"><img id="x" src="../../figures/x.png"></div>
     <div class="x-check"><img id="check" src="../../figures/check.png"></div>
 
     <div id="title" class="row">
@@ -44,8 +59,10 @@
             <div id="date" class="date block notdropped draggable"></div>
             <div id="hike" class="hike block notdropped draggable"></div>
             <div id="beach" class="beach block notdropped draggable"></div>
+
         </div>
     </div>
+
 
     <div class="row">
         <div class="col-1"></div>
@@ -62,8 +79,11 @@
             </div>
         </div>
         <div class="col-1"></div>
-        <div class="col-2">
+        <div class="col-8">
             <div class="dropzone" id="scheduler">
+                <div id="phantom-gym" class="phantom gym block notdropped can-drop"></div>
+                <div id="phantom-date" class="phantom date block notdropped can-drop"></div>
+                <div id="phantom-hike" class="phantom hike block notdropped can-drop"></div>
                 <div>
 					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
 						<!--<span id="scheduler-total-hours">7 hours total</span>-->
@@ -72,7 +92,7 @@
             </div>
             <div id="scheduler-arrow"></div>
         </div>
-        <div class="col-1"><img class="time-icon" src="../../figures/time_icons/0h.png"></div>
+        <div class="col-1"><img class="time-icon target-time" src="../../figures/time_icons/7h.png"></div>
     </div>
     <div class="row">
         <div class="col-3"></div>
@@ -84,8 +104,6 @@
             </div>
         </div>
     </div>
-</div>
-
 </div>
 </body>
 </html>

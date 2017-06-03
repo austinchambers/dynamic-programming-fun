@@ -22,8 +22,6 @@ var optimalScheduleText = "Awesome! You maximized your value!";
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
-var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
-var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -417,8 +415,14 @@ function onDropAction(event) {
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
 
-    // update
-    updateHelpText();
+    // update helpful text
+    //updateHelpfulText();
+    setHelpfulText("It fits!");
+
+    showCheck();
+    fillInTable(2,3);
+
+    document.getElementById('date').classList.remove('draggable');
 }
 
 function onDragLeaveAction(event) {

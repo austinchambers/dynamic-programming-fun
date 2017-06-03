@@ -1,29 +1,21 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 0;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
-var gridMaxRows = 0;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
-var gridMaxCols = 0;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
-var tableEnabled = false;       // True, if we have a table
-var displayTableUpToRows = 2;
-var displayTableUpToCols = 0;   // Row and column limit of the table to display, if tableEnabled = true
-var highlightCellRow = 2;
-var highlightCellCol = 0;       // Row and column of cell to highlighjt
-var displayAllActivities = true;//Whether to display all activities or just a single one.
-var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
+var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
+var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 
-var instructionText = "Drag the activity to your timeline to get the most value.";
-var initialHelpfulText = "What value can you get in 0 hours?";
-var doBetterText = "That's progress, but you could do better.";
-var optimalScheduleText = "Awesome! You maximized your value!";
-
-// Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
-var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
-var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
+
+var alreadyDropped = false;
+
+// Other stuff
+var doBetterText = "That's progress, but you could do better.";
+var instructionText = "Can we go to the beach?";
+var optimalScheduleText = "Awesome! You maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
@@ -34,47 +26,34 @@ var activityArr = [ // ORDER MATTERS
         'duration': 1,
         'value': 1,
         'index': 1,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
         'index': 2,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
         'index': 3,
+        'startTop': 0,
+        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
         'index': 4,
+        'startTop': 0,
+        'startLeft': 0,
     },
 ];
-
-// Set everything up
-function main() {
-    // Display all activities or just a single one.
-    if (displayAllActivities == true) {
-        displayActivities(schedulerMaxActivities);
-    }
-    else {
-        displaySingleActivity(singleActivityIndexToDisplay);
-    }
-
-    // Display a table, and if so, set table settings.
-    if (tableEnabled == true) {
-        initTable();
-        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
-        highlightCellAt(highlightCellRow, highlightCellCol)
-    }
-
-    setHelpfulText(initialHelpfulText);
-    displaySchedule();
-}
 
 // ********************************** DP GRID LOOKUP ***************************************
 // Initialize the table
@@ -154,8 +133,12 @@ function displayTableUpTo(maxRows, maxCols) {
 
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
+    console.log(grid.rows);
+    console.log(grid.rows[r].cells);
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c+1];
+    console.log(cell);
+    console.log(table[r]);
+    cell.innerHTML = table[r-1][c];
 }
 
 function getCellAt(coords) {
@@ -198,6 +181,212 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+// ********************************** SCHEDULING ***************************************
+function displaySchedule() {
+    // Update the scheduler width and height.
+    var elem = document.getElementById('scheduler');
+    elem.style.height = BLOCK_HEIGHT + 'px';
+    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
+
+    // Update hours left if the corresponding ID element exists.
+    elem = document.getElementById('hours-left');
+    if (elem != null) {
+        elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
+    }
+
+    // Update total hours if the corresponding ID element exists.
+    elem = document.getElementById('scheduler-total-hours');
+    if (elem != null) {
+        elem.innerHTML = schedulerMaxHours + ' hours total';
+    }
+}
+
+function displayActivities(num) {
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
+
+        if (i < num) {
+            display.style.height = BLOCK_HEIGHT + 'px';
+            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
+            display.innerHTML = activity.name
+        }
+        else {
+            display.style.display = 'none';
+        }
+    }
+}
+
+function displaySingleActivity(idx) {
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
+
+        if (i == idx) {
+            display.style.height = BLOCK_HEIGHT + 'px';
+            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
+            display.innerHTML = activity.name
+        }
+        else {
+            display.style.display = 'none';
+        }
+    }
+}
+
+// Used to get properties about the activity object using its name.
+function getselectedActivityFromName(name) {
+    var i;
+    for (i = 0; i < activityArr.length; i++) {
+        if (name == activityArr[i].name) {
+            return activityArr[i];
+        }
+    }
+}
+
+// Set everything up
+function main() {
+    selectedActivity = activityArr[schedulerMaxActivities - 1];
+    initTable();
+    displayTableUpTo(4, 6);
+    highlightCellAt(4, 7)
+    displaySchedule();
+    //displayActivities(schedulerMaxActivities);
+
+    displaySingleActivity(3);
+
+    setHelpfulText(instructionText);
+
+    // Get the initial locations of the activities, and store in the activity array.
+    for (var i = 0; i < schedulerMaxActivities; i++) {
+        var elem = document.getElementById(activityArr[i]);
+        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
+        var y = $("#"+activityArr[i].name).offset().left;
+        activityArr[i].startLeft = x;
+        activityArr[i].startTop = y;
+        console.log('x, y:', x, y);
+    }
+}
+
+var mouseLeaveText = "It fits! You still have time left. Click on what we can do in 2 hours.";
+// ********************************** INTERACT JS ***************************************
+function onDropAction(event) {
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    selectedActivity = getselectedActivityFromName(draggableElement.id);
+
+    // update hours left
+    scheduleHoursUsed += selectedActivity.duration;
+    var elem = document.getElementById('hours-left');
+    elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
+
+    // update value
+    scheduleValue += selectedActivity.value;
+    elem = document.getElementById('scheduler-value');
+    elem.innerHTML = scheduleValue;
+
+    // update helpful text
+    //updateHelpfulText();
+
+    setHelpfulText(mouseLeaveText);
+    addCellEvents(3, 2);
+    highlightCellBorderAt(3, 2);
+
+    document.getElementById('beach').classList.remove('draggable');
+}
+
+function onDragLeaveAction(event) {
+    // remove the drop feedback style
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    selectedActivity = getselectedActivityFromName(draggableElement.id);
+
+    // update hours left
+    scheduleHoursUsed -= selectedActivity.duration;
+    var elem = document.getElementById('hours-left');
+    elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
+
+    // update value
+    var oldValue = scheduleValue;
+    scheduleValue -= selectedActivity.value;
+    elem = document.getElementById('scheduler-value');
+    elem.innerHTML = scheduleValue;
+
+    // update helpful text
+    //updateHelpfulText();
+}
+
+// This is a bit lazy, but it gets the point across.
+function updateHelpfulText() {
+    var elem = document.getElementById('instruction');
+
+    if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 3) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 4)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 5)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if ((schedulerMaxHours == 7 )) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 9)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 6)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 5) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 7)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+    else if (schedulerMaxHours == 6) {
+        if (scheduleValue == 0)
+            elem.innerHTML = instructionText;
+        else if (scheduleValue < 8)
+            elem.innerHTML = doBetterText;
+        else
+            elem.innerHTML = optimalScheduleText;
+    }
+}
+
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
+}
+
+function onDragEnterAction(event) {
+    // remove the drop feedback style
+    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
+    selectedActivity = getselectedActivityFromName(draggableElement.id);
+}
+
+function onDragMove() {
+}
+
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r].cells[c];
@@ -206,11 +395,29 @@ function addCellEvents(r, c) {
     cell.addEventListener('click', onCellClick)
 }
 
+function addCellEventsNew(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.addEventListener('mouseover', onCellMouseOverNew);
+    cell.addEventListener('mouseleave', onCellMouseLeaveNew);
+    cell.addEventListener('click', onCellClickNew)
+}
+
+
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
     //showX();
     hidePhantomActivity('gym');
-    setHelpfulText(doesntFitText);
+    setHelpfulText(mouseLeaveText);
+    hidePhantomValue();
+    hidePhantomHoursLeft();
+    event.target.classList.remove('target-time-highlight');
+}
+
+function onCellMouseLeaveNew(event) {
+    hidePhantomActivity('date');
+    hidePhantomActivity('hike');
+    setHelpfulText("Cool! Then we still have lots of time left. Click on what we can do in 7 hours.");
     hidePhantomValue();
     hidePhantomHoursLeft();
     event.target.classList.remove('target-time-highlight');
@@ -222,6 +429,17 @@ function highlightCellBorderAt(r, c) {
     cell.classList.add('highlight-border');
 }
 
+function onCellMouseOverNew(event) {
+    document.getElementById('beach').classList.remove('draggable');
+    showPhantomActivity('hike');
+    showPhantomActivity('date');
+    setHelpfulText("That's right!");
+    showPhantomValue(9);
+    showPhantomHoursLeft(0);
+    event.target.classList.add('target-time-highlight');
+}
+
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     hideX();
@@ -231,9 +449,9 @@ function onCellMouseOver(event) {
     // }, "slow");
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(1);
-    showPhantomHoursLeft(0);
+    setHelpfulText("That's right!");
+    showPhantomValue(8);
+    showPhantomHoursLeft(1);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -286,7 +504,7 @@ function fillInPhantomHoursLeft() {
 
 function showPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
-    elem.style.display = 'block';
+    elem.style.display = 'inline-block';
     elem.innerHTML = name;
 }
 
@@ -299,18 +517,38 @@ function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
 }
+
+function onCellClickNew(event) {
+    fillInTable(4, 7);
+    fillInPhantomActivity('date');
+    fillInPhantomActivity('hike');
+    fillInPhantomValue();
+    fillInPhantomHoursLeft();
+    event.target.removeEventListener('mouseover', onCellMouseOverNew);
+    event.target.removeEventListener('mouseleave', onCellMouseLeaveNew);
+    event.target.removeEventListener('mouseleave', onCellClickNew);
+    showCheck();
+}
+
 function onCellClick(event) {
     console.log('click', event.target);
-    fillInTable(2,1);
+    fillInTable(2, 4);
     fillInPhantomActivity('gym');
     fillInPhantomValue();
     fillInPhantomHoursLeft();
 
     event.target.removeEventListener('mouseover', onCellMouseOver);
     event.target.removeEventListener('mouseleave', onCellMouseLeave);
+    event.target.removeEventListener('click', onCellClick);
+    //event.target.classList.remove('target-time-highlight');
+    //event.target.classList.remove('highlight-border');
 
-    showCheck();
+    //showCheck();
+    setHelpfulText("Is this the best we can do though? What if we don't go to the beach?");
 
+    document.getElementById('beach').classList.add('draggable');
+
+    alreadyDropped = true;
 }
 
 function showX() {
@@ -334,231 +572,26 @@ function hideCheck() {
     elem.style.visibility = 'hidden';
 }
 
-// ********************************** SCHEDULING ***************************************
-function displaySchedule() {
-    // Update the scheduler width and height.
-    var elem = document.getElementById('scheduler');
-    elem.style.height = BLOCK_HEIGHT + 'px';
-    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
-
-    // Update hours left if the corresponding ID element exists.
-    elem = document.getElementById('hours-left');
-    if (elem != null) {
-        elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
-    }
-
-    // Update total hours if the corresponding ID element exists.
-    elem = document.getElementById('scheduler-total-hours');
-    if (elem != null) {
-        elem.innerHTML = schedulerMaxHours + ' hours total';
-    }
-}
-
-
-function displayActivities(num) {
-    for (var i = 0; i < activityArr.length; i++) {
-        var activity = activityArr[i];
-        var display = document.getElementById(activity.name);
-
-        if (i < num) {
-            display.style.height = BLOCK_HEIGHT + 'px';
-            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
-            display.innerHTML = activity.name
-        }
-        else {
-            display.style.display = 'none';
-        }
-    }
-}
-
-function displaySingleActivity(idx) {
-    for (var i = 0; i < activityArr.length; i++) {
-        var activity = activityArr[i];
-        var display = document.getElementById(activity.name);
-
-        if (i == idx) {
-            display.style.height = BLOCK_HEIGHT + 'px';
-            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
-            display.innerHTML = activity.name
-        }
-        else {
-            display.style.display = 'none';
-        }
-    }
-}
-
-// Used to get properties about the activity object using its name.
-function getselectedActivityFromName(name) {
-    var i;
-    for (i = 0; i < activityArr.length; i++) {
-        if (name == activityArr[i].name) {
-            return activityArr[i];
-        }
-    }
-}
-
-function setHelpfulText(newText) {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = newText;
-}
-
-// ********************************** INTERACT JS ***************************************
-function onDropAction(event) {
-    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
-    selectedActivity = getselectedActivityFromName(draggableElement.id);
-
-    // update hours left
-    scheduleHoursUsed += selectedActivity.duration;
-    var elem = document.getElementById('hours-left');
-    elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
-
-    // update value
-    scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
-
-    // update
-    updateHelpText();
-}
-
-function onDragLeaveAction(event) {
-    // remove the drop feedback style
-    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
-    selectedActivity = getselectedActivityFromName(draggableElement.id);
-
-    // update hours left
-    scheduleHoursUsed -= selectedActivity.duration;
-    var elem = document.getElementById('hours-left');
-    elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
-
-    // update value
-    var oldValue = scheduleValue;
-    scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
-
-    // update helpful text
-    updateHelpText();
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-// This is a bit lazy, but it gets the point across.
-function updateHelpText() {
-    let elem = document.getElementById('instruction');
-
-    if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else
-            indicateOptimal();
-    }
-    else if (schedulerMaxHours == 3) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 4)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-    else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 5)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-    else if ((schedulerMaxHours == 7 )) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 9)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-    else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 6)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-    else if (schedulerMaxHours == 5) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 7)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-    else if (schedulerMaxHours == 6) {
-        if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
-        else if (scheduleValue < 8)
-            indicateNotOptimal();
-        else
-            indicateOptimal();
-    }
-}
-
-function setHelpfulText(newText) {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = newText;
-}
-
-function onDragEnterAction(event) {
-    // remove the drop feedback style
-    var draggableElement = event.relatedTarget, dropzoneElement = event.target;
-    selectedActivity = getselectedActivityFromName(draggableElement.id);
-}
-
-function onDragMove() {
-}
-
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
 
 function onDropDeactivate() {
-    if (tableEnabled == true) {
-        showX();
-        setHelpfulText(doesntFitText);
-        addCellEvents(1,1);
-        //highlightTargetTime('1h.png');
-        highlightCellBorderAt(1, 1);
-    }
-    setHelpfulText("That's right - 0");
-    showCheck();
+    showX();
+    setHelpfulText(doesntFitText);
+    addCellEvents(1,1);
+    //highlightTargetTime('1h.png');
+    highlightCellBorderAt(1, 1);
+}
+
+function onDropDeactivateBeach() {
+    console.log('what if we dont go to the beach');
+    hidePhantomActivity('gym');
+
+    let elem = document.getElementById('grid').rows[3].cells[2];
+    elem.classList.remove('target-time-highlight');
+    elem.classList.remove('highlight-border');
+    setHelpfulText("Cool! Then we still have so much time left. Click on what we can do in 7 hours.");
+    addCellEventsNew(3, 7);
+    highlightCellBorderAt(3, 7);
 }
 
 interact('.draggable').snap({
@@ -571,25 +604,16 @@ interact('.draggable').snap({
 
 interact('.draggable')
     .on('dragstart', function (event) {
-        var draggableElement = event.target;
+        var rect = interact.getElementRect(event.target);
+        selectedActivity = getselectedActivityFromName(event.target.id);
+        console.log(selectedActivity.name);
+        // record center point when starting a drag
+        startPos.x = rect.left + rect.width  / 2;
+        startPos.y = rect.top  + rect.height / 2;
 
-        if (!draggableElement.classList.contains('dropped')) {
-            var rect = interact.getElementRect(event.target);
-            selectedActivity = getselectedActivityFromName(event.target.id);
-
-            // record center point when starting a drag
-            startPos.x = rect.left + rect.width  / 2;
-            startPos.y = rect.top  + rect.height / 2;
-
-            // snap to the start position
-            event.interactable.snap({ anchors: [startPos] });
-            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
-            console.log('on undropped dragstart '.concat(selectedActivity.name));
-        }
-        else {
-            console.log('on dropped dragstart '.concat(selectedActivity.name));
-        }
-    });
+        // snap to the start position
+        event.interactable.snap({ anchors: [startPos] });
+});
 
 // target elements with the "draggable" class
 interact('.draggable').draggable({
@@ -645,10 +669,6 @@ interact('.dropzone').dropzone({
         if ((schedulerMaxHours - scheduleHoursUsed) >= selectedActivity.duration) {
             // add active dropzone feedback
             event.target.classList.add('drop-active');
-            console.log('on drag activate dropzone '.concat(draggableElement.id));
-        }
-        else {
-            console.log('on drag noactivate dropzone '.concat(draggableElement.id));
         }
     },
 
@@ -665,28 +685,23 @@ interact('.dropzone').dropzone({
             // If the item has already been dropped, don't count it's duration a second time.
             var dropOffset = 0;
             if (draggableElement.classList.contains('dropped')) {
-                console.log('on drag enter valid from dropped '.concat(draggableElement.id));
                 dropOffset = selectedActivity.duration;
             }
-            else {
-                console.log('on drag enter valid from notdropped '.concat(draggableElement.id));
-            }
-
 
             var dropRect = interact.getElementRect(event.target),
                 dropCenter = {
                     // To snap to the first location on left, uncomment following line
-                    // x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    //x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     y: dropRect.top + dropRect.height / 2
                 };
-            console.log('setting snap '.concat(dropCenter.x).concat('-').concat(dropCenter.y));
+
             event.draggable.snap({
                 anchors: [ dropCenter ]
             });
         }
         else {
-            console.log('on drag enter notvalid '.concat(draggableElement.id));
+            event.draggable.snap(false);
         }
     },
 
@@ -694,31 +709,17 @@ interact('.dropzone').dropzone({
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
         selectedActivity = getselectedActivityFromName(draggableElement.id);
 
+        // remove the drop feedback style
+        draggableElement.classList.remove('can-drop');
         dropzoneElement.classList.remove('drop-target');
 
-        // If the draggable element had 'can-drop' then it was in the drag zone in a valid state.
-        if (draggableElement.classList.contains('can-drop')) {
-            // remove the drop feedback style
-            draggableElement.classList.remove('can-drop');
-
-            // If the item was dropped, then it can be removed
-            if (draggableElement.classList.contains('dropped')) {
-                draggableElement.classList.remove('dropped');
-                onDragLeaveAction(event);
-                console.log('on drag leave valid from dropped '.concat(draggableElement.id));
-            }
-            else {
-                console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
-            }
-
-            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
-            event.draggable.snap({
-                anchors: [ startPos ]
-            });
+        // If the item was dropped, then it can be removed
+        if (draggableElement.classList.contains('dropped')) {
+            draggableElement.classList.remove('dropped');
+            onDragLeaveAction(event);
         }
-        else {
-            console.log('on drag leave invalid '.concat(draggableElement.id));
-        }
+
+        event.draggable.snap(false);
     },
 
     ondrop: function (event) {
@@ -727,12 +728,9 @@ interact('.dropzone').dropzone({
         // Only drop if the dropzone is active, and don't re-drop something that's already been dropped.
         if (dropzoneElement.classList.contains('drop-active') && !(draggableElement.classList.contains('dropped'))) {
             draggableElement.classList.add('dropped');
-            console.log('on drop from notdropped '.concat(draggableElement.id));
             onDropAction(event);
         }
-        else {
-            console.log('on drop from dropped '.concat(draggableElement.id));
-        }
+
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -741,8 +739,11 @@ interact('.dropzone').dropzone({
         dropzoneElement.classList.remove('drop-active');
         dropzoneElement.classList.remove('drop-target');
 
-        console.log('on drop deactivate '.concat(draggableElement.id));
+        console.log('on drop deactivate');
 
-        onDropDeactivate();
+        if (alreadyDropped) {
+            onDropDeactivateBeach();
+        }
+        //onDropDeactivate();
     }
 });
