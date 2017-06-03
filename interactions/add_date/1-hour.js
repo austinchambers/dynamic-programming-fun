@@ -166,6 +166,7 @@ function highlightCellAt(r, c) {
     var grid = document.getElementById('grid');
     var cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
+    cell.innerHTML = '?';
 }
 
 function unhighlightCellAt(r, c) {
@@ -377,7 +378,18 @@ function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r].cells[c];
     cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
     cell.addEventListener('click', onCellClick)
+}
+
+function onCellMouseLeave(event) {
+    console.log('mouse leave', event.target);
+    //showX();
+    hidePhantomActivity('gym');
+    setHelpfulText(doesntFitText);
+    hidePhantomValue();
+    hidePhantomHoursLeft();
+    event.target.classList.remove('target-time-highlight');
 }
 
 function highlightCellBorderAt(r, c) {
@@ -389,10 +401,10 @@ function highlightCellBorderAt(r, c) {
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     hideX();
-    // hack, fix this
-    $('#date').animate({
-        'left' : "+=300px"
-    }, "slow");
+    // // hack, fix this
+    // $('#date').animate({
+    //     'left' : "+=300px"
+    // }, "slow");
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
@@ -410,10 +422,18 @@ function highlightTargetTime(filename) {
 
 }
 
+var oldValue;
 function showPhantomValue(phantomValue) {
     let elem = document.getElementById('scheduler-value');
+    oldValue = elem.innerHTML;
     elem.innerHTML = phantomValue;
     elem.style.opacity = 0.5;
+}
+
+function hidePhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.innerHTML = oldValue;
+    elem.style.opacity = 1;
 }
 
 function fillInPhantomValue() {
@@ -421,10 +441,18 @@ function fillInPhantomValue() {
     elem.style.opacity = 1;
 }
 
+var oldHoursLeft;
 function showPhantomHoursLeft(phantomHoursLeft) {
     let elem = document.getElementById('hours-left');
+    oldHoursLeft = elem.innerHTML;
     elem.innerHTML = phantomHoursLeft;
     elem.style.opacity = 0.5;
+}
+
+function hidePhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.innerHTML = oldHoursLeft;
+    elem.style.opacity = 1;
 }
 
 function fillInPhantomHoursLeft() {
@@ -438,6 +466,11 @@ function showPhantomActivity(name) {
     elem.innerHTML = name;
 }
 
+function hidePhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.display = 'none';
+}
+
 function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
@@ -448,11 +481,16 @@ function onCellClick(event) {
     fillInPhantomActivity('gym');
     fillInPhantomValue();
     fillInPhantomHoursLeft();
+
+    event.target.removeEventListener('mouseover', onCellMouseOver);
+    event.target.removeEventListener('mouseleave', onCellMouseLeave);
+
+    showCheck();
+
 }
 
 function showX() {
     let elem = document.getElementById('x');
-    //elem.style.backgroundColor = 'red';
     elem.style.visibility = 'visible';
 }
 
@@ -462,10 +500,21 @@ function hideX() {
     elem.style.visibility = 'hidden';
 }
 
+function showCheck() {
+    let elem = document.getElementById('check');
+    elem.style.visibility = 'visible';
+}
+
+function hideCheck() {
+    let elem = document.getElementById('check');
+    elem.style.visibility = 'hidden';
+}
+
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
 
 function onDropDeactivate() {
     showX();
-    setHelpfulText("That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.");
+    setHelpfulText(doesntFitText);
     addCellEvents(1,1);
     //highlightTargetTime('1h.png');
     highlightCellBorderAt(1, 1);

@@ -1,8 +1,8 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
-var schedulerMaxActivities = 4; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
+var schedulerMaxHours = 3;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 
@@ -12,16 +12,12 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 // Other stuff
 var doBetterText = "That's progress, but you could do better.";
-var instructionText = "Drag the activities to your timeline to get the most value.";
+var instructionText = "Drag the gym to your timeline to get the most value.";
 var optimalScheduleText = "Awesome! You maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = {x: 0, y: 0};
-var startX;
-var startY;
-var gymStartTop;
-var gymStartLeft;
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -107,6 +103,38 @@ function displayTable() {
     }
 }
 
+function displayTableUpTo(maxRows, maxCols) {
+    var grid = document.getElementById('grid');
+
+    for (var i = 0; i < maxRows; i++) {
+        var row = grid.insertRow(i + 1);
+        var cell = row.insertCell(0);
+        var thisarray = [];
+        for (var k = 0; k <= i; k++) {
+            thisarray[k] = activityArr[k].name;
+        }
+        cell.innerHTML = thisarray.join(", ");
+
+
+        for (var j = 0; j < gridMaxCols-1; j++) {
+            var cell = row.insertCell(j + 1);
+            if (i == maxRows - 1 && j >= maxCols) {
+                cell.innerHTML = '';
+            }
+            else {
+                cell.innerHTML = table[i][j+1];
+            }
+
+        }
+    }
+}
+
+function fillInTable(r, c) {
+    var grid = document.getElementById('grid');
+    let cell = grid.rows[r].cells[c];
+    cell.innerHTML = table[r][c];
+}
+
 function getCellAt(coords) {
     return table[coords[0]][coords[1]];
 }
@@ -138,6 +166,7 @@ function highlightCellAt(r, c) {
     var grid = document.getElementById('grid');
     var cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
+    cell.innerHTML = '?';
 }
 
 function unhighlightCellAt(r, c) {
@@ -166,13 +195,28 @@ function displaySchedule() {
     }
 }
 
-
 function displayActivities(num) {
     for (var i = 0; i < activityArr.length; i++) {
         var activity = activityArr[i];
         var display = document.getElementById(activity.name);
 
         if (i < num) {
+            display.style.height = BLOCK_HEIGHT + 'px';
+            display.style.width = BLOCK_WIDTH * activity.duration + 'px';
+            display.innerHTML = activity.name
+        }
+        else {
+            display.style.display = 'none';
+        }
+    }
+}
+
+function displaySingleActivity(idx) {
+    for (var i = 0; i < activityArr.length; i++) {
+        var activity = activityArr[i];
+        var display = document.getElementById(activity.name);
+
+        if (i == idx) {
             display.style.height = BLOCK_HEIGHT + 'px';
             display.style.width = BLOCK_WIDTH * activity.duration + 'px';
             display.innerHTML = activity.name
@@ -193,20 +237,18 @@ function getselectedActivityFromName(name) {
     }
 }
 
-function setHelpfulText(newText) {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = newText;
-}
-
 // Set everything up
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
-    //initTable();
-    //displayTable();
+    initTable();
+    displayTableUpTo(2, 2);
+    highlightCellAt(2,3)
     displaySchedule();
-    displayActivities(schedulerMaxActivities);
+    //displayActivities(schedulerMaxActivities);
 
-    setHelpfulText(instructionText);
+    displaySingleActivity(1);
+
+    setHelpfulText("Can we go on a date?");
 
     // Get the initial locations of the activities, and store in the activity array.
     for (var i = 0; i < schedulerMaxActivities; i++) {
@@ -220,7 +262,6 @@ function main() {
 }
 
 // ********************************** INTERACT JS ***************************************
-
 function onDropAction(event) {
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
     selectedActivity = getselectedActivityFromName(draggableElement.id);
@@ -235,8 +276,12 @@ function onDropAction(event) {
     elem = document.getElementById('scheduler-value');
     elem.innerHTML = scheduleValue;
 
-    // update
-    updateHelpText();
+    // update helpful text
+    updateHelpfulText();
+
+    showCheck();
+    fillInTable(2,3);
+
 }
 
 function onDragLeaveAction(event) {
@@ -256,86 +301,73 @@ function onDragLeaveAction(event) {
     elem.innerHTML = scheduleValue;
 
     // update helpful text
-    updateHelpText();
-
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    //elem = document.getElementById('value-box');
-    //elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    //elem = document.getElementById('value-box');
-    //elem.style.backgroundColor = 'lightgreen';
+    updateHelpfulText();
 }
 
 // This is a bit lazy, but it gets the point across.
-function updateHelpText() {
-    let elem = document.getElementById('instruction');
+function updateHelpfulText() {
+    var elem = document.getElementById('instruction');
 
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if (schedulerMaxHours == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 4)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 5)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if ((schedulerMaxHours == 7 )) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 9)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 6)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if (schedulerMaxHours == 5) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 7)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
     else if (schedulerMaxHours == 6) {
         if (scheduleValue == 0)
             elem.innerHTML = instructionText;
         else if (scheduleValue < 8)
-            indicateNotOptimal();
+            elem.innerHTML = doBetterText;
         else
-            indicateOptimal();
+            elem.innerHTML = optimalScheduleText;
     }
- }
+}
 
+function setHelpfulText(newText) {
+    let elem = document.getElementById('instruction');
+    elem.innerHTML = newText;
+}
 
 function onDragEnterAction(event) {
     // remove the drop feedback style
@@ -344,6 +376,152 @@ function onDragEnterAction(event) {
 }
 
 function onDragMove() {
+}
+
+function addCellEvents(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
+    cell.addEventListener('click', onCellClick)
+}
+
+function onCellMouseLeave(event) {
+    console.log('mouse leave', event.target);
+    //showX();
+    hidePhantomActivity('gym');
+    setHelpfulText(doesntFitText);
+    hidePhantomValue();
+    hidePhantomHoursLeft();
+    event.target.classList.remove('target-time-highlight');
+}
+
+function highlightCellBorderAt(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.classList.add('highlight-border');
+}
+
+function onCellMouseOver(event) {
+    console.log('mouse over', event.target);
+    hideX();
+    // // hack, fix this
+    // $('#date').animate({
+    //     'left' : "+=300px"
+    // }, "slow");
+    document.getElementById('date').classList.remove('draggable');
+    showPhantomActivity('gym');
+    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+    showPhantomValue(1);
+    showPhantomHoursLeft(0);
+    event.target.classList.add('target-time-highlight');
+}
+
+function highlightTargetTime(filename) {
+    let elems = document.getElementsByClassName('target-time');
+    for (let i = 0; i < elems.length; i++) {
+        let elem = elems[i];
+        elem.src = '../../figures/yellow_time_icons/' + filename;
+    }
+
+}
+
+var oldValue;
+function showPhantomValue(phantomValue) {
+    let elem = document.getElementById('scheduler-value');
+    oldValue = elem.innerHTML;
+    elem.innerHTML = phantomValue;
+    elem.style.opacity = 0.5;
+}
+
+function hidePhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.innerHTML = oldValue;
+    elem.style.opacity = 1;
+}
+
+function fillInPhantomValue() {
+    let elem = document.getElementById('scheduler-value');
+    elem.style.opacity = 1;
+}
+
+var oldHoursLeft;
+function showPhantomHoursLeft(phantomHoursLeft) {
+    let elem = document.getElementById('hours-left');
+    oldHoursLeft = elem.innerHTML;
+    elem.innerHTML = phantomHoursLeft;
+    elem.style.opacity = 0.5;
+}
+
+function hidePhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.innerHTML = oldHoursLeft;
+    elem.style.opacity = 1;
+}
+
+function fillInPhantomHoursLeft() {
+    let elem = document.getElementById('hours-left');
+    elem.style.opacity = 1;
+}
+
+function showPhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.display = 'block';
+    elem.innerHTML = name;
+}
+
+function hidePhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.display = 'none';
+}
+
+function fillInPhantomActivity(name) {
+    let elem = document.getElementById('phantom-'+name);
+    elem.style.opacity = 1;
+}
+function onCellClick(event) {
+    console.log('click', event.target);
+    fillInTable(2,1);
+    fillInPhantomActivity('gym');
+    fillInPhantomValue();
+    fillInPhantomHoursLeft();
+
+    event.target.removeEventListener('mouseover', onCellMouseOver);
+    event.target.removeEventListener('mouseleave', onCellMouseLeave);
+
+    showCheck();
+
+}
+
+function showX() {
+    let elem = document.getElementById('x');
+    elem.style.visibility = 'visible';
+}
+
+function hideX() {
+    let elem = document.getElementById('x');
+    //elem.style.backgroundColor = 'red';
+    elem.style.visibility = 'hidden';
+}
+
+function showCheck() {
+    let elem = document.getElementById('check');
+    elem.style.visibility = 'visible';
+}
+
+function hideCheck() {
+    let elem = document.getElementById('check');
+    elem.style.visibility = 'hidden';
+}
+
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
+
+function onDropDeactivate() {
+    showX();
+    setHelpfulText(doesntFitText);
+    addCellEvents(1,1);
+    //highlightTargetTime('1h.png');
+    highlightCellBorderAt(1, 1);
 }
 
 interact('.draggable').snap({
@@ -369,24 +547,24 @@ interact('.draggable')
 
 // target elements with the "draggable" class
 interact('.draggable').draggable({
-        // enable inertial throwing
-        inertia: true,
+    // enable inertial throwing
+    inertia: true,
 
-        // enable autoScroll
-        autoScroll: true,
+    // enable autoScroll
+    autoScroll: true,
 
-        // call this function on every dragmove event
-        onmove: dragMoveListener,
-        // call this function on every dragend event
-        onend: function (event) {
-            var textEl = event.target.querySelector('p');
+    // call this function on every dragmove event
+    onmove: dragMoveListener,
+    // call this function on every dragend event
+    onend: function (event) {
+        var textEl = event.target.querySelector('p');
 
-            textEl && (textEl.textContent =
-                'moved a distance of '
-                + (Math.sqrt(event.dx * event.dx +
-                    event.dy * event.dy)|0) + 'px');
-        }
-    });
+        textEl && (textEl.textContent =
+            'moved a distance of '
+            + (Math.sqrt(event.dx * event.dx +
+                event.dy * event.dy)|0) + 'px');
+    }
+});
 
 function dragMoveListener (event) {
     onDragMove();
@@ -443,7 +621,7 @@ interact('.dropzone').dropzone({
             var dropRect = interact.getElementRect(event.target),
                 dropCenter = {
                     // To snap to the first location on left, uncomment following line
-                    // x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
+                    //x: dropRect.left + ((scheduleHoursUsed - dropOffset) * BLOCK_WIDTH) + (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     x: dropRect.left + ((schedulerMaxHours - scheduleHoursUsed + dropOffset) * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity.duration) / 2,
                     y: dropRect.top + dropRect.height / 2
                 };
@@ -483,6 +661,7 @@ interact('.dropzone').dropzone({
             console.log('on drop');
             onDropAction(event);
         }
+
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -492,5 +671,7 @@ interact('.dropzone').dropzone({
         dropzoneElement.classList.remove('drop-target');
 
         console.log('on drop deactivate');
+
+        //onDropDeactivate();
     }
 });
