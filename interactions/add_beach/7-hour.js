@@ -1,7 +1,7 @@
 "use strict";
 
 // Global Variables + Settings
-var schedulerMaxHours = 4;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
+var schedulerMaxHours = 7;      // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
@@ -10,9 +10,11 @@ var selectedActivity;           // The currently selected activity (in the inter
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
+var alreadyDropped = false;
+
 // Other stuff
 var doBetterText = "That's progress, but you could do better.";
-var instructionText = "Drag the gym to your timeline to get the most value.";
+var instructionText = "Can we go to the beach?";
 var optimalScheduleText = "Awesome! You maximized your value!";
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
@@ -131,8 +133,12 @@ function displayTableUpTo(maxRows, maxCols) {
 
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
+    console.log(grid.rows);
+    console.log(grid.rows[r].cells);
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c];
+    console.log(cell);
+    console.log(table[r]);
+    cell.innerHTML = table[r-1][c];
 }
 
 function getCellAt(coords) {
@@ -241,14 +247,14 @@ function getselectedActivityFromName(name) {
 function main() {
     selectedActivity = activityArr[schedulerMaxActivities - 1];
     initTable();
-    displayTableUpTo(2, 3);
-    highlightCellAt(2, 4)
+    displayTableUpTo(4, 6);
+    highlightCellAt(4, 7)
     displaySchedule();
     //displayActivities(schedulerMaxActivities);
 
-    displaySingleActivity(1);
+    displaySingleActivity(3);
 
-    setHelpfulText("Can we go on a date?");
+    setHelpfulText(instructionText);
 
     // Get the initial locations of the activities, and store in the activity array.
     for (var i = 0; i < schedulerMaxActivities; i++) {
@@ -261,7 +267,7 @@ function main() {
     }
 }
 
-var mouseLeaveText = "It fits! You still have time left. Click on what we can do in an hour.";
+var mouseLeaveText = "It fits! You still have time left. Click on what we can do in 2 hours.";
 // ********************************** INTERACT JS ***************************************
 function onDropAction(event) {
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -281,8 +287,10 @@ function onDropAction(event) {
     //updateHelpfulText();
 
     setHelpfulText(mouseLeaveText);
-    addCellEvents(1, 1);
-    highlightCellBorderAt(1, 1);
+    addCellEvents(3, 2);
+    highlightCellBorderAt(3, 2);
+
+    document.getElementById('beach').classList.remove('draggable');
 }
 
 function onDragLeaveAction(event) {
@@ -302,7 +310,7 @@ function onDragLeaveAction(event) {
     elem.innerHTML = scheduleValue;
 
     // update helpful text
-    updateHelpfulText();
+    //updateHelpfulText();
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -387,11 +395,29 @@ function addCellEvents(r, c) {
     cell.addEventListener('click', onCellClick)
 }
 
+function addCellEventsNew(r, c) {
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.addEventListener('mouseover', onCellMouseOverNew);
+    cell.addEventListener('mouseleave', onCellMouseLeaveNew);
+    cell.addEventListener('click', onCellClickNew)
+}
+
+
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
     //showX();
     hidePhantomActivity('gym');
     setHelpfulText(mouseLeaveText);
+    hidePhantomValue();
+    hidePhantomHoursLeft();
+    event.target.classList.remove('target-time-highlight');
+}
+
+function onCellMouseLeaveNew(event) {
+    hidePhantomActivity('date');
+    hidePhantomActivity('hike');
+    setHelpfulText("Cool! Then we still have lots of time left. Click on what we can do in 7 hours.");
     hidePhantomValue();
     hidePhantomHoursLeft();
     event.target.classList.remove('target-time-highlight');
@@ -403,6 +429,17 @@ function highlightCellBorderAt(r, c) {
     cell.classList.add('highlight-border');
 }
 
+function onCellMouseOverNew(event) {
+    document.getElementById('beach').classList.remove('draggable');
+    showPhantomActivity('hike');
+    showPhantomActivity('date');
+    setHelpfulText("That's right!");
+    showPhantomValue(9);
+    showPhantomHoursLeft(0);
+    event.target.classList.add('target-time-highlight');
+}
+
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     hideX();
@@ -412,9 +449,9 @@ function onCellMouseOver(event) {
     // }, "slow");
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(5);
-    showPhantomHoursLeft(0);
+    setHelpfulText("That's right!");
+    showPhantomValue(8);
+    showPhantomHoursLeft(1);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -467,7 +504,7 @@ function fillInPhantomHoursLeft() {
 
 function showPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
-    elem.style.display = 'block';
+    elem.style.display = 'inline-block';
     elem.innerHTML = name;
 }
 
@@ -480,6 +517,19 @@ function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
 }
+
+function onCellClickNew(event) {
+    fillInTable(4, 7);
+    fillInPhantomActivity('date');
+    fillInPhantomActivity('hike');
+    fillInPhantomValue();
+    fillInPhantomHoursLeft();
+    event.target.removeEventListener('mouseover', onCellMouseOverNew);
+    event.target.removeEventListener('mouseleave', onCellMouseLeaveNew);
+    event.target.removeEventListener('mouseleave', onCellClickNew);
+    showCheck();
+}
+
 function onCellClick(event) {
     console.log('click', event.target);
     fillInTable(2, 4);
@@ -489,9 +539,16 @@ function onCellClick(event) {
 
     event.target.removeEventListener('mouseover', onCellMouseOver);
     event.target.removeEventListener('mouseleave', onCellMouseLeave);
+    event.target.removeEventListener('click', onCellClick);
+    //event.target.classList.remove('target-time-highlight');
+    //event.target.classList.remove('highlight-border');
 
-    showCheck();
+    //showCheck();
+    setHelpfulText("Is this the best we can do though? What if we don't go to the beach?");
 
+    document.getElementById('beach').classList.add('draggable');
+
+    alreadyDropped = true;
 }
 
 function showX() {
@@ -523,6 +580,18 @@ function onDropDeactivate() {
     addCellEvents(1,1);
     //highlightTargetTime('1h.png');
     highlightCellBorderAt(1, 1);
+}
+
+function onDropDeactivateBeach() {
+    console.log('what if we dont go to the beach');
+    hidePhantomActivity('gym');
+
+    let elem = document.getElementById('grid').rows[3].cells[2];
+    elem.classList.remove('target-time-highlight');
+    elem.classList.remove('highlight-border');
+    setHelpfulText("Cool! Then we still have so much time left. Click on what we can do in 7 hours.");
+    addCellEventsNew(3, 7);
+    highlightCellBorderAt(3, 7);
 }
 
 interact('.draggable').snap({
@@ -659,9 +728,9 @@ interact('.dropzone').dropzone({
         // Only drop if the dropzone is active, and don't re-drop something that's already been dropped.
         if (dropzoneElement.classList.contains('drop-active') && !(draggableElement.classList.contains('dropped'))) {
             draggableElement.classList.add('dropped');
-            console.log('on drop');
             onDropAction(event);
         }
+
     },
     ondropdeactivate: function (event) {
         var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -672,6 +741,9 @@ interact('.dropzone').dropzone({
 
         console.log('on drop deactivate');
 
+        if (alreadyDropped) {
+            onDropDeactivateBeach();
+        }
         //onDropDeactivate();
     }
 });
