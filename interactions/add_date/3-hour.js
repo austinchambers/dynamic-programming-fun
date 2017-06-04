@@ -234,7 +234,7 @@ function onCellMouseOver(event) {
     showPhantomActivity('gym');
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
     showPhantomValue(1);
-    showPhantomHoursLeft(0);
+    showPhantomHoursLeft(1);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -247,23 +247,17 @@ function highlightTargetTime(filename) {
 
 }
 
-var oldValue;
 function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    oldValue = elem.innerHTML;
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
+    updateScheduleValue(phantomValue);
 }
 
 function hidePhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = oldValue;
-    elem.style.opacity = 1;
+    updateScheduleValue(0);
 }
 
-function fillInPhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.style.opacity = 1;
+function fillInPhantomValue(phantomValue) {
+    scheduleValue += phantomValue;
+    updateScheduleValue(0);
 }
 
 var oldHoursLeft;
@@ -304,7 +298,7 @@ function onCellClick(event) {
     console.log('click', event.target);
     fillInTable(2,fillInValue);
     fillInPhantomActivity('gym');
-    fillInPhantomValue();
+    fillInPhantomValue(1);
     fillInPhantomHoursLeft();
 
     event.target.removeEventListener('mouseover', onCellMouseOver);

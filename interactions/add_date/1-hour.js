@@ -273,7 +273,6 @@ function highlightTargetTime(filename) {
 
 }
 
-var oldValue;
 function showPhantomValue(phantomValue) {
     updateScheduleValue(phantomValue);
 }
@@ -282,9 +281,9 @@ function hidePhantomValue() {
     updateScheduleValue(0);
 }
 
-function fillInPhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.style.opacity = 1;
+function fillInPhantomValue(phantomValue) {
+    scheduleValue += phantomValue;
+    updateScheduleValue(0);
 }
 
 var oldHoursLeft;
@@ -325,7 +324,7 @@ function onCellClick(event) {
     console.log('click', event.target);
     fillInTable(2,fillInValue);
     fillInPhantomActivity('gym');
-    fillInPhantomValue();
+    fillInPhantomValue(1);
     fillInPhantomHoursLeft();
 
     event.target.removeEventListener('mouseover', onCellMouseOver);
