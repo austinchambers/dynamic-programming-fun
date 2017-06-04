@@ -21,6 +21,7 @@ var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em>
 var fillInValue = 4;
 
 // Other stuff
+var selectedPhantomActivity;
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
@@ -224,6 +225,7 @@ function highlightCellBorderAt(r, c) {
 }
 
 function onCellMouseOver(event) {
+    selectedPhantomActivity = activityArr[0]; // Select the gym
     console.log('mouse over', event.target);
     hideX();
     // // hack, fix this
@@ -231,10 +233,11 @@ function onCellMouseOver(event) {
     //     'left' : "+=300px"
     // }, "slow");
     document.getElementById('date').classList.remove('draggable');
-    showPhantomActivity('gym');
+    showPhantomActivity(selectedPhantomActivity.name);
+
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(1);
-    showPhantomHoursLeft(1);
+    showPhantomValue(selectedPhantomActivity.value);
+    showPhantomHoursLeft((currHoursTotal - currHoursUsed) - selectedPhantomActivity.duration);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -348,7 +351,6 @@ function displaySchedule() {
         elem.innerHTML = schedulerMaxHours + ' hours total';
     }
 }
-
 
 function displayActivities(num) {
     for (var i = 0; i < activityArr.length; i++) {
