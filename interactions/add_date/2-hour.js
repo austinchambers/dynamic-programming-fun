@@ -6,17 +6,19 @@ var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause th
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 var tableEnabled = true;       // True, if we have a table
-var displayTableUpToRows = 1;
+var displayTableUpToRows = 2;
 var displayTableUpToCols = 1;   // Row and column limit of the table to display, if tableEnabled = true
 var highlightCellRow = 1;
-var highlightCellCol = 1;       // Row and column of cell to highlighjt
-var displayAllActivities = true;//Whether to display all activities or just a single one.
+var highlightCellCol = 2;             // Row and column of cell to highlighjt
+var displayAllActivities = false;     //Whether to display all activities or just a single one.
 var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
+var fillInValue = 1;
 
 var instructionText = "Drag the activity to your timeline to get the most value.";
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "Awesome! You maximized your value!";
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in two hours.";
 
 // Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
@@ -69,7 +71,7 @@ function main() {
     if (tableEnabled == true) {
         initTable();
         displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
-        highlightCellAt(highlightCellRow, highlightCellCol)
+        highlightCellAt(displayTableUpToRows, displayTableUpToCols + 1)
     }
 
     setHelpfulText(initialHelpfulText);
@@ -155,7 +157,7 @@ function displayTableUpTo(maxRows, maxCols) {
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c+1];
+    cell.innerHTML = table[r][c];
 }
 
 function getCellAt(coords) {
@@ -301,7 +303,7 @@ function fillInPhantomActivity(name) {
 }
 function onCellClick(event) {
     console.log('click', event.target);
-    fillInTable(2,1);
+    fillInTable(2,fillInValue);
     fillInPhantomActivity('gym');
     fillInPhantomValue();
     fillInPhantomHoursLeft();
@@ -446,7 +448,7 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '5px 5px yellow';
 }
 
 function indicateOptimal() {
@@ -454,23 +456,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -547,15 +533,13 @@ function onDragEnterAction(event) {
 function onDragMove() {
 }
 
-var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
-
 function onDropDeactivate() {
     if (tableEnabled == true) {
         showX();
         setHelpfulText(doesntFitText);
-        addCellEvents(1,1);
+        addCellEvents(highlightCellRow,highlightCellCol);
         //highlightTargetTime('1h.png');
-        highlightCellBorderAt(1, 1);
+        highlightCellBorderAt(highlightCellRow, highlightCellCol);
     }
 }
 
