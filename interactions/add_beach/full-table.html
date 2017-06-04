@@ -52,18 +52,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-7">
-            <div id="gym" class="gym block notdropped draggable"></div>
-            <div id="date" class="date block notdropped draggable"></div>
-            <div id="hike" class="hike block notdropped draggable"></div>
-            <div id="beach" class="beach block notdropped draggable"></div>
-        </div>
-    </div>
 
     <div class="row">
-        <div class="col-1"></div>
         <div class="col-1">
             <div id="value-box" class="value-block">
                 <div id="value-block-caption">Value</div>
@@ -71,11 +61,12 @@
             </div>
         </div>
         <div class="col-1"></div>
-        <div class="col-8">
+        <div class="col-9">
             <div class="dropzone" id="scheduler">
                 <div id="phantom-gym" class="phantom gym block notdropped can-drop"></div>
                 <div id="phantom-date" class="phantom date block notdropped can-drop"></div>
                 <div id="phantom-hike" class="phantom hike block notdropped can-drop"></div>
+                <div id="phantom-beach" class="phantom beach block notdropped can-drop"></div>
                 <div>
 					<span style="text-align: center; font-size: 12px; font-style: italic; color: gray">
 						<!--<span id="scheduler-total-hours">7 hours total</span>-->
@@ -84,10 +75,10 @@
             </div>
             <div id="scheduler-arrow"></div>
         </div>
-        <div class="col-1"><img class="time-icon target-time" style="margin-top: 20px;" src="../../figures/time_icons/7h.png"></div>
+        <div class="col-1"><div class="time-icon time-icon7 time-dynamic target-time" style="margin-top: 20px; height: 50px;"></div>
     </div>
     <div class="row">
-        <div class="col-3"></div>
+        <div class="col-5"></div>
         <div class="col-6">
             <div id="hours-left-text">
                 <span>Timeline: </span>

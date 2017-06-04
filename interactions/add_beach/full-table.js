@@ -3,7 +3,7 @@
 // Global Variables + Settings
 var tableEnabled = true;             // True, if we have a table
 var displayTableUpToRows = 4;
-var displayTableUpToCols = 6;         // Row and column limit of the table to display, if tableEnabled = true
+var displayTableUpToCols = 7;         // Row and column limit of the table to display, if tableEnabled = true
 
 var schedulerMaxHours = 7;           // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 4;      // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
@@ -15,7 +15,7 @@ var highlightCellCol = 3;             // Row and column of cell to highlighjt
 
 var alreadyDropped = false;
 
-var instructionText = "Drag the activity to your timeline to get the most value.";
+var instructionText = "Hover over the values in the table to recall how they were computed.";
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "It fits!";
@@ -62,13 +62,12 @@ var activityArr = [ // ORDER MATTERS
 // Set everything up
 function main() {
     // Display all the activities.
-    displayActivities(schedulerMaxActivities);
+    // displayActivities(schedulerMaxActivities);
 
     // Display a table, and if so, set table settings.
     if (tableEnabled == true) {
         initTable();
-        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
-        highlightCellAt(displayTableUpToRows, displayTableUpToCols + 1)
+        displayTableUpTo(displayTableUpToRows, displayTableUpToCols, true);
     }
 
     setHelpfulText(instructionText);
@@ -106,27 +105,7 @@ function initTable() {
     console.log(table);
 }
 
-// Find the #grid item in the html page, and display the table within it.
-function displayTable() {
-    var grid = document.getElementById('grid');
-
-    for (var i = 0; i < gridMaxRows; i++) {
-        var row = grid.insertRow(i + 1);
-        var cell = row.insertCell(0);
-        var thisarray = [];
-        for (var k = 0; k <= i; k++) {
-            thisarray[k] = activityArr[k].name;
-        }
-        cell.innerHTML = thisarray.join(", ");
-
-        for (var j = 0; j < gridMaxCols; j++) {
-            var cell = row.insertCell(j + 1);
-            cell.innerHTML = table[i][j];
-        }
-    }
-}
-
-function displayTableUpTo(maxRows, maxCols) {
+function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
     var grid = document.getElementById('grid');
 
     for (var i = 0; i < maxRows; i++) {
@@ -139,15 +118,19 @@ function displayTableUpTo(maxRows, maxCols) {
         cell.innerHTML = thisarray.join(", ");
 
 
-        for (var j = 0; j < gridMaxCols-1; j++) {
+        for (var j = 0; j < gridMaxCols - 1; j++) {
             var cell = row.insertCell(j + 1);
             if (i == maxRows - 1 && j >= maxCols) {
                 cell.innerHTML = '';
             }
             else {
-                cell.innerHTML = table[i][j+1];
+                cell.innerHTML = table[i][j + 1];
             }
-
+            if (addEventsToCells == true) {
+                addCellEvents(i, j);
+                cell.classList.add('Row'.concat(i+1));
+                cell.classList.add('Col'.concat(j+1));
+            }
         }
     }
 }
@@ -159,7 +142,7 @@ function fillInTable(r, c) {
     let cell = grid.rows[r].cells[c];
     console.log(cell);
     console.log(table[r]);
-    cell.innerHTML = table[r-1][c];
+    cell.innerHTML = table[r - 1][c];
 }
 
 function getCellAt(coords) {
@@ -204,37 +187,10 @@ function unhighlightCellAt(r, c) {
 
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
-    let cell = elem.rows[r].cells[c];
+    let cell = elem.rows[r+1].cells[c+1];
     cell.addEventListener('mouseover', onCellMouseOver);
-    cell.addEventListener('mouseleave', onCellMouseLeave);
-    cell.addEventListener('click', onCellClick)
-}
-
-function addCellEventsNew(r, c) {
-    let elem = document.getElementById('grid');
-    let cell = elem.rows[r].cells[c];
-    cell.addEventListener('mouseover', onCellMouseOverNew);
-    cell.addEventListener('mouseleave', onCellMouseLeaveNew);
-    cell.addEventListener('click', onCellClickNew)
-}
-
-function onCellMouseLeave(event) {
-    console.log('mouse leave', event.target);
-    //showX();
-    hidePhantomActivity('gym');
-    setHelpfulText(mouseLeaveText);
-    hidePhantomValue();
-    hidePhantomHoursLeft();
-    event.target.classList.remove('target-time-highlight');
-}
-
-function onCellMouseLeaveNew(event) {
-    hidePhantomActivity('date');
-    hidePhantomActivity('hike');
-    setHelpfulText("Cool! Then we still have lots of time left. Click on what we can do in 7 hours.");
-    hidePhantomValue();
-    hidePhantomHoursLeft();
-    event.target.classList.remove('target-time-highlight');
+    //cell.addEventListener('mouseleave', onCellMouseLeave);
+    //cell.addEventListener('click', onCellClick)
 }
 
 function highlightCellBorderAt(r, c) {
@@ -244,40 +200,116 @@ function highlightCellBorderAt(r, c) {
 }
 
 function onCellMouseOver(event) {
-    selectedPhantomActivity = activityArr[0]; // Select the gym
     console.log('mouse over', event.target);
-    hideX();
+
+    for (var i = 1; i <= 7; i++) {
+        if (event.target.classList.contains('Col'.concat(i))) {
+            schedulerMaxHours = i;
+            updateScheduleValue(0);
+            displaySchedule();
+            console.log('display'.concat(i));
+        }
+    }
+
+    hidePhantomActivity('gym'); hidePhantomActivity('date');
+    hidePhantomActivity('hike'); hidePhantomActivity('beach');
+    var phantomValueSum = 0;
+    var phantomDurationSum = 0;
+    var cellValue = event.target.innerHTML;
+    if (cellValue == 1) {
+        setHelpfulText('Why gym is best here');
+        // Show phantom gym
+        selectedPhantomActivity = activityArr[0];
+        showPhantomActivity(selectedPhantomActivity.name, null);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+    else if (cellValue == 4) {
+        setHelpfulText('Why date is best here');
+        // Show phantom date
+        selectedPhantomActivity = activityArr[1];
+        showPhantomActivity(selectedPhantomActivity.name, null);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+    else if (cellValue == 5) {
+        if (event.target.classList.contains('Row2')) {
+            setHelpfulText('Why date + gym is best here.');
+            // Show phantom gym
+            selectedPhantomActivity = activityArr[0];
+            phantomValueSum += selectedPhantomActivity.value;
+            phantomDurationSum += selectedPhantomActivity.duration;
+            // Show phantom date
+            selectedPhantomActivity = activityArr[1];
+            showPhantomActivity(selectedPhantomActivity.name, activityArr[0].name);
+            phantomValueSum += selectedPhantomActivity.value;
+            phantomDurationSum += selectedPhantomActivity.duration;
+        }
+        else {
+            setHelpfulText('Why hike is best here');
+            // Show phantom hike
+            selectedPhantomActivity = activityArr[2];
+            showPhantomActivity(selectedPhantomActivity.name, null);
+            phantomValueSum += selectedPhantomActivity.value;
+            phantomDurationSum += selectedPhantomActivity.duration;
+        }
+    }
+    else if (cellValue == 6) {
+        setHelpfulText('Why hike + date is best here');
+        // Show phantom gym
+        selectedPhantomActivity = activityArr[0];
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+        // Show phantom hike
+        selectedPhantomActivity = activityArr[2];
+        showPhantomActivity(selectedPhantomActivity.name, activityArr[0].name);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+    else if (cellValue == 7) {
+        setHelpfulText('Why beach is best here');
+        // Show phantom beach
+        selectedPhantomActivity = activityArr[3];
+        showPhantomActivity(selectedPhantomActivity.name, null);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+    else if (cellValue == 8) {
+        setHelpfulText('Why gym + beach is best here');
+        // Show phantom gym
+        selectedPhantomActivity = activityArr[0];
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+        // Show phantom beach
+        selectedPhantomActivity = activityArr[3];
+        showPhantomActivity(selectedPhantomActivity.name, activityArr[0].name);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+    else if (cellValue == 9) {
+        setHelpfulText('Why date + hike is best here');
+        // Show phantom date
+        selectedPhantomActivity = activityArr[1];
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+
+        // Show phantom hike
+        selectedPhantomActivity = activityArr[2];
+        showPhantomActivity(selectedPhantomActivity.name, activityArr[1].name);
+        phantomValueSum += selectedPhantomActivity.value;
+        phantomDurationSum += selectedPhantomActivity.duration;
+    }
+
+    //hideX();
     // // hack, fix this
     // $('#date').animate({
     //     'left' : "+=300px"
     // }, "slow");
-    document.getElementById('date').classList.remove('draggable');
-    showPhantomActivity(selectedPhantomActivity.name);
+    //document.getElementById('date').classList.remove('draggable');
 
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(selectedPhantomActivity.value);
-    showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
-    event.target.classList.add('target-time-highlight');
-}
-
-function onCellMouseOverNew(event) {
-    document.getElementById('beach').classList.remove('draggable');
-    showPhantomActivity('hike');
-    showPhantomActivity('date');
-    setHelpfulText("That's right!");
-    scheduleValue = 0;
-    showPhantomValue(9);
-    showPhantomHoursLeft(0);
-    event.target.classList.add('target-time-highlight');
-}
-
-function highlightTargetTime(filename) {
-    let elems = document.getElementsByClassName('target-time');
-    for (let i = 0; i < elems.length; i++) {
-        let elem = elems[i];
-        elem.src = '../../figures/yellow_time_icons/' + filename;
-    }
-
+    showPhantomValue(phantomValueSum);
+    showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - phantomDurationSum);
+    //event.target.classList.add('target-time-highlight');
 }
 
 function showPhantomValue(phantomValue) {
@@ -312,49 +344,51 @@ function fillInPhantomHoursLeft() {
     elem.style.opacity = 1;
 }
 
-function showPhantomActivity(name) {
-    let elem = document.getElementById('phantom-'+name);
+function showPhantomActivity(name, optionalSecondName) {
+    // Make activities visible
+    let elem = document.getElementById('phantom-' + name);
     elem.style.display = 'inline-block';
     elem.innerHTML = name;
+
+    var secondActivityOffset = 0;
+    if ((optionalSecondName != null) && (optionalSecondName != '')) {
+        let elem2 = document.getElementById('phantom-' + optionalSecondName);
+        elem2.style.display = 'inline-block';
+        elem2.innerHTML = optionalSecondName;
+
+        var selectedActivity2 = getselectedActivityFromName(optionalSecondName);
+        secondActivityOffset += selectedActivity2.duration + 1;
+        if (optionalSecondName == 'date') {
+            secondActivityOffset += 2;
+        }
+        var schedBox = document.getElementById('scheduler');
+        elem2.style.left = schedBox.style.left + (schedulerMaxHours * BLOCK_WIDTH) - (BLOCK_WIDTH * selectedActivity2.duration) - 3 + 'px';
+
+        var selectedActivity = getselectedActivityFromName(name);
+        var schedBox = document.getElementById('scheduler');
+        elem.style.left = schedBox.style.left + (schedulerMaxHours * BLOCK_WIDTH) - (BLOCK_WIDTH * (selectedActivity.duration + secondActivityOffset)) - 7 + 'px';
+        console.log(elem.style.left);
+    }
+    else {
+        var selectedActivity = getselectedActivityFromName(name);
+        var schedBox = document.getElementById('scheduler');
+        elem.style.left = schedBox.style.left + (schedulerMaxHours * BLOCK_WIDTH) - (BLOCK_WIDTH * (selectedActivity.duration + secondActivityOffset)) - 3 + 'px';
+        console.log(secondActivityOffset + selectedActivity.duration);
+    }
 }
 
 function hidePhantomActivity(name) {
-    let elem = document.getElementById('phantom-'+name);
+    let elem = document.getElementById('phantom-' + name);
     elem.style.display = 'none';
 }
 
 function fillInPhantomActivity(name) {
-    let elem = document.getElementById('phantom-'+name);
+    let elem = document.getElementById('phantom-' + name);
     elem.style.opacity = 1;
 }
 
-function onCellClickNew(event) {
-    fillInTable(4, 7);
-    fillInPhantomActivity('date');
-    fillInPhantomActivity('hike');
-    fillInPhantomValue(9);
-    fillInPhantomHoursLeft();
-    event.target.removeEventListener('mouseover', onCellMouseOverNew);
-    event.target.removeEventListener('mouseleave', onCellMouseLeaveNew);
-    event.target.removeEventListener('mouseleave', onCellClickNew);
-    showCheck();
-}
-
 function onCellClick(event) {
-    console.log('click', event.target);
-    fillInTable(2, fillInValue);
-    fillInPhantomActivity('gym');
-    fillInPhantomValue(1);
-    fillInPhantomHoursLeft();
 
-    event.target.removeEventListener('mouseover', onCellMouseOver);
-    event.target.removeEventListener('mouseleave', onCellMouseLeave);
-    event.target.removeEventListener('click', onCellClick);
-
-    setHelpfulText("Is this the best we can do though? What if we don't go to the beach?");
-
-    document.getElementById('beach').classList.add('draggable');
-    alreadyDropped = true;
 }
 
 function showX() {
@@ -383,7 +417,7 @@ function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
     elem.style.height = BLOCK_HEIGHT + 20 + 'px';
-    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
+    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 13 + 'px';
 
     // Update hours left if the corresponding ID element exists.
     elem = document.getElementById('hours-left');
@@ -396,6 +430,18 @@ function displaySchedule() {
     if (elem != null) {
         elem.innerHTML = schedulerMaxHours + ' hours total';
     }
+
+    // Update schedule clock
+    var elems = document.getElementsByClassName('time-dynamic');
+    elems[0].classList.remove('time-icon0');
+    elems[0].classList.remove('time-icon1');
+    elems[0].classList.remove('time-icon2');
+    elems[0].classList.remove('time-icon3');
+    elems[0].classList.remove('time-icon4');
+    elems[0].classList.remove('time-icon5');
+    elems[0].classList.remove('time-icon6');
+    elems[0].classList.remove('time-icon7');
+    elems[0].classList.add('time-icon'.concat(schedulerMaxHours));
 }
 
 function displayActivities(num) {
@@ -444,9 +490,9 @@ function onDropAction(event) {
     updateScheduleValue(0);
 
     // update
-    setHelpfulText(mouseLeaveText);
-    addCellEvents(3, 2);
-    highlightCellBorderAt(3, 2);
+    //setHelpfulText(mouseLeaveText);
+    //addCellEvents(3, 2);
+    //highlightCellBorderAt(3, 2);
 }
 
 function onDragLeaveAction(event) {
@@ -467,8 +513,8 @@ function onDragLeaveAction(event) {
     // updateHelpText();
 }
 
-function updateScheduleValue(phantomValue)
-{
+
+function updateScheduleValue(phantomValue) {
     var elem = document.getElementById('scheduler-value');
     elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
 
@@ -567,11 +613,6 @@ function updateHelpText() {
     }
 }
 
-function setHelpfulText(newText) {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = newText;
-}
-
 function onDragEnterAction(event) {
     // remove the drop feedback style
     var draggableElement = event.relatedTarget, dropzoneElement = event.target;
@@ -584,28 +625,22 @@ function onDragMove() {
 function onDropDeactivate() {
     showX();
     setHelpfulText(doesntFitText);
-    addCellEvents(1,1);
+    //addCellEvents(1, 1);
     //highlightTargetTime('1h.png');
-    highlightCellBorderAt(1, 1);
+    //highlightCellBorderAt(1, 1);
 }
 
 function onDropDeactivateBeach() {
-    console.log('what if we dont go to the beach');
-    hidePhantomActivity('gym');
 
-    let elem = document.getElementById('grid').rows[3].cells[2];
-    elem.classList.remove('target-time-highlight');
-    elem.classList.remove('highlight-border');
-    setHelpfulText("Cool! Then we still have so much time left. Click on what we can do in 7 hours.");
-    addCellEventsNew(3, 7);
-    highlightCellBorderAt(3, 7);
+//    addCellEventsNew(3, 7);
+  //  highlightCellBorderAt(3, 7);
 }
 
 interact('.draggable').snap({
     mode: 'anchor',
     anchors: [],
     range: Infinity,
-    elementOrigin: { x: 0.5, y: 0.5 },
+    elementOrigin: {x: 0.5, y: 0.5},
     endOnly: true
 });
 
@@ -618,11 +653,11 @@ interact('.draggable')
             selectedActivity = getselectedActivityFromName(event.target.id);
 
             // record center point when starting a drag
-            startPos[selectedActivity.index].x = rect.left + rect.width  / 2;
-            startPos[selectedActivity.index].y = rect.top  + rect.height / 2;
+            startPos[selectedActivity.index].x = rect.left + rect.width / 2;
+            startPos[selectedActivity.index].y = rect.top + rect.height / 2;
 
             // snap to the start position
-            event.interactable.snap({ anchors: [startPos[selectedActivity.index]] });
+            event.interactable.snap({anchors: [startPos[selectedActivity.index]]});
             console.log('setting snap '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             console.log('on undropped dragstart '.concat(selectedActivity.name));
         }
@@ -648,11 +683,11 @@ interact('.draggable').draggable({
         textEl && (textEl.textContent =
             'moved a distance of '
             + (Math.sqrt(event.dx * event.dx +
-                event.dy * event.dy)|0) + 'px');
+                event.dy * event.dy) | 0) + 'px');
     }
 });
 
-function dragMoveListener (event) {
+function dragMoveListener(event) {
     onDragMove();
     var target = event.target,
         // keep the dragged position in the data-x/data-y attributes
@@ -722,7 +757,7 @@ interact('.dropzone').dropzone({
                 };
             console.log('setting snap '.concat(dropCenter.x).concat('-').concat(dropCenter.y));
             event.draggable.snap({
-                anchors: [ dropCenter ]
+                anchors: [dropCenter]
             });
         }
         else {
@@ -753,7 +788,7 @@ interact('.dropzone').dropzone({
 
             console.log('setting return snap position '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             event.draggable.snap({
-                anchors: [ startPos[selectedActivity.index] ]
+                anchors: [startPos[selectedActivity.index]]
             });
         }
         else {
