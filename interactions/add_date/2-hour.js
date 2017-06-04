@@ -17,7 +17,7 @@ var fillInValue = 1;
 var instructionText = "Drag the activity to your timeline to get the most value.";
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
-var optimalScheduleText = "Awesome! You maximized your value!";
+var optimalScheduleText = "Correct! Gym is best for two hours as well, since no other activity can fit.";
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in two hours.";
 
 // Other stuff
@@ -332,7 +332,7 @@ function onCellClick(event) {
     event.target.removeEventListener('mouseleave', onCellMouseLeave);
 
     showCheck();
-
+    indicateOptimal();
 }
 
 function showX() {
@@ -468,7 +468,7 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.boxShadow = '5px 5px yellow';
+    elem.style.boxShadow = '';
 }
 
 function indicateOptimal() {
