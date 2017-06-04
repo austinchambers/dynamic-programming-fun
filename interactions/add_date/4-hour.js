@@ -238,7 +238,7 @@ function onCellMouseOver(event) {
 
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
     showPhantomValue(selectedPhantomActivity.value);
-    showPhantomHoursLeft((currHoursTotal - currHoursUsed) - selectedPhantomActivity.duration);
+    showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -435,7 +435,7 @@ function onDragLeaveAction(event) {
     updateScheduleValue(0);
 
     // update helpful text
-    updateHelpfulText();
+    updateHelpText();
 }
 
 function updateScheduleValue(phantomValue)

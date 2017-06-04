@@ -237,7 +237,7 @@ function onCellMouseOver(event) {
 
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
     showPhantomValue(selectedPhantomActivity.value);
-    showPhantomHoursLeft((currHoursTotal - currHoursUsed) - selectedPhantomActivity.duration);
+    showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
     event.target.classList.add('target-time-highlight');
 }
 
@@ -467,6 +467,7 @@ function indicateNotOptimal() {
 
     elem = document.getElementById('value-box');
     elem.style.boxShadow = '';
+    hideCheck();
 }
 
 function indicateOptimal() {
@@ -475,6 +476,7 @@ function indicateOptimal() {
 
     elem = document.getElementById('value-box');
     elem.style.boxShadow = '5px 5px #00B54F';
+    showCheck();
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -482,54 +484,82 @@ function updateHelpText() {
     let elem = document.getElementById('instruction');
 
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else
             indicateOptimal();
     }
     else if (schedulerMaxHours == 3) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 4)
             indicateNotOptimal();
         else
             indicateOptimal();
     }
     else if ((schedulerMaxHours == 4) || (schedulerMaxActivities == 2)) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 5)
             indicateNotOptimal();
         else
             indicateOptimal();
     }
     else if ((schedulerMaxHours == 7 )) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 9)
             indicateNotOptimal();
         else
             indicateOptimal();
     }
     else if (((schedulerMaxHours == 5) || (schedulerMaxHours == 6)) && schedulerMaxActivities == 3) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 6)
             indicateNotOptimal();
         else
             indicateOptimal();
     }
     else if (schedulerMaxHours == 5) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 7)
             indicateNotOptimal();
         else
             indicateOptimal();
     }
     else if (schedulerMaxHours == 6) {
-        if (scheduleValue == 0)
+        if (scheduleValue == 0) {
             elem.innerHTML = instructionText;
+            var elem2 = document.getElementById('value-box');
+            elem2.style.boxShadow = '';
+            hideCheck();
+        }
         else if (scheduleValue < 8)
             indicateNotOptimal();
         else
