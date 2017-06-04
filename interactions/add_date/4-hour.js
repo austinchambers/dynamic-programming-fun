@@ -253,23 +253,25 @@ function highlightCellBorderAt(r, c) {
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     var cellValue = event.target.innerHTML;
-    event.target.classList.add('value-block'.concat(cellValue));
+    if ((cellValue != null) && (cellValue != '')) {
+        event.target.classList.add('value-block'.concat(cellValue));
 
-    if (event.target.classList.contains('specialEvent')) {
-        selectedPhantomActivity = activityArr[0]; // Select the gym
-        console.log('mouse over', event.target);
-        hideX();
-        // // hack, fix this
-        // $('#date').animate({
-        //     'left' : "+=300px"
-        // }, "slow");
-        document.getElementById('date').classList.remove('draggable');
-        showPhantomActivity(selectedPhantomActivity.name);
+        if (event.target.classList.contains('specialEvent')) {
+            selectedPhantomActivity = activityArr[0]; // Select the gym
+            console.log('mouse over', event.target);
+            hideX();
+            // // hack, fix this
+            // $('#date').animate({
+            //     'left' : "+=300px"
+            // }, "slow");
+            document.getElementById('date').classList.remove('draggable');
+            showPhantomActivity(selectedPhantomActivity.name);
 
-        setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-        showPhantomValue(selectedPhantomActivity.value);
-        showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
-        event.target.classList.add('target-time-highlight');
+            setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+            showPhantomValue(selectedPhantomActivity.value);
+            showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
+            event.target.classList.add('target-time-highlight');
+        }
     }
 }
 

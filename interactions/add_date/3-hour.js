@@ -69,7 +69,7 @@ function main() {
     // Display a table, and if so, set table settings.
     if (tableEnabled == true) {
         initTable();
-        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
+        displayTableUpTo(displayTableUpToRows, displayTableUpToCols, true);
         highlightCellAt(displayTableUpToRows, displayTableUpToCols + 1)
     }
 
@@ -128,7 +128,7 @@ function displayTable() {
     }
 }
 
-function displayTableUpTo(maxRows, maxCols) {
+function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
     var grid = document.getElementById('grid');
 
     for (var i = 0; i < maxRows; i++) {
@@ -149,7 +149,11 @@ function displayTableUpTo(maxRows, maxCols) {
             else {
                 cell.innerHTML = table[i][j+1];
             }
-
+            if (addEventsToCells == true) {
+                addCellEvents(i, j);
+                cell.classList.add('Row'.concat(i+1));
+                cell.classList.add('Col'.concat(j+1));
+            }
         }
     }
 }
@@ -202,20 +206,41 @@ function unhighlightCellAt(r, c) {
 
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
-    let cell = elem.rows[r].cells[c];
+    let cell = elem.rows[r+1].cells[c+1];
     cell.addEventListener('mouseover', onCellMouseOver);
     cell.addEventListener('mouseleave', onCellMouseLeave);
-    cell.addEventListener('click', onCellClick)
+}
+
+function addSpecialCellEvents(r, c) {
+    console.log('adding special cell events for '.concat(r).concat('-').concat(c));
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.classList.add('specialEvent');
+    cell.addEventListener('click', onCellClick);
+    cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
+    console.log('setold cell '.concat(r).concat('-').concat(c));
 }
 
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
-    //showX();
-    hidePhantomActivity('gym');
-    setHelpfulText(doesntFitText);
-    hidePhantomValue();
-    hidePhantomHoursLeft();
-    event.target.classList.remove('target-time-highlight');
+    event.target.classList.remove('value-block'.concat(1));
+    event.target.classList.remove('value-block'.concat(4));
+    event.target.classList.remove('value-block'.concat(5));
+    event.target.classList.remove('value-block'.concat(6));
+    event.target.classList.remove('value-block'.concat(7));
+    event.target.classList.remove('value-block'.concat(8));
+    event.target.classList.remove('value-block'.concat(9));
+    event.target.style.display = 'table-cell';
+
+    if (event.target.classList.contains('specialEvent')) {
+        //showX();
+        hidePhantomActivity('gym');
+        setHelpfulText(doesntFitText);
+        hidePhantomValue();
+        hidePhantomHoursLeft();
+        event.target.classList.remove('target-time-highlight');
+    }
 }
 
 function highlightCellBorderAt(r, c) {
@@ -225,20 +250,28 @@ function highlightCellBorderAt(r, c) {
 }
 
 function onCellMouseOver(event) {
-    selectedPhantomActivity = activityArr[0]; // Select the gym
     console.log('mouse over', event.target);
-    hideX();
-    // // hack, fix this
-    // $('#date').animate({
-    //     'left' : "+=300px"
-    // }, "slow");
-    document.getElementById('date').classList.remove('draggable');
-    showPhantomActivity(selectedPhantomActivity.name);
+    var cellValue = event.target.innerHTML;
+    if ((cellValue != null) && (cellValue != '')) {
+        event.target.classList.add('value-block'.concat(cellValue));
 
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(selectedPhantomActivity.value);
-    showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
-    event.target.classList.add('target-time-highlight');
+        if (event.target.classList.contains('specialEvent')) {
+            selectedPhantomActivity = activityArr[0]; // Select the gym
+            console.log('mouse over', event.target);
+            hideX();
+            // // hack, fix this
+            // $('#date').animate({
+            //     'left' : "+=300px"
+            // }, "slow");
+            document.getElementById('date').classList.remove('draggable');
+            showPhantomActivity(selectedPhantomActivity.name);
+
+            setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+            showPhantomValue(selectedPhantomActivity.value);
+            showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
+            event.target.classList.add('target-time-highlight');
+        }
+    }
 }
 
 function highlightTargetTime(filename) {
@@ -284,7 +317,7 @@ function fillInPhantomHoursLeft() {
 
 function showPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
-    elem.style.display = 'block';
+    elem.style.display = 'inline-block';
     elem.innerHTML = name;
 }
 
@@ -297,18 +330,24 @@ function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
 }
+
 function onCellClick(event) {
-    console.log('click', event.target);
-    fillInTable(2,fillInValue);
-    fillInPhantomActivity('gym');
-    fillInPhantomValue(1);
-    fillInPhantomHoursLeft();
+    if (event.target.classList.contains('specialEvent')) {
+        console.log('click', event.target);
+        fillInTable(2, fillInValue);
+        fillInPhantomActivity('gym');
+        fillInPhantomValue(1);
+        fillInPhantomHoursLeft();
 
-    event.target.removeEventListener('mouseover', onCellMouseOver);
-    event.target.removeEventListener('mouseleave', onCellMouseLeave);
+        for (var i = 0; i < 7; i++) {
+            event.target.classList.remove('value-block'.concat(i));
+        }
+        event.target.removeEventListener('mouseover', onCellMouseOver);
+        event.target.removeEventListener('mouseleave', onCellMouseLeave);
+        event.target.removeEventListener('click', onCellClick);
 
-    showCheck();
-
+        showCheck();
+    }
 }
 
 function showX() {
