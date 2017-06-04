@@ -52,7 +52,7 @@ td {
 #scheduler {
     position: relative;
     z-index: -1000;
-    height: 60px;
+    height: 80px;
     background-repeat: no-repeat;
     background-position: left bottom;
     background-image:url('../figures/schedule_ticklines.png');
@@ -103,6 +103,11 @@ td {
     background-image:url('../figures/altheart9_small.png');
 }
 
+#value-block-caption {
+    text-align: center;
+    margin-top: -24px;
+}
+
 .value-block {
     height: 60px;
     width: 60px;
@@ -111,13 +116,13 @@ td {
     border-width: 1px;
     background-repeat: no-repeat;
     background-position: center center;
-    margin:0; /* If you want no margin */
+    margin: 12px 0px 0px 0px; /* If you want no margin */
     padding:0; /*if your want to padding */
     text-align: center;
 }
 
 #scheduler-arrow {
-    height:66px; /*height of your image*/
+    height:86px; /*height of your image*/
     width:20px;
     background-repeat: no-repeat;
     background-position: right bottom;
