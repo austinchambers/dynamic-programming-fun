@@ -18,12 +18,10 @@ var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "It fits!";
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
-var fillInValue = 1;
+var fillInValue = 4;
 
 // Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
-var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
-var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
 
@@ -76,6 +74,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue();
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -416,8 +415,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update
     updateHelpText();
@@ -436,13 +434,28 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
-    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update helpful text
     updateHelpText();
+}
+
+function updateScheduleValue()
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue));
 }
 
 function indicateNotOptimal() {
@@ -727,6 +740,6 @@ interact('.dropzone').dropzone({
 
         console.log('on drop deactivate '.concat(draggableElement.id));
 
-        onDropDeactivate();
+        //onDropDeactivate();
     }
 });

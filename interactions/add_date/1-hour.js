@@ -76,6 +76,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue();
 }
 
 // ********************************** DP GRID LOOKUP ***************************************

@@ -76,6 +76,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue();
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -416,8 +417,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update
     updateHelpText();
@@ -436,8 +436,7 @@ function onDragLeaveAction(event) {
     // update value
     var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue();
 
     // update helpful text
     updateHelpText();
