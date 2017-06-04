@@ -71,16 +71,49 @@ td {
     box-shadow: 3px 3px 3px #888888;
 }
 
+.value-block0 {
+    background-image:url('../figures/altheart0_small.png');
+}
+
+.value-block1 {
+    background-image:url('../figures/altheart1_small.png');
+}
+
+.value-block4 {
+    background-image:url('../figures/altheart4_small.png');
+}
+
+.value-block5 {
+    background-image:url('../figures/altheart5_small.png');
+}
+
+.value-block6 {
+    background-image:url('../figures/altheart6_small.png');
+}
+
+.value-block7 {
+    background-image:url('../figures/altheart7_small.png');
+}
+
+.value-block8 {
+    background-image:url('../figures/altheart8_small.png');
+}
+
+.value-block9 {
+    background-image:url('../figures/altheart9_small.png');
+}
+
 .value-block {
-    position: relative;
-    z-index: 1000;
     height: 60px;
     width: 60px;
-    border-color: grey;
+    border-color: black;
     border-style: solid;
     border-width: 1px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    margin:0; /* If you want no margin */
+    padding:0; /*if your want to padding */
     text-align: center;
-    border-radius: 10px;
 }
 
 #scheduler-arrow {

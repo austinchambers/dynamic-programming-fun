@@ -8,15 +8,17 @@ var gridMaxCols = 8;            // Total number of columns to display in the gri
 var tableEnabled = true;       // True, if we have a table
 var displayTableUpToRows = 2;
 var displayTableUpToCols = 0;   // Row and column limit of the table to display, if tableEnabled = true
-var highlightCellRow = 2;
-var highlightCellCol = 0;       // Row and column of cell to highlighjt
-var displayAllActivities = true;//Whether to display all activities or just a single one.
+var highlightCellRow = 1;
+var highlightCellCol = 1;             // Row and column of cell to highlighjt
+var displayAllActivities = false;     //Whether to display all activities or just a single one.
 var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
+var fillInValue = 1;
 
 var instructionText = "Drag the activity to your timeline to get the most value.";
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "Awesome! You maximized your value!";
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
 
 // Other stuff
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
@@ -69,11 +71,36 @@ function main() {
     if (tableEnabled == true) {
         initTable();
         displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
-        highlightCellAt(highlightCellRow, highlightCellCol)
+        highlightCellAt(displayTableUpToRows, displayTableUpToCols + 1)
     }
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue(0);
+}
+
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -155,7 +182,7 @@ function displayTableUpTo(maxRows, maxCols) {
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c+1];
+    cell.innerHTML = table[r][c];
 }
 
 function getCellAt(coords) {
@@ -248,16 +275,11 @@ function highlightTargetTime(filename) {
 
 var oldValue;
 function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    oldValue = elem.innerHTML;
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
+    updateScheduleValue(phantomValue);
 }
 
 function hidePhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = oldValue;
-    elem.style.opacity = 1;
+    updateScheduleValue(0);
 }
 
 function fillInPhantomValue() {
@@ -301,7 +323,7 @@ function fillInPhantomActivity(name) {
 }
 function onCellClick(event) {
     console.log('click', event.target);
-    fillInTable(2,1);
+    fillInTable(2,fillInValue);
     fillInPhantomActivity('gym');
     fillInPhantomValue();
     fillInPhantomHoursLeft();
@@ -446,7 +468,7 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '5px 5px yellow';
 }
 
 function indicateOptimal() {
@@ -454,23 +476,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px lightgreen';
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -547,15 +553,13 @@ function onDragEnterAction(event) {
 function onDragMove() {
 }
 
-var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
-
 function onDropDeactivate() {
     if (tableEnabled == true) {
         showX();
         setHelpfulText(doesntFitText);
-        addCellEvents(1,1);
+        addCellEvents(highlightCellRow,highlightCellCol);
         //highlightTargetTime('1h.png');
-        highlightCellBorderAt(1, 1);
+        highlightCellBorderAt(highlightCellRow, highlightCellCol);
     }
 }
 

@@ -24,32 +24,24 @@ var activityArr = [ // ORDER MATTERS
         'duration': 1,
         'value': 1,
         'index': 1,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
         'index': 2,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
         'index': 3,
-        'startTop': 0,
-        'startLeft': 0,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
         'index': 4,
-        'startTop': 0,
-        'startLeft': 0,
     },
 ];
 
@@ -250,15 +242,7 @@ function main() {
 
     setHelpfulText("Can we go on a date?");
 
-    // Get the initial locations of the activities, and store in the activity array.
-    for (var i = 0; i < schedulerMaxActivities; i++) {
-        var elem = document.getElementById(activityArr[i]);
-        var x = $("#"+activityArr[i].name).offset().top - $(document).scrollTop();
-        var y = $("#"+activityArr[i].name).offset().left;
-        activityArr[i].startLeft = x;
-        activityArr[i].startTop = y;
-        console.log('x, y:', x, y);
-    }
+    updateScheduleValue(0);
 }
 
 var mouseLeaveText = "It fits! You still have time left. Click on what we can do in an hour.";
@@ -274,8 +258,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     //updateHelpfulText();
@@ -296,14 +279,37 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
-    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpfulText();
 }
+
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
+}
+
 
 // This is a bit lazy, but it gets the point across.
 function updateHelpfulText() {
@@ -413,7 +419,7 @@ function onCellMouseOver(event) {
     document.getElementById('date').classList.remove('draggable');
     showPhantomActivity('gym');
     setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(5);
+    showPhantomValue(1);
     showPhantomHoursLeft(0);
     event.target.classList.add('target-time-highlight');
 }
@@ -427,23 +433,17 @@ function highlightTargetTime(filename) {
 
 }
 
-var oldValue;
 function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    oldValue = elem.innerHTML;
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
+    updateScheduleValue(phantomValue);
 }
 
 function hidePhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = oldValue;
-    elem.style.opacity = 1;
+    updateScheduleValue(0);
 }
 
-function fillInPhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.style.opacity = 1;
+function fillInPhantomValue(phantomValue) {
+    scheduleValue += phantomValue;
+    updateScheduleValue(0);
 }
 
 var oldHoursLeft;
@@ -484,7 +484,7 @@ function onCellClick(event) {
     console.log('click', event.target);
     fillInTable(2, 4);
     fillInPhantomActivity('gym');
-    fillInPhantomValue();
+    fillInPhantomValue(1);
     fillInPhantomHoursLeft();
 
     event.target.removeEventListener('mouseover', onCellMouseOver);
@@ -544,7 +544,7 @@ interact('.draggable')
 
         // snap to the start position
         event.interactable.snap({ anchors: [startPos] });
-});
+    });
 
 // target elements with the "draggable" class
 interact('.draggable').draggable({
