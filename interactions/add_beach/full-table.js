@@ -1,17 +1,18 @@
 "use strict";
 
 // Global Variables + Settings
+var tableEnabled = true;             // True, if we have a table
+var displayTableUpToRows = 4;
+var displayTableUpToCols = 6;         // Row and column limit of the table to display, if tableEnabled = true
+
 var schedulerMaxHours = 7;           // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 4;      // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;                 // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;                 // Total number of columns to display in the grid. With 0 included, this would be 0-7
-var tableEnabled = true;             // True, if we have a table
-var displayTableUpToRows = 4;
-var displayTableUpToCols = 6;         // Row and column limit of the table to display, if tableEnabled = true
+
 var highlightCellRow = 2;
 var highlightCellCol = 3;             // Row and column of cell to highlighjt
 
-var singleActivityIndexToDisplay = 3; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
 var alreadyDropped = false;
 
 var instructionText = "Drag the activity to your timeline to get the most value.";
@@ -30,31 +31,31 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
-var startPos = {x: 0, y: 0};
+var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
-        'index': 1,
+        'index': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
-        'index': 2,
+        'index': 1,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
-        'index': 3,
+        'index': 2,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
-        'index': 4,
+        'index': 3,
     },
 ];
 
@@ -617,12 +618,12 @@ interact('.draggable')
             selectedActivity = getselectedActivityFromName(event.target.id);
 
             // record center point when starting a drag
-            startPos.x = rect.left + rect.width  / 2;
-            startPos.y = rect.top  + rect.height / 2;
+            startPos[selectedActivity.index].x = rect.left + rect.width  / 2;
+            startPos[selectedActivity.index].y = rect.top  + rect.height / 2;
 
             // snap to the start position
-            event.interactable.snap({ anchors: [startPos] });
-            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.interactable.snap({ anchors: [startPos[selectedActivity.index]] });
+            console.log('setting snap '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             console.log('on undropped dragstart '.concat(selectedActivity.name));
         }
         else {
@@ -750,9 +751,9 @@ interact('.dropzone').dropzone({
                 console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
             }
 
-            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('setting return snap position '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             event.draggable.snap({
-                anchors: [ startPos ]
+                anchors: [ startPos[selectedActivity.index] ]
             });
         }
         else {

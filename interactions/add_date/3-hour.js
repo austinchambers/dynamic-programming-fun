@@ -28,31 +28,31 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
-var startPos = {x: 0, y: 0};
+var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
-        'index': 1,
+        'index': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
-        'index': 2,
+        'index': 1,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
-        'index': 3,
+        'index': 2,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
-        'index': 4,
+        'index': 3,
     },
 ];
 
@@ -608,12 +608,12 @@ interact('.draggable')
             selectedActivity = getselectedActivityFromName(event.target.id);
 
             // record center point when starting a drag
-            startPos.x = rect.left + rect.width  / 2;
-            startPos.y = rect.top  + rect.height / 2;
+            startPos[selectedActivity.index].x = rect.left + rect.width  / 2;
+            startPos[selectedActivity.index].y = rect.top  + rect.height / 2;
 
             // snap to the start position
-            event.interactable.snap({ anchors: [startPos] });
-            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.interactable.snap({ anchors: [startPos[selectedActivity.index]] });
+            console.log('setting snap '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             console.log('on undropped dragstart '.concat(selectedActivity.name));
         }
         else {
@@ -741,9 +741,9 @@ interact('.dropzone').dropzone({
                 console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
             }
 
-            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('setting return snap position '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             event.draggable.snap({
-                anchors: [ startPos ]
+                anchors: [ startPos[selectedActivity.index] ]
             });
         }
         else {
