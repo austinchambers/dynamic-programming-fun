@@ -189,7 +189,7 @@ function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r+1].cells[c+1];
     cell.addEventListener('mouseover', onCellMouseOver);
-    //cell.addEventListener('mouseleave', onCellMouseLeave);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
     //cell.addEventListener('click', onCellClick)
 }
 
@@ -199,8 +199,22 @@ function highlightCellBorderAt(r, c) {
     cell.classList.add('highlight-border');
 }
 
+function onCellMouseLeave(event) {
+    console.log('mouse leave', event.target);
+    event.target.classList.remove('value-block'.concat(1));
+    event.target.classList.remove('value-block'.concat(4));
+    event.target.classList.remove('value-block'.concat(5));
+    event.target.classList.remove('value-block'.concat(6));
+    event.target.classList.remove('value-block'.concat(7));
+    event.target.classList.remove('value-block'.concat(8));
+    event.target.classList.remove('value-block'.concat(9));
+    event.target.style.display = 'table-cell';
+}
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
+    var cellValue = event.target.innerHTML;
+    event.target.classList.add('value-block'.concat(cellValue));
 
     for (var i = 1; i <= 7; i++) {
         if (event.target.classList.contains('Col'.concat(i))) {
@@ -215,7 +229,6 @@ function onCellMouseOver(event) {
     hidePhantomActivity('hike'); hidePhantomActivity('beach');
     var phantomValueSum = 0;
     var phantomDurationSum = 0;
-    var cellValue = event.target.innerHTML;
     if (cellValue == 1) {
         setHelpfulText('Why gym is best here');
         // Show phantom gym

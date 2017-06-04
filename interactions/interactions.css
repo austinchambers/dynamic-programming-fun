@@ -73,36 +73,53 @@ td {
 
 .value-block0 {
     background-image:url('../figures/altheart0_small.png');
-}
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 
+}
 .value-block1 {
     background-image:url('../figures/altheart1_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block4 {
     background-image:url('../figures/altheart4_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block5 {
     background-image:url('../figures/altheart5_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block6 {
     background-image:url('../figures/altheart6_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block7 {
     background-image:url('../figures/altheart7_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block8 {
     background-image:url('../figures/altheart8_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 .value-block9 {
     background-image:url('../figures/altheart9_small.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(0, 0, 0, 0.0);
 }
-
 #value-block-caption {
     text-align: center;
     margin-top: -24px;
