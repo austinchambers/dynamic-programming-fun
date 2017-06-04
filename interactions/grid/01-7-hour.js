@@ -74,6 +74,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue(0);
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -414,8 +415,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update
     updateHelpText();
@@ -432,21 +432,45 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
-    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpText();
 }
 
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
+}
+
+
 function indicateNotOptimal() {
     let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
+    elem.innerHTML = instructionText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '';
+    hideCheck();
 }
 
 function indicateOptimal() {
@@ -454,23 +478,8 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px #00B54F';
+    showCheck();
 }
 
 // This is a bit lazy, but it gets the point across.

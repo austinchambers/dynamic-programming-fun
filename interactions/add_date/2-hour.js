@@ -476,7 +476,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.boxShadow = '5px 5px lightgreen';
+    elem.style.boxShadow = '5px 5px #00B54F';
 }
 
 // This is a bit lazy, but it gets the point across.

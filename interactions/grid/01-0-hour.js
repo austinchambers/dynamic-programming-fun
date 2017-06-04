@@ -414,8 +414,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update
     updateHelpText();
@@ -432,10 +431,8 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
-    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpText();
@@ -446,7 +443,7 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '';
 }
 
 function indicateOptimal() {
@@ -454,23 +451,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px #00B54F';
 }
 
 // This is a bit lazy, but it gets the point across.

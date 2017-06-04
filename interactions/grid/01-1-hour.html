@@ -27,8 +27,9 @@
 <body onload="main()">
 <div class="container schedule">
 
-    <!--<table id="grid">-->
-    <!--</table>-->
+    <div class="x-check"><img id="x" src="../../figures/x.png"></div>
+    <div class="x-check"><img id="check" src="../../figures/check.png"></div>
+
     <div id="title" class="row">
         <div class="col-12">
             <h2 id="instruction"></h2><!--Will be populated by JS!-->
@@ -55,7 +56,7 @@
     <div class="row">
         <div class="col-1"></div>
         <div class="col-1">
-            <div class="value-block">
+            <div id="value-box" class="value-block">
                 <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
             </div>
         </div>
