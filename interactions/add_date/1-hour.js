@@ -76,7 +76,31 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
-    updateScheduleValue();
+    updateScheduleValue(0);
+}
+
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -251,16 +275,11 @@ function highlightTargetTime(filename) {
 
 var oldValue;
 function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    oldValue = elem.innerHTML;
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
+    updateScheduleValue(phantomValue);
 }
 
 function hidePhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = oldValue;
-    elem.style.opacity = 1;
+    updateScheduleValue(0);
 }
 
 function fillInPhantomValue() {

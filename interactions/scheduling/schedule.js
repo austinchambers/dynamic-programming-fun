@@ -74,7 +74,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
-    updateScheduleValue();
+    updateScheduleValue(0);
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -415,13 +415,13 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    updateScheduleValue();
+    updateScheduleValue(0);
 
     // update
     updateHelpText();
 }
 
-function updateScheduleValue()
+function updateScheduleValue(phantomValue)
 {
     var elem = document.getElementById('scheduler-value');
     elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
@@ -435,7 +435,14 @@ function updateScheduleValue()
     elems[0].classList.remove('value-block7');
     elems[0].classList.remove('value-block8');
     elems[0].classList.remove('value-block9');
-    elems[0].classList.add('value-block'.concat(scheduleValue));
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
 }
 
 function onDragLeaveAction(event) {
@@ -451,7 +458,7 @@ function onDragLeaveAction(event) {
     // update value
     var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    updateScheduleValue();
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpText();
@@ -462,7 +469,8 @@ function indicateNotOptimal() {
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.boxShadow = '5px 5px yellow';
+    elem.style.boxShadow = '';
+    hideCheck();
 }
 
 function indicateOptimal() {
@@ -471,6 +479,7 @@ function indicateOptimal() {
 
     elem = document.getElementById('value-box');
     elem.style.boxShadow = '5px 5px lightgreen';
+    showCheck();
 }
 
 // This is a bit lazy, but it gets the point across.
