@@ -201,6 +201,9 @@ function highlightCellAt(r, c) {
     var grid = document.getElementById('grid');
     var cell = grid.rows[r].cells[c];
     cell.classList.add('highlight');
+    if (r == grid.rows.length - 1 && c == grid.rows[r].cells.length - 1) {
+        cell.classList.add('highlight-corner');
+    }
     cell.innerHTML = '?';
 }
 
@@ -321,6 +324,13 @@ function onCellMouseOverNew(event) {
         document.getElementById('beach').classList.remove('draggable');
         showPhantomActivity('hike');
         showPhantomActivity('date');
+
+        // hack
+        let scheduler = document.getElementById('scheduler');
+        let width = parseInt(scheduler.style.width);
+        console.log('width', width);
+        scheduler.style.width = width + 1 + 'px';
+
         setHelpfulText("That's right!");
         scheduleValue = 0;
         showPhantomValue(9);

@@ -479,6 +479,12 @@ function fillInPhantomHoursLeft() {
 }
 
 function showPhantomActivity(name, optionalSecondName) {
+    // hack
+    let scheduler = document.getElementById('scheduler');
+    let width = parseInt(scheduler.style.width);
+    console.log('width', width);
+    scheduler.style.width = width + 1 + 'px';
+    
     // Make activities visible
     let elem = document.getElementById('phantom-' + name);
     elem.style.display = 'inline-block';
