@@ -14,7 +14,7 @@ var displayAllActivities = false;     //Whether to display all activities or jus
 var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
 
 var instructionText = "Drag the activity to your timeline to get the most value.";
-var initialHelpfulText = "Can we go on a date.";
+var initialHelpfulText = "Can we go on a date?";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "It fits!";
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";

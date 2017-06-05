@@ -34,38 +34,38 @@ const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CS
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
 var lookUp = [                // Tracks which cells are built from other cells. If ref1 and ref2 both aren't null, then two cells are highlighted.
-    {'coord': '10','ref1': null,'ref2': null,},
-    {'coord': '11','ref1': '10','ref2': null,},
-    {'coord': '12','ref1': '20','ref2': '12',},
-    {'coord': '13','ref1': '10','ref2': null,},
-    {'coord': '14','ref1': null,'ref2': null,},
-    {'coord': '15','ref1': null,'ref2': null,},
-    {'coord': '16','ref1': null,'ref2': '12',},
-    {'coord': '17','ref1': null,'ref2': null,},
-    {'coord': '20','ref1': null,'ref2': null,},
-    {'coord': '21','ref1': null,'ref2': null,},
+    {'coord': '10','ref1': '10','ref2': null,},
+    {'coord': '11','ref1': '11','ref2': null,},
+    {'coord': '12','ref1': '12','ref2': null,},
+    {'coord': '13','ref1': '13','ref2': null,},
+    {'coord': '14','ref1': '14','ref2': null,},
+    {'coord': '15','ref1': '15','ref2': null,},
+    {'coord': '16','ref1': '16','ref2': null,},
+    {'coord': '17','ref1': '17','ref2': null,},
+    {'coord': '20','ref1': '20','ref2': null,},
+    {'coord': '21','ref1': '20','ref2': '11',},
     {'coord': '22','ref1': '20','ref2': '12',},
-    {'coord': '23','ref1': '10','ref2': null,},
-    {'coord': '24','ref1': null,'ref2': null,},
-    {'coord': '25','ref1': '10','ref2': null,},
-    {'coord': '26','ref1': '20','ref2': '12',},
-    {'coord': '27','ref1': '10','ref2': null,},
-    {'coord': '30','ref1': null,'ref2': null,},
-    {'coord': '31','ref1': '10','ref2': null,},
-    {'coord': '32','ref1': '20','ref2': '12',},
-    {'coord': '33','ref1': '10','ref2': null,},
-    {'coord': '34','ref1': null,'ref2': null,},
-    {'coord': '35','ref1': '10','ref2': null,},
-    {'coord': '36','ref1': '20','ref2': '12',},
-    {'coord': '37','ref1': '10','ref2': null,},
-    {'coord': '40','ref1': null,'ref2': null,},
-    {'coord': '41','ref1': '10','ref2': null,},
-    {'coord': '42','ref1': '20','ref2': '12',},
-    {'coord': '43','ref1': '10','ref2': null,},
-    {'coord': '44','ref1': null,'ref2': null,},
-    {'coord': '45','ref1': '10','ref2': null,},
-    {'coord': '46','ref1': '20','ref2': '12',},
-    {'coord': '47','ref1': '10','ref2': null,},
+    {'coord': '23','ref1': '23','ref2': '10',},
+    {'coord': '24','ref1': '23','ref2': '11',},
+    {'coord': '25','ref1': '23','ref2': '12',},
+    {'coord': '26','ref1': '23','ref2': '13',},
+    {'coord': '27','ref1': '23','ref2': '14',},
+    {'coord': '30','ref1': '30','ref2': null,},
+    {'coord': '31','ref1': '30','ref2': '21',},
+    {'coord': '32','ref1': '30','ref2': '22',},
+    {'coord': '33','ref1': '30','ref2': '23',},
+    {'coord': '34','ref1': '34','ref2': '20',},
+    {'coord': '35','ref1': '34','ref2': '21',},
+    {'coord': '36','ref1': '34','ref2': '22',},
+    {'coord': '37','ref1': '34','ref2': '23',},
+    {'coord': '40','ref1': '40','ref2': null,},
+    {'coord': '41','ref1': '40','ref2': '31',},
+    {'coord': '42','ref1': '40','ref2': '32',},
+    {'coord': '43','ref1': '40','ref2': '33',},
+    {'coord': '44','ref1': '40','ref2': '34',},
+    {'coord': '45','ref1': '45','ref2': '30',},
+    {'coord': '46','ref1': '45','ref2': '31',},
+    {'coord': '47','ref1': '40','ref2': '37',},
 ];
 var activityArr = [ // ORDER MATTERS
     {
@@ -351,7 +351,7 @@ function onCellMouseOver(event) {
     var phantomValueSum = 0;
     var phantomDurationSum = 0;
     if (cellValue == 1) {
-        setHelpfulText('Why gym is best here');
+        setHelpfulText('Gym is best here.');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -359,7 +359,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 4) {
-        setHelpfulText('Why date is best here');
+        setHelpfulText('Date is best here.');
         // Show phantom date
         selectedPhantomActivity = activityArr[1];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -368,7 +368,7 @@ function onCellMouseOver(event) {
     }
     else if (cellValue == 5) {
         if (event.target.classList.contains('Row2')) {
-            setHelpfulText('Why date + gym is best here.');
+            setHelpfulText('Date and gym are best here.');
             // Show phantom gym
             selectedPhantomActivity = activityArr[0];
             phantomValueSum += selectedPhantomActivity.value;
@@ -380,7 +380,7 @@ function onCellMouseOver(event) {
             phantomDurationSum += selectedPhantomActivity.duration;
         }
         else {
-            setHelpfulText('Why hike is best here');
+            setHelpfulText('Hike is best here.');
             // Show phantom hike
             selectedPhantomActivity = activityArr[2];
             showPhantomActivity(selectedPhantomActivity.name, null);
@@ -389,7 +389,7 @@ function onCellMouseOver(event) {
         }
     }
     else if (cellValue == 6) {
-        setHelpfulText('Why hike + date is best here');
+        setHelpfulText('Hike + date is best here.');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -401,7 +401,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 7) {
-        setHelpfulText('Why beach is best here');
+        setHelpfulText('Beach is best here.');
         // Show phantom beach
         selectedPhantomActivity = activityArr[3];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -409,7 +409,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 8) {
-        setHelpfulText('Why gym + beach is best here');
+        setHelpfulText('Gym + beach is best here');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -421,7 +421,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 9) {
-        setHelpfulText('Why date + hike is best here');
+        setHelpfulText('Date + hike is best here.');
         // Show phantom date
         selectedPhantomActivity = activityArr[1];
         phantomValueSum += selectedPhantomActivity.value;

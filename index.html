@@ -23,6 +23,7 @@
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Patua+One" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet" type="text/css">
     <link href="css/main.css" rel="stylesheet" type="text/css">
 
@@ -53,9 +54,9 @@
 
     <p>We all want to have fun! This is a very easy concept. </p>
 
-    <br><br>
 
     <p>Having fun often involves the amount of fun that you get from an activity: </p>
+      <br><br>
 
     <div class="row image-row">
         <div class="col-12">
@@ -69,7 +70,7 @@
 
     <br><br>
 
-    <p>And the time you have for activities: </p>
+    <p>And the time you have: </p>
 
     <div class="row image-row">
         <div class="col-12">
@@ -89,7 +90,7 @@
 
     <br><br>
 
-    <p>Scheuduling fun can look like this: </p>
+    <p>Scheduling fun can look like this: </p>
 
 
     <div class="row image-row">
@@ -102,29 +103,30 @@
     <br><br>
 
 
-    <p>But your time is limited! You often need to make decisions as to what activities you can fit in your schedule so you can have the most fun. Play around and try to maximize the amount of fun you have with a given amount of time: </p>
+    <p>But your time is limited! You often need to make decisions as to what activities you can fit in your schedule so you can have the most fun. </p>
+    <p> Play around and try to maximize the amount of fun you can have with a given amount of time: </p>
 
     <!-- One Hour -->
     <iframe src="interactions/scheduling/schedule.html" style="height:600px" scrolling="no" embedded></iframe>
 
     <p>
-        If you do not see a green check mark in the top right corner, go back and schedule the date with the hike to solve the problem and get the maximum value of 9.  
+        To solve the problem, schedule the date with the hike to get the maximum value of 9.  
     </p>
     <p>
-        Now imagine if you were given 100 activities and many more hours to schedule.  This is a much bigger problem and much harder to solve with all the activities at once.
+        Now imagine if you were given 100 activities and many more hours to schedule.  This is a bigger problem and much harder to solve with all the activities at once.
     </p>
      <p>
-        But instead of trying to consider all the activities at once, you could break the larger problem into much smaller subproblems.  Let's start with the smallest subproblem which is just one activity in one hour.  Try it here:
+        But instead of trying to consider all the activities at once, you could divide the larger problem into much smaller subproblems.  Let's start with the smallest subproblem which is just one activity in one hour.  Try it here:
     </p>
 
     <!-- One Hour -->
     <iframe id="01-1" src="interactions/grid/01-1-hour.html" scrolling="no" embedded></iframe>
 
     <p>
-        Super Simple. That was much easier to do.  Even though this seems incredibly basic, its important to start from the smallest subproblem and work your way up, by incrementally increasing either time or adding another activity.  
+        Super Simple. Even though this seems incredibly easy to do, its important to start from the smallest subproblem and work your way up, by increasing either time or adding another activity.  
     </p>
     <p>
-        For this interaction, we will increase time first, so try maximizing our total value with the same activity, but with two hours of time:
+        We will increase time first, so try maximizing our total value with the same activity, but with two hours of time:
     </p>
 
     <!-- Two Hour -->
@@ -132,13 +134,12 @@
 
     <!--Three to Six Hour-->
     <p id="01-3">
-        The same idea applies when you have a timeline with three hours, four hours, and so on.
+        Since we are increasing time first, we need to solve each subproblem for every hour before adding another activity.  You should notice that no matter what amount of time you have (3 hours, 4 hours, and so on), you will only get a max value of the one activity you are considering.  </p>
+        <p> Try this for 7 hours, the longest block of time we are scheduling:
     </p>
 
     <!-- Seven Hour -->
     <iframe id="01-7" src="interactions/grid/01-7-hour.html" scrolling="no" embedded></iframe>
-
-    <p><em>Jeff's trying to explain Concept of a table</em></p>
 
         <!--<table id="grid-01">-->
             <!--<tr>-->
@@ -154,37 +155,45 @@
         <!--</table>-->
 
     <p>
-        What if we could also choose to go on a date in addition to the gym?
-        If we have only one hour, does the date fit?
+        You just solved all the possibilities for one activity, breaking everything down into a series of subproblems. 
+        This is the first step in Dynamic Programming.  
     </p>
 
-
     <p>
-        You're right, it doesn't fit. So we still have one hour. What can we do in one hour?
+        No matter how many hours you have, with only the gym, you get a max value of 1. We will save these values in a table so that we can reuse them later.
     </p>
     <p>
-        Let's look at our table. As you can see, we already know that in one hour we can go to the gym!
+        Now that we have considered one activity, let's add our second activity: going on a date.  We will start again with one hour.  Considering both the gym and a date, what can you do in one hour?
     </p>
 
     <!-- Add date, 1 Hour -->
     <iframe src="interactions/add_date/1-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p><em>Explain 2 hour situation here</em></p>
+    <p>If you drag the "date" into the timeline, you will see that it does not fit. Instead, you can only select the gym. 
+    You previously already solved this problem, so you can just click on that value in your table to resue your previous solution.</p>
+
+    <p> Let's try this again for two hours: </p>
 
     <!-- Add date, 2 Hour -->
     <iframe src="interactions/add_date/2-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p><em>Explain 2 hour situation here</em></p>
+    <p>Again, a date does not fit. Notice that you can reuse your previous solution <em> from the two hours column </em> in the first row of your table.</p>
+
+    <p> What happens now in three hours? </p>
 
     <!-- Add date, 3 Hour -->
     <iframe src="interactions/add_date/3-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p><em>Explain 4 hour situation here</em></p>
+    <p>You can now schedule a date and get a max value of 4. You do not have any remaining time to fit in the gym. </p>
+
+    <p> Let's try this again, but with 4 hours: </p>
 
     <!-- Add date, 4 Hour -->
     <iframe src="interactions/add_date/4-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p>Watch how we fill in the table below!</p>
+    <p>When you schedule the date, you have one hour left. To get the maximum value for the time remaining, you go to the corresponding time left in the row above, since you previously already solved the maximum value for that amount of time! </p>
+
+    <p> To visualize this better, play around with the following table that we continuned for you.  Notice how the optimal values for the remaining time are taken from the previous row. 
 
     <!-- Fill in table up to beach -->
     <iframe src="interactions/add_beach/3-table.html" style="height:600px;" scrolling="no" embedded></iframe>
