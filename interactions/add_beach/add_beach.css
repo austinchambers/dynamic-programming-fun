@@ -82,6 +82,11 @@
     border-width: 1px;
 }
 
+.time-icon0 {
+    background-image:url('../../figures/time_icons/0h_small.png');
+    width: 50px;
+}
+
 .time-icon1 {
     background-image:url('../../figures/time_icons/1h_small.png');
     width: 50px;

@@ -3,12 +3,13 @@
 // Global Variables + Settings
 var tableEnabled = true;             // True, if we have a table
 var displayTableUpToRows = 4;
-var displayTableUpToCols = 7;         // Row and column limit of the table to display, if tableEnabled = true
+var displayTableUpToCols = 8;         // Row and column limit of the table to display, if tableEnabled = true
 
 var schedulerMaxHours = 7;           // Change the schedulerMaxHours to cause the schedule to increase or decrease in size (tested 1-7).
 var schedulerMaxActivities = 4;      // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;                 // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;                 // Total number of columns to display in the grid. With 0 included, this would be 0-7
+var showZeroTable = false;
 
 var highlightCellRow = 2;
 var highlightCellCol = 3;             // Row and column of cell to highlighjt
@@ -64,6 +65,10 @@ function main() {
     // Display all the activities.
     // displayActivities(schedulerMaxActivities);
 
+    if (showZeroTable == true) {
+        gridMaxCols += 1;
+    }
+
     // Display a table, and if so, set table settings.
     if (tableEnabled == true) {
         initTable();
@@ -117,19 +122,28 @@ function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
         }
         cell.innerHTML = thisarray.join(", ");
 
-
         for (var j = 0; j < gridMaxCols - 1; j++) {
             var cell = row.insertCell(j + 1);
             if (i == maxRows - 1 && j >= maxCols) {
                 cell.innerHTML = '';
             }
             else {
-                cell.innerHTML = table[i][j + 1];
+                if (showZeroTable == true) {
+                    cell.innerHTML = table[i][j];
+                }
+                else {
+                    cell.innerHTML = table[i][j+1];
+                }
             }
             if (addEventsToCells == true) {
                 addCellEvents(i, j);
                 cell.classList.add('Row'.concat(i+1));
-                cell.classList.add('Col'.concat(j+1));
+                if (showZeroTable == true) {
+                    cell.classList.add('Col'.concat(j));
+                }
+                else {
+                    cell.classList.add('Col'.concat(j+1));
+                }
             }
         }
     }
@@ -201,6 +215,7 @@ function highlightCellBorderAt(r, c) {
 
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
+    event.target.classList.remove('value-block'.concat(0));
     event.target.classList.remove('value-block'.concat(1));
     event.target.classList.remove('value-block'.concat(4));
     event.target.classList.remove('value-block'.concat(5));
@@ -216,7 +231,7 @@ function onCellMouseOver(event) {
     var cellValue = event.target.innerHTML;
     event.target.classList.add('value-block'.concat(cellValue));
 
-    for (var i = 1; i <= 7; i++) {
+    for (var i = 0; i <= 7; i++) {
         if (event.target.classList.contains('Col'.concat(i))) {
             schedulerMaxHours = i;
             updateScheduleValue(0);
@@ -646,7 +661,7 @@ function onDropDeactivate() {
 function onDropDeactivateBeach() {
 
 //    addCellEventsNew(3, 7);
-  //  highlightCellBorderAt(3, 7);
+    //  highlightCellBorderAt(3, 7);
 }
 
 interact('.draggable').snap({
