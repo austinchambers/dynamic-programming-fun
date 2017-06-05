@@ -295,11 +295,7 @@ function getCellId(target) {
 }
 
 function removeAllHintHighlighting() {
-    for (var i = 1; i < gridMaxRows; i++) {
-        for (var j = 1; j < gridMaxCols; j++) {
-            hintUnhighlightCellAt(i, j, false);
-        }
-    }
+    $('.value-block-reference').removeClass('value-block-reference');
 }
 
 
