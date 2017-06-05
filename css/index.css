@@ -73,10 +73,10 @@ a:hover {
 
 #intro_container {
     width: 100%;
-    height: 550px;
+    /*height: 550px;*/
     overflow: hidden;
     position: relative;
-    background: #000;
+    /*background: #000;*/
 }
 
 #intro {
@@ -189,5 +189,27 @@ iframe {
     /*z-index: 20000;*/
 }
 
+#header-img {
+    width: 100%;
+}
 
+.intro-heart {
+    display: inline-block;
+}
 
+.image-row {
+    text-align: center;
+}
+
+#time-img {
+    height: 90px;
+}
+
+#time-open-img {
+    height: 130px;
+}
+
+#beach-gym-img {
+    height: 90px;
+    display: inline-block;
+}
