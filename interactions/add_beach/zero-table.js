@@ -109,18 +109,6 @@ function main() {
         displayTableUpTo(displayTableUpToRows, displayTableUpToCols, true);
     }
 
-    for (var i = 0; i < lookUp.length; i++) {
-        console.log('Id: ' + lookUp[i].coord);
-        var lookRef1 = lookUp[i].ref1;
-        var lookRef2 = lookUp[i].ref2;
-        if (lookUp[i].ref1 != null) {
-            console.log('LookRef1: ' + lookUp[i].ref1);
-        }
-        else {
-            console.log('LookRef1: null');
-        }
-    }
-
     setHelpfulText(instructionText);
     displaySchedule();
     updateScheduleValue(0);
@@ -184,14 +172,11 @@ function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
             if (addEventsToCells == true) {
                 addCellEvents(i, j);
                 cell.classList.add('Row'.concat(i+1));
-                var cellId = (i+1) * 10;
                 if (showZeroTable == true) {
                     cell.classList.add('Col'.concat(j));
-                    cell.id = cellId + j;
                 }
                 else {
                     cell.classList.add('Col'.concat(j+1));
-                    cell.id = cellId + j+1;
                 }
             }
         }

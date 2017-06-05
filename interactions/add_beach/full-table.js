@@ -33,6 +33,40 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
+var lookUp = [                // Tracks which cells are built from other cells. If ref1 and ref2 both aren't null, then two cells are highlighted.
+    {'coord': '10','ref1': null,'ref2': null,},
+    {'coord': '11','ref1': '10','ref2': null,},
+    {'coord': '12','ref1': '20','ref2': '12',},
+    {'coord': '13','ref1': '10','ref2': null,},
+    {'coord': '14','ref1': null,'ref2': null,},
+    {'coord': '15','ref1': null,'ref2': null,},
+    {'coord': '16','ref1': null,'ref2': '12',},
+    {'coord': '17','ref1': null,'ref2': null,},
+    {'coord': '20','ref1': null,'ref2': null,},
+    {'coord': '21','ref1': null,'ref2': null,},
+    {'coord': '22','ref1': '20','ref2': '12',},
+    {'coord': '23','ref1': '10','ref2': null,},
+    {'coord': '24','ref1': null,'ref2': null,},
+    {'coord': '25','ref1': '10','ref2': null,},
+    {'coord': '26','ref1': '20','ref2': '12',},
+    {'coord': '27','ref1': '10','ref2': null,},
+    {'coord': '30','ref1': null,'ref2': null,},
+    {'coord': '31','ref1': '10','ref2': null,},
+    {'coord': '32','ref1': '20','ref2': '12',},
+    {'coord': '33','ref1': '10','ref2': null,},
+    {'coord': '34','ref1': null,'ref2': null,},
+    {'coord': '35','ref1': '10','ref2': null,},
+    {'coord': '36','ref1': '20','ref2': '12',},
+    {'coord': '37','ref1': '10','ref2': null,},
+    {'coord': '40','ref1': null,'ref2': null,},
+    {'coord': '41','ref1': '10','ref2': null,},
+    {'coord': '42','ref1': '20','ref2': '12',},
+    {'coord': '43','ref1': '10','ref2': null,},
+    {'coord': '44','ref1': null,'ref2': null,},
+    {'coord': '45','ref1': '10','ref2': null,},
+    {'coord': '46','ref1': '20','ref2': '12',},
+    {'coord': '47','ref1': '10','ref2': null,},
+];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -199,6 +233,19 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+function hintHighlightCellAt(r, c) {
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c+1];
+    cell.classList.add('value-block-reference');
+}
+
+function hintUnhighlightCellAt(r, c) {
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c];
+    cell.classList.remove('value-block-reference');
+}
+
+
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r+1].cells[c+1];
@@ -226,10 +273,69 @@ function onCellMouseLeave(event) {
     event.target.style.display = 'table-cell';
 }
 
+function getCellId(target) {
+    var row = 0;
+    var col = 0;
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Row'.concat(i))) {
+            row = i;
+            break;
+        }
+    }
+
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Col'.concat(i))) {
+            col = i;
+            break;
+        }
+    }
+
+    return row * 10 + col;
+}
+
+function removeAllHintHighlighting() {
+    for (var i = 1; i < gridMaxRows; i++) {
+        for (var j = 1; j < gridMaxCols; j++) {
+            hintUnhighlightCellAt(i, j, false);
+        }
+    }
+}
+
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     var cellValue = event.target.innerHTML;
     event.target.classList.add('value-block'.concat(cellValue));
+
+    removeAllHintHighlighting();
+
+    var cellId = getCellId(event.target);
+    console.log(cellId);
+    // Get the reference ids.
+    for (var i = 0; i < lookUp.length; i++) {
+        if (lookUp[i].coord == cellId) {
+            var lookRef1 = lookUp[i].ref1;
+            var lookRef2 = lookUp[i].ref2;
+            break;
+        }
+    }
+
+    // Highlight first reference
+    if (lookRef1 != null) {
+        console.log('Id: ' + lookRef1.id);
+        var row_digit = parseInt((''+lookRef1)[0]);
+        var col_digit = parseInt((''+lookRef1)[1]);
+        console.log('Highlighting: ' + row_digit + '-' + col_digit);
+        hintHighlightCellAt(row_digit, col_digit, false);
+    }
+    // Highlight second reference, if any.
+    if (lookRef2 != null) {
+        console.log('Id: ' + lookRef2.id);
+        var row_digit = parseInt((''+lookRef2)[0]);
+        var col_digit = parseInt((''+lookRef2)[1]);
+        console.log('Highlighting: ' + row_digit + '-' + col_digit);
+        hintHighlightCellAt(row_digit, col_digit, false);
+    }
 
     for (var i = 0; i <= 7; i++) {
         if (event.target.classList.contains('Col'.concat(i))) {

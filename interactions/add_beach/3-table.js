@@ -9,6 +9,7 @@ var schedulerMaxHours = 7;           // Change the schedulerMaxHours to cause th
 var schedulerMaxActivities = 4;      // Change the schedulerMaxActivities to cause the set of activities to vary, starting with gym
 var gridMaxRows = 4;                 // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;                 // Total number of columns to display in the grid. With 0 included, this would be 0-7
+var showZeroTable = false;
 
 var highlightCellRow = 2;
 var highlightCellCol = 3;             // Row and column of cell to highlighjt
@@ -32,6 +33,40 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
+var lookUp = [                // Tracks which cells are built from other cells. If ref1 and ref2 both aren't null, then two cells are highlighted.
+    {'coord': '10','ref1': null,'ref2': null,},
+    {'coord': '11','ref1': '10','ref2': null,},
+    {'coord': '12','ref1': '20','ref2': '12',},
+    {'coord': '13','ref1': '10','ref2': null,},
+    {'coord': '14','ref1': null,'ref2': null,},
+    {'coord': '15','ref1': null,'ref2': null,},
+    {'coord': '16','ref1': null,'ref2': '12',},
+    {'coord': '17','ref1': null,'ref2': null,},
+    {'coord': '20','ref1': null,'ref2': null,},
+    {'coord': '21','ref1': null,'ref2': null,},
+    {'coord': '22','ref1': '20','ref2': '12',},
+    {'coord': '23','ref1': '10','ref2': null,},
+    {'coord': '24','ref1': null,'ref2': null,},
+    {'coord': '25','ref1': '10','ref2': null,},
+    {'coord': '26','ref1': '20','ref2': '12',},
+    {'coord': '27','ref1': '10','ref2': null,},
+    {'coord': '30','ref1': null,'ref2': null,},
+    {'coord': '31','ref1': '10','ref2': null,},
+    {'coord': '32','ref1': '20','ref2': '12',},
+    {'coord': '33','ref1': '10','ref2': null,},
+    {'coord': '34','ref1': null,'ref2': null,},
+    {'coord': '35','ref1': '10','ref2': null,},
+    {'coord': '36','ref1': '20','ref2': '12',},
+    {'coord': '37','ref1': '10','ref2': null,},
+    {'coord': '40','ref1': null,'ref2': null,},
+    {'coord': '41','ref1': '10','ref2': null,},
+    {'coord': '42','ref1': '20','ref2': '12',},
+    {'coord': '43','ref1': '10','ref2': null,},
+    {'coord': '44','ref1': null,'ref2': null,},
+    {'coord': '45','ref1': '10','ref2': null,},
+    {'coord': '46','ref1': '20','ref2': '12',},
+    {'coord': '47','ref1': '10','ref2': null,},
+];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -63,6 +98,10 @@ var activityArr = [ // ORDER MATTERS
 function main() {
     // Display all the activities.
     // displayActivities(schedulerMaxActivities);
+
+    if (showZeroTable == true) {
+        gridMaxCols += 1;
+    }
 
     // Display a table, and if so, set table settings.
     if (tableEnabled == true) {
@@ -124,12 +163,22 @@ function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
                 cell.innerHTML = '';
             }
             else {
-                cell.innerHTML = table[i][j + 1];
+                if (showZeroTable == true) {
+                    cell.innerHTML = table[i][j];
+                }
+                else {
+                    cell.innerHTML = table[i][j+1];
+                }
             }
             if (addEventsToCells == true) {
                 addCellEvents(i, j);
                 cell.classList.add('Row'.concat(i+1));
-                cell.classList.add('Col'.concat(j+1));
+                if (showZeroTable == true) {
+                    cell.classList.add('Col'.concat(j));
+                }
+                else {
+                    cell.classList.add('Col'.concat(j+1));
+                }
             }
         }
     }
@@ -185,6 +234,19 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+function hintHighlightCellAt(r, c) {
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c+1];
+    cell.classList.add('value-block-reference');
+}
+
+function hintUnhighlightCellAt(r, c) {
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c];
+    cell.classList.remove('value-block-reference');
+}
+
+
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r+1].cells[c+1];
@@ -201,6 +263,7 @@ function highlightCellBorderAt(r, c) {
 
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
+    event.target.classList.remove('value-block'.concat(0));
     event.target.classList.remove('value-block'.concat(1));
     event.target.classList.remove('value-block'.concat(4));
     event.target.classList.remove('value-block'.concat(5));
@@ -211,12 +274,71 @@ function onCellMouseLeave(event) {
     event.target.style.display = 'table-cell';
 }
 
+function getCellId(target) {
+    var row = 0;
+    var col = 0;
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Row'.concat(i))) {
+            row = i;
+            break;
+        }
+    }
+
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Col'.concat(i))) {
+            col = i;
+            break;
+        }
+    }
+
+    return row * 10 + col;
+}
+
+function removeAllHintHighlighting() {
+    for (var i = 1; i < gridMaxRows; i++) {
+        for (var j = 1; j < gridMaxCols; j++) {
+            hintUnhighlightCellAt(i, j, false);
+        }
+    }
+}
+
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     var cellValue = event.target.innerHTML;
     event.target.classList.add('value-block'.concat(cellValue));
 
-    for (var i = 1; i <= 7; i++) {
+    removeAllHintHighlighting();
+
+    var cellId = getCellId(event.target);
+    console.log(cellId);
+    // Get the reference ids.
+    for (var i = 0; i < lookUp.length; i++) {
+        if (lookUp[i].coord == cellId) {
+            var lookRef1 = lookUp[i].ref1;
+            var lookRef2 = lookUp[i].ref2;
+            break;
+        }
+    }
+
+    // Highlight first reference
+    if (lookRef1 != null) {
+        console.log('Id: ' + lookRef1.id);
+        var row_digit = parseInt((''+lookRef1)[0]);
+        var col_digit = parseInt((''+lookRef1)[1]);
+        console.log('Highlighting: ' + row_digit + '-' + col_digit);
+        hintHighlightCellAt(row_digit, col_digit, false);
+    }
+    // Highlight second reference, if any.
+    if (lookRef2 != null) {
+        console.log('Id: ' + lookRef2.id);
+        var row_digit = parseInt((''+lookRef2)[0]);
+        var col_digit = parseInt((''+lookRef2)[1]);
+        console.log('Highlighting: ' + row_digit + '-' + col_digit);
+        hintHighlightCellAt(row_digit, col_digit, false);
+    }
+
+    for (var i = 0; i <= 7; i++) {
         if (event.target.classList.contains('Col'.concat(i))) {
             schedulerMaxHours = i;
             updateScheduleValue(0);
@@ -538,6 +660,7 @@ function updateScheduleValue(phantomValue) {
     elems[0].classList.remove('value-block3');
     elems[0].classList.remove('value-block4');
     elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block6');
     elems[0].classList.remove('value-block7');
     elems[0].classList.remove('value-block8');
     elems[0].classList.remove('value-block9');
