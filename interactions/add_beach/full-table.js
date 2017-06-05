@@ -346,8 +346,9 @@ function onCellMouseOver(event) {
     hidePhantomActivity('hike'); hidePhantomActivity('beach');
     var phantomValueSum = 0;
     var phantomDurationSum = 0;
+    var cellValue = event.target.innerHTML;
     if (cellValue == 1) {
-        setHelpfulText('Why gym is best here');
+        setHelpfulText('Gym is best here.');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -355,7 +356,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 4) {
-        setHelpfulText('Why date is best here');
+        setHelpfulText('Date is best here.');
         // Show phantom date
         selectedPhantomActivity = activityArr[1];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -364,7 +365,7 @@ function onCellMouseOver(event) {
     }
     else if (cellValue == 5) {
         if (event.target.classList.contains('Row2')) {
-            setHelpfulText('Why date + gym is best here.');
+            setHelpfulText('Date and gym are best here.');
             // Show phantom gym
             selectedPhantomActivity = activityArr[0];
             phantomValueSum += selectedPhantomActivity.value;
@@ -376,7 +377,7 @@ function onCellMouseOver(event) {
             phantomDurationSum += selectedPhantomActivity.duration;
         }
         else {
-            setHelpfulText('Why hike is best here');
+            setHelpfulText('Hike is best here.');
             // Show phantom hike
             selectedPhantomActivity = activityArr[2];
             showPhantomActivity(selectedPhantomActivity.name, null);
@@ -385,7 +386,7 @@ function onCellMouseOver(event) {
         }
     }
     else if (cellValue == 6) {
-        setHelpfulText('Why hike + date is best here');
+        setHelpfulText('Hike and date is best here.');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -397,7 +398,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 7) {
-        setHelpfulText('Why beach is best here');
+        setHelpfulText('Beach is best here.');
         // Show phantom beach
         selectedPhantomActivity = activityArr[3];
         showPhantomActivity(selectedPhantomActivity.name, null);
@@ -405,7 +406,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 8) {
-        setHelpfulText('Why gym + beach is best here');
+        setHelpfulText('Gym and beach is best here');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -417,7 +418,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 9) {
-        setHelpfulText('Why date + hike is best here');
+        setHelpfulText('Date and hike is best here.');
         // Show phantom date
         selectedPhantomActivity = activityArr[1];
         phantomValueSum += selectedPhantomActivity.value;
