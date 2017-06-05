@@ -26,8 +26,8 @@
 <body onload="main()">
 <div class="container schedule">
 
-    <!--<table id="grid">-->
-    <!--</table>-->
+    <div class="x-check"><img id="x" src="../../figures/x.png"></div>
+    <div class="x-check"><img id="check" src="../../figures/check.png"></div>
 
     <div id="title" class="row">
         <div class="col-12">
@@ -47,15 +47,9 @@
 
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-1" style="text-align: center">Value</div>
-        <div class="col-1"></div>
-        <div class="col-5"></div>
-
-    </div>
-    <div class="row">
-        <div class="col-1"></div>
         <div class="col-1">
             <div id="value-box" class="value-block">
+                <div id="value-block-caption">Value</div>
                 <div style="padding-top: 15px;"><strong><span style="text-align: center;" id="scheduler-value">0</span></strong></div><!--Populated by JS!-->
             </div>
         </div>
@@ -70,7 +64,7 @@
             </div>
             <div id="scheduler-arrow"></div>
         </div>
-        <div class="col-1"><img class="time-icon" src="../../figures/time_icons/7h.png"></div>
+        <div class="col-1"><img class="time-icon target-time" style="margin-top: 20px;" src="../../figures/time_icons/7h.png"></div>
     </div>
     <div class="row">
         <div class="col-3"></div>

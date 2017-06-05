@@ -50,7 +50,6 @@
 .phantom {
     display: none;
     opacity:0.5;
-    margin-left: -3px;
 }
 
 .target-time-highlight {
@@ -63,17 +62,58 @@
 
 #phantom-gym {
     /* hack */
-    left: 60px;
+    width: 60px;
+    border-width: 1px;
 }
 
 #phantom-hike {
     /* hack */
-    right: 0px;
-    width: 236px;
+    width: 240px;
+    border-width: 1px;
 }
 
 #phantom-date {
-    width: 176px;
+    width: 180px;
+    border-width: 1px;
+}
+
+#phantom-beach {
+    width: 300px;
+    border-width: 1px;
+}
+
+.time-icon0 {
+    background-image:url('../../figures/time_icons/0h_small.png');
+    width: 50px;
+}
+
+.time-icon1 {
+    background-image:url('../../figures/time_icons/1h_small.png');
+    width: 50px;
+}
+.time-icon2 {
+    background-image:url('../../figures/time_icons/2h_small.png');
+    width: 50px;
+}
+.time-icon3 {
+    background-image:url('../../figures/time_icons/3h_small.png');
+    width: 50px;
+}
+.time-icon4 {
+    background-image:url('../../figures/time_icons/4h_small.png');
+    width: 50px;
+}
+.time-icon5 {
+    background-image:url('../../figures/time_icons/5h_small.png');
+    width: 50px;
+}
+.time-icon6 {
+    background-image:url('../../figures/time_icons/6h_small.png');
+    width: 50px;
+}
+.time-icon7 {
+    background-image:url('../../figures/time_icons/7h_small.png');
+    width: 50px;
 }
 
 

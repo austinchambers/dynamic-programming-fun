@@ -27,31 +27,31 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
-var startPos = {x: 0, y: 0};
+var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
-        'index': 1,
+        'index': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
-        'index': 2,
+        'index': 1,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
-        'index': 3,
+        'index': 2,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
-        'index': 4,
+        'index': 3,
     },
 ];
 
@@ -74,6 +74,7 @@ function main() {
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue(0);
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -338,7 +339,7 @@ function hideCheck() {
 function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
-    elem.style.height = BLOCK_HEIGHT + 'px';
+    elem.style.height = BLOCK_HEIGHT + 20 + 'px';
     elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
     // Update hours left if the corresponding ID element exists.
@@ -414,8 +415,7 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update
     updateHelpText();
@@ -432,10 +432,8 @@ function onDragLeaveAction(event) {
     elem.innerHTML = schedulerMaxHours - scheduleHoursUsed;
 
     // update value
-    var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpText();
@@ -443,10 +441,11 @@ function onDragLeaveAction(event) {
 
 function indicateNotOptimal() {
     let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
+    elem.innerHTML = instructionText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '';
+    hideCheck();
 }
 
 function indicateOptimal() {
@@ -454,23 +453,32 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px #00B54F';
+    showCheck();
 }
 
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
 
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
 
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -479,7 +487,7 @@ function updateHelpText() {
 
     if ((schedulerMaxHours <= 2) || (schedulerMaxActivities == 1)) {
         if (scheduleValue == 0)
-            elem.innerHTML = instructionText;
+            indicateNotOptimal();
         else
             indicateOptimal();
     }
@@ -576,12 +584,12 @@ interact('.draggable')
             selectedActivity = getselectedActivityFromName(event.target.id);
 
             // record center point when starting a drag
-            startPos.x = rect.left + rect.width  / 2;
-            startPos.y = rect.top  + rect.height / 2;
+            startPos[selectedActivity.index].x = rect.left + rect.width  / 2;
+            startPos[selectedActivity.index].y = rect.top  + rect.height / 2;
 
             // snap to the start position
-            event.interactable.snap({ anchors: [startPos] });
-            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.interactable.snap({ anchors: [startPos[selectedActivity.index]] });
+            console.log('setting snap '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             console.log('on undropped dragstart '.concat(selectedActivity.name));
         }
         else {
@@ -709,9 +717,9 @@ interact('.dropzone').dropzone({
                 console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
             }
 
-            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('setting return snap position '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             event.draggable.snap({
-                anchors: [ startPos ]
+                anchors: [ startPos[selectedActivity.index] ]
             });
         }
         else {

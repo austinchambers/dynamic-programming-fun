@@ -6,19 +6,22 @@ var schedulerMaxActivities = 1; // Change the schedulerMaxActivities to cause th
 var gridMaxRows = 4;            // Total number of rows to display in the grid, not including header. For 4 activities, this should be 4.
 var gridMaxCols = 8;            // Total number of columns to display in the grid. With 0 included, this would be 0-7
 var tableEnabled = true;       // True, if we have a table
-var displayTableUpToRows = 1;
+var displayTableUpToRows = 2;
 var displayTableUpToCols = 1;   // Row and column limit of the table to display, if tableEnabled = true
 var highlightCellRow = 1;
-var highlightCellCol = 1;       // Row and column of cell to highlighjt
-var displayAllActivities = true;//Whether to display all activities or just a single one.
+var highlightCellCol = 2;             // Row and column of cell to highlighjt
+var displayAllActivities = false;     //Whether to display all activities or just a single one.
 var singleActivityIndexToDisplay = 1; // Only use if displayAllActivities = true. Index of single activity to display (0=gym, 1=date, 2=hike, 3=beach)
+var fillInValue = 1;
 
 var instructionText = "Drag the activity to your timeline to get the most value.";
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
-var optimalScheduleText = "Awesome! You maximized your value!";
+var optimalScheduleText = "Correct! Gym is best for two hours as well, since no other activity can fit.";
+var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in two hours.";
 
 // Other stuff
+var selectedPhantomActivity;
 var selectedActivity;           // The currently selected activity (in the interact.js events; probably safe to not touch)
 var scheduleHoursUsed = 0;      // Tracks the current number of hours used in schedule. I'd treat as read-only variable
 var scheduleValue = 0;          // Tracks the current value accumulated in schedule. I'd treat as read only variable
@@ -27,31 +30,31 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
-var startPos = {x: 0, y: 0};
+var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
         'duration': 1,
         'value': 1,
-        'index': 1,
+        'index': 0,
     },
     {
         'name': 'date',
         'duration': 3,
         'value': 4,
-        'index': 2,
+        'index': 1,
     },
     {
         'name': 'hike',
         'duration': 4,
         'value': 5,
-        'index': 3,
+        'index': 2,
     },
     {
         'name': 'beach',
         'duration': 5,
         'value': 7,
-        'index': 4,
+        'index': 3,
     },
 ];
 
@@ -68,12 +71,37 @@ function main() {
     // Display a table, and if so, set table settings.
     if (tableEnabled == true) {
         initTable();
-        displayTableUpTo(displayTableUpToRows, displayTableUpToCols);
-        highlightCellAt(highlightCellRow, highlightCellCol)
+        displayTableUpTo(displayTableUpToRows, displayTableUpToCols, true);
+        highlightCellAt(displayTableUpToRows, displayTableUpToCols + 1)
     }
 
     setHelpfulText(initialHelpfulText);
     displaySchedule();
+    updateScheduleValue(0);
+}
+
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
 }
 
 // ********************************** DP GRID LOOKUP ***************************************
@@ -126,7 +154,7 @@ function displayTable() {
     }
 }
 
-function displayTableUpTo(maxRows, maxCols) {
+function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
     var grid = document.getElementById('grid');
 
     for (var i = 0; i < maxRows; i++) {
@@ -147,7 +175,11 @@ function displayTableUpTo(maxRows, maxCols) {
             else {
                 cell.innerHTML = table[i][j+1];
             }
-
+            if (addEventsToCells == true) {
+                addCellEvents(i, j);
+                cell.classList.add('Row'.concat(i+1));
+                cell.classList.add('Col'.concat(j+1));
+            }
         }
     }
 }
@@ -155,7 +187,7 @@ function displayTableUpTo(maxRows, maxCols) {
 function fillInTable(r, c) {
     var grid = document.getElementById('grid');
     let cell = grid.rows[r].cells[c];
-    cell.innerHTML = table[r][c+1];
+    cell.innerHTML = table[r][c];
 }
 
 function getCellAt(coords) {
@@ -200,20 +232,41 @@ function unhighlightCellAt(r, c) {
 
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
-    let cell = elem.rows[r].cells[c];
+    let cell = elem.rows[r+1].cells[c+1];
     cell.addEventListener('mouseover', onCellMouseOver);
     cell.addEventListener('mouseleave', onCellMouseLeave);
-    cell.addEventListener('click', onCellClick)
+}
+
+function addSpecialCellEvents(r, c) {
+    console.log('adding special cell events for '.concat(r).concat('-').concat(c));
+    let elem = document.getElementById('grid');
+    let cell = elem.rows[r].cells[c];
+    cell.classList.add('specialEvent');
+    cell.addEventListener('click', onCellClick);
+    cell.addEventListener('mouseover', onCellMouseOver);
+    cell.addEventListener('mouseleave', onCellMouseLeave);
+    console.log('setold cell '.concat(r).concat('-').concat(c));
 }
 
 function onCellMouseLeave(event) {
     console.log('mouse leave', event.target);
-    //showX();
-    hidePhantomActivity('gym');
-    setHelpfulText(doesntFitText);
-    hidePhantomValue();
-    hidePhantomHoursLeft();
-    event.target.classList.remove('target-time-highlight');
+    event.target.classList.remove('value-block'.concat(1));
+    event.target.classList.remove('value-block'.concat(4));
+    event.target.classList.remove('value-block'.concat(5));
+    event.target.classList.remove('value-block'.concat(6));
+    event.target.classList.remove('value-block'.concat(7));
+    event.target.classList.remove('value-block'.concat(8));
+    event.target.classList.remove('value-block'.concat(9));
+    event.target.style.display = 'table-cell';
+
+    if (event.target.classList.contains('specialEvent')) {
+        //showX();
+        hidePhantomActivity('gym');
+        setHelpfulText(doesntFitText);
+        hidePhantomValue();
+        hidePhantomHoursLeft();
+        event.target.classList.remove('target-time-highlight');
+    }
 }
 
 function highlightCellBorderAt(r, c) {
@@ -224,17 +277,27 @@ function highlightCellBorderAt(r, c) {
 
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
-    hideX();
-    // // hack, fix this
-    // $('#date').animate({
-    //     'left' : "+=300px"
-    // }, "slow");
-    document.getElementById('date').classList.remove('draggable');
-    showPhantomActivity('gym');
-    setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
-    showPhantomValue(1);
-    showPhantomHoursLeft(0);
-    event.target.classList.add('target-time-highlight');
+    var cellValue = event.target.innerHTML;
+    if ((cellValue != null) && (cellValue != '')) {
+        event.target.classList.add('value-block'.concat(cellValue));
+
+        if (event.target.classList.contains('specialEvent')) {
+            selectedPhantomActivity = activityArr[0]; // Select the gym
+            console.log('mouse over', event.target);
+            hideX();
+            // // hack, fix this
+            // $('#date').animate({
+            //     'left' : "+=300px"
+            // }, "slow");
+            document.getElementById('date').classList.remove('draggable');
+            showPhantomActivity(selectedPhantomActivity.name);
+
+            setHelpfulText("That's right! We can go to the gym. Fill in the table by clicking on the value.");
+            showPhantomValue(selectedPhantomActivity.value);
+            showPhantomHoursLeft((schedulerMaxHours - scheduleHoursUsed) - selectedPhantomActivity.duration);
+            event.target.classList.add('target-time-highlight');
+        }
+    }
 }
 
 function highlightTargetTime(filename) {
@@ -248,21 +311,16 @@ function highlightTargetTime(filename) {
 
 var oldValue;
 function showPhantomValue(phantomValue) {
-    let elem = document.getElementById('scheduler-value');
-    oldValue = elem.innerHTML;
-    elem.innerHTML = phantomValue;
-    elem.style.opacity = 0.5;
+    updateScheduleValue(phantomValue);
 }
 
 function hidePhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.innerHTML = oldValue;
-    elem.style.opacity = 1;
+    updateScheduleValue(0);
 }
 
-function fillInPhantomValue() {
-    let elem = document.getElementById('scheduler-value');
-    elem.style.opacity = 1;
+function fillInPhantomValue(phantomValue) {
+    scheduleValue += phantomValue;
+    updateScheduleValue(0);
 }
 
 var oldHoursLeft;
@@ -286,7 +344,7 @@ function fillInPhantomHoursLeft() {
 
 function showPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
-    elem.style.display = 'block';
+    elem.style.display = 'inline-block';
     elem.innerHTML = name;
 }
 
@@ -299,18 +357,26 @@ function fillInPhantomActivity(name) {
     let elem = document.getElementById('phantom-'+name);
     elem.style.opacity = 1;
 }
+
 function onCellClick(event) {
-    console.log('click', event.target);
-    fillInTable(2,1);
-    fillInPhantomActivity('gym');
-    fillInPhantomValue();
-    fillInPhantomHoursLeft();
+    if (event.target.classList.contains('specialEvent')) {
+        console.log('click', event.target);
+        fillInTable(2, fillInValue);
+        fillInPhantomActivity('gym');
+        fillInPhantomValue(1);
+        fillInPhantomHoursLeft();
 
-    event.target.removeEventListener('mouseover', onCellMouseOver);
-    event.target.removeEventListener('mouseleave', onCellMouseLeave);
+        for (var i = 0; i < 7; i++) {
+            event.target.classList.remove('value-block'.concat(i));
+        }
+        event.target.removeEventListener('mouseover', onCellMouseOver);
+        event.target.removeEventListener('mouseleave', onCellMouseLeave);
+        event.target.removeEventListener('click', onCellClick);
 
-    showCheck();
-
+        hideX();
+        showCheck();
+        indicateOptimal();
+    }
 }
 
 function showX() {
@@ -338,7 +404,7 @@ function hideCheck() {
 function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
-    elem.style.height = BLOCK_HEIGHT + 'px';
+    elem.style.height = BLOCK_HEIGHT + 20 + 'px';
     elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
     // Update hours left if the corresponding ID element exists.
@@ -414,11 +480,11 @@ function onDropAction(event) {
 
     // update value
     scheduleValue += selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update
     updateHelpText();
+    addSpecialCellEvents(1,2);
 }
 
 function onDragLeaveAction(event) {
@@ -434,19 +500,42 @@ function onDragLeaveAction(event) {
     // update value
     var oldValue = scheduleValue;
     scheduleValue -= selectedActivity.value;
-    elem = document.getElementById('scheduler-value');
-    elem.innerHTML = scheduleValue;
+    updateScheduleValue(0);
 
     // update helpful text
     updateHelpText();
 }
 
+function updateScheduleValue(phantomValue)
+{
+    var elem = document.getElementById('scheduler-value');
+    elem.innerHTML = ''; //Make it blank for now. Normally this is scheduleValue, but we have the images for that;
+
+    var elems = document.getElementsByClassName('value-block');
+    elems[0].classList.remove('value-block0');
+    elems[0].classList.remove('value-block1');
+    elems[0].classList.remove('value-block3');
+    elems[0].classList.remove('value-block4');
+    elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block7');
+    elems[0].classList.remove('value-block8');
+    elems[0].classList.remove('value-block9');
+    elems[0].classList.add('value-block'.concat(scheduleValue + phantomValue));
+
+    if (phantomValue > 0) {
+        elems[0].style.opacity = 0.5;
+    }
+    else {
+        elems[0].style.opacity = 1;
+    }
+}
+
 function indicateNotOptimal() {
     let elem = document.getElementById('instruction');
     elem.innerHTML = doBetterText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
+    elem.style.boxShadow = '';
 }
 
 function indicateOptimal() {
@@ -454,23 +543,7 @@ function indicateOptimal() {
     elem.innerHTML = optimalScheduleText;
 
     elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
-}
-
-function indicateNotOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = doBetterText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'yellow';
-}
-
-function indicateOptimal() {
-    let elem = document.getElementById('instruction');
-    elem.innerHTML = optimalScheduleText;
-
-    elem = document.getElementById('value-box');
-    elem.style.backgroundColor = 'lightgreen';
+    elem.style.boxShadow = '5px 5px #00B54F';
 }
 
 // This is a bit lazy, but it gets the point across.
@@ -547,15 +620,13 @@ function onDragEnterAction(event) {
 function onDragMove() {
 }
 
-var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
-
 function onDropDeactivate() {
     if (tableEnabled == true) {
         showX();
         setHelpfulText(doesntFitText);
-        addCellEvents(1,1);
+        addSpecialCellEvents(highlightCellRow,highlightCellCol);
         //highlightTargetTime('1h.png');
-        highlightCellBorderAt(1, 1);
+        highlightCellBorderAt(highlightCellRow, highlightCellCol);
     }
 }
 
@@ -576,12 +647,12 @@ interact('.draggable')
             selectedActivity = getselectedActivityFromName(event.target.id);
 
             // record center point when starting a drag
-            startPos.x = rect.left + rect.width  / 2;
-            startPos.y = rect.top  + rect.height / 2;
+            startPos[selectedActivity.index].x = rect.left + rect.width  / 2;
+            startPos[selectedActivity.index].y = rect.top  + rect.height / 2;
 
             // snap to the start position
-            event.interactable.snap({ anchors: [startPos] });
-            console.log('setting snap '.concat(startPos.x).concat('-').concat(startPos.y));
+            event.interactable.snap({ anchors: [startPos[selectedActivity.index]] });
+            console.log('setting snap '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             console.log('on undropped dragstart '.concat(selectedActivity.name));
         }
         else {
@@ -709,9 +780,9 @@ interact('.dropzone').dropzone({
                 console.log('on drag leave valid from notdropped '.concat(draggableElement.id));
             }
 
-            console.log('setting return snap position '.concat(startPos.x).concat('-').concat(startPos.y));
+            console.log('setting return snap position '.concat(startPos[selectedActivity.index].x).concat('-').concat(startPos[selectedActivity.index].y));
             event.draggable.snap({
-                anchors: [ startPos ]
+                anchors: [ startPos[selectedActivity.index] ]
             });
         }
         else {

@@ -3,8 +3,8 @@
 <head>
 
     <!-- Place this data between the <head> tags of your website -->
-    <title>Dynamic Programming with Systematic Scheduling -- An Interactive Explanation</title>
-    <meta name="description" content="Dynamic Programming with Systematic Scheduling -- An Interactive Explanation"/>
+    <title>Having Fun with Dynamic Programming</title>
+    <meta name="description" content="Having Fun with Dynamic Programming"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
           integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
@@ -19,8 +19,10 @@
 
     <link rel="icon" type="image/png" href="favicon.png">
 
+
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Patua+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet" type="text/css">
     <link href="css/main.css" rel="stylesheet" type="text/css">
 
@@ -33,6 +35,7 @@
 <body onload="main()">
 
 <!-- SPLASH -->
+
 <div id="intro_container">
     <div id="intro">
         <iframe src="intro/intro.html" id="intro_background" scrolling="no"></iframe>
@@ -42,25 +45,14 @@
 <!-- CHAPTER -->
 <div class="container chapter">
 
-    <p>Dynamic Programming is a concept in computer science, mathematics,
-        management science and bioinformatics, involving a method for solving a
-        complex problem by breaking it down into a collection of simpler
-        subproblems, solving each once, then saving and reusing each solution
-        to solve a larger problem.</p>
+    <br><br>
 
-    <div class="instruction">
-        How does this work?
-    </div>
+    <p>We all want to have fun! This is a very easy concept. </p>
 
-    <p>
-        Let's walk through an example of this using something we all do on a daily basis: scheduling our free time.
-        To do this, let's first talk about what activities you can do.
-    </p>
+    <br><br>
 
-    <br>
-    <p>
-        For example, you can go on a hike:
-    </p>
+    <p>Having fun often involves the amount of fun that you get from an activity: </p>
+
     <div class="row">
         <div class="col-12">
             <img src="figures/hike_activity.png" alt="Hike Activity" display: block; margin: auto; width: 40%;>
@@ -68,97 +60,63 @@
     </div>
 
     <br><br>
-    <p>
-        Notice activities have two main characteristics: their <span class="time">duration</span> and how
-        much <span class="enjoyment">enjoyment</span> they give you.
-    </p>
+
+    <p>And the time you have for activities: </p>
 
     <div class="row">
-        <div class="col-6">
-            <div class="col-12">
-                <img src="figures/date_activity_timeline.png" alt="Date Activity" display: block; margin: auto; width: 40%;>
-            </div>
-            <div class="col-12">
-                <span class="commentary-text">This date has a duration of 3 hours.</span>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="col-12">
-                <img src="figures/date_activity.png" alt="Date Activity" display: block; margin: auto; width: 40%;>
-            </div>
-            <div class="col-12">
-                <span class="commentary-text">
-                The value in the heart represents how much you enjoy each activity.
-                The higher the enjoyment value, the better.
-                    </span>
-            </div>
+        <div class="col-12">
+            <img src="figures/hike_activity.png" alt="Hike Activity" display: block; margin: auto; width: 40%;>
         </div>
     </div>
 
-    <br>
-    <div class="row col-12">
-        This is a schedule.
-    </div>
-    <div class="row col-12">
-        <img src="figures/schedule_6hours_example.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
-    </div>
     <br><br>
-    <div class="row col-12">
-        A schedule is a given amount of time:
-        It can contain activities, like this:
+
+    <p>Activities have a fun value     (insert purple heart)       and they also take up time: </p>
+
+      <div class="row">
+        <div class="col-12">
+            <img src="figures/hike_activity.png" alt="Hike Activity" display: block; margin: auto; width: 40%;>
+        </div>
     </div>
-    <div class="row col-12">
-        <img src="figures/schedule_6hours_filled_example.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
-    </div>
+
     <br><br>
-    <div class="row col-12">
-        This box shows the total enjoyment value of a schedule. Here the value is 8 because, in the schedule above, 1 + 7 = 8.
-    </div>
-    <div class="row col-12">
-        <img src="figures/ValueBox.png" alt="ScheduleExample" display: block; margin: auto; width: 40%;>
-    </div>
 
-    <br>
-    <br>
-    <div class="instruction">
-        Find the most enjoyment in a schedule.
+    <p>Scheuduling fun can look like this: </p>
+
+
+    <div class="row">
+        <div class="col-12">
+            <img src="figures/hike_activity.png" alt="Hike Activity" display: block; margin: auto; width: 40%;>
+        </div>
     </div>
 
-    <p>
-        Consider four daily activities that you would like to do at most once, but each one takes a
-        specific amount of <span class="time">time:</span>
-    <p>
+    <br><br>
 
-        <img src="figures/intro-hours-visual.png" alt="Hours Visual" display: block; margin: auto; width: 40%;>
 
-    <p>
-        Naturally, you get different amounts of pleasure from different things.
-        Now, imagine if you gave each activity an "<span class="enjoyment">enjoyment value</span>" where
-        the number of points indicate a value of how much enjoyment you get from something (higher number = more enjoyment). Let's
-        call this each item's "<span class="enjoyment">e.v.</span>" and make up some values for each activity:
-    </p>
-
-    <img src="figures/intro-enjoyment-visual.png" alt="Enjoyment Visual" display: block; margin: auto; width: 40%;>
-
-    <p>
-    If you were given a block time and a set of possible activities, how would you
-    schedule your activities to maximize your enjoyment score?
-    </p>
+    <p>But your time is limited! You often need to make decisions as to what activities you can fit in your schedule so you can have the most fun. Play around and try to maximize the amount of fun you have with a given amount of time: </p>
 
     <!-- One Hour -->
     <iframe src="interactions/scheduling/schedule.html" style="height:600px" scrolling="no" embedded></iframe>
 
     <p>
-        What if you were given 100 activities and much more time? That's a much bigger problem!
+        If you do not see a green check mark in the top right corner, go back and schedule the date with the hike to solve the problem and get the maximum value of 9.  
     </p>
     <p>
-        Dynamic programming helps us break this big problem down into smaller subproblems to make it easier to solve.
-        The first step is to start with the smallest subproblem, which is a schedule of one hour and the shortest activity.
-        Let's do it!
+        Now imagine if you were given 100 activities and many more hours to schedule.  This is a much bigger problem and much harder to solve with all the activities at once.
+    </p>
+     <p>
+        But instead of trying to consider all the activities at once, you could break the larger problem into much smaller subproblems.  Let's start with the smallest subproblem which is just one activity in one hour.  Try it here:
     </p>
 
     <!-- One Hour -->
     <iframe id="01-1" src="interactions/grid/01-1-hour.html" scrolling="no" embedded></iframe>
+
+    <p>
+        Super Simple. That was much easier to do.  Even though this seems incredibly basic, its important to start from the smallest subproblem and work your way up, by incrementally increasing either time or adding another activity.  
+    </p>
+    <p>
+        For this interaction, we will increase time first, so try maximizing our total value with the same activity, but with two hours of time:
+    </p>
 
     <!-- Two Hour -->
     <iframe id="01-2" src="interactions/grid/01-2-hour.html" scrolling="no" embedded></iframe>
@@ -171,7 +129,7 @@
     <!-- Seven Hour -->
     <iframe id="01-7" src="interactions/grid/01-7-hour.html" scrolling="no" embedded></iframe>
 
-    <p><em>Here is where we will explain the concept of a table</em></p>
+    <p><em>Jeff's trying to explain Concept of a table</em></p>
 
         <!--<table id="grid-01">-->
             <!--<tr>-->
@@ -220,12 +178,18 @@
     <p>Watch how we fill in the table below!</p>
 
     <!-- Fill in table up to beach -->
-    <iframe src="interactions/fill_table/beach.html" style="height:600px" scrolling="no" embedded></iframe>
+    <iframe src="interactions/add_beach/3-table.html" style="height:600px;" scrolling="no" embedded></iframe>
+
+    <!-- Show table with 3 rows so far, explore! -->
 
     <p>Suppose we have seven hours free. Should we go to the beach?</p>
 
     <!-- Add beach, 7 Hour -->
     <iframe src="interactions/add_beach/7-hour.html" style="height:700px" scrolling="no" embedded></iframe>
+
+    <p>Now we have a full set of optimal values!</p>
+
+    <iframe src="interactions/add_beach/full-table.html" style="height:660px;" scrolling="no" embedded></iframe>
 
     <p>We've filled out our table! However, in order to complete the dynamic programming lesson
     we need to talk about base cases...</p>
@@ -235,8 +199,8 @@
 
     <p>Awesome, we now have our full dynamic programming table. Check it out below.</p>
 
-    <!-- Fill full table -->
-    <iframe src="interactions/fill_table/full.html" style="height:600px" scrolling="no" embedded></iframe>
+    <!-- Show full table, four rows -->
+    <iframe src="interactions/add_beach/zero-table.html" style="height:660px" scrolling="no" embedded></iframe>-->
 </div>
 
 
