@@ -18,7 +18,7 @@ var instructionText = "Drag the activity to your timeline to get the most value.
 var initialHelpfulText = "Can we go on a date.";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "It fits!";
-var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
+var doesntFitText = "That's right; it doesn't fit. Using the table, click on what we <em>can</em> do in an hour.";
 var mouseLeaveText = "It fits! You still have time left. Click on what we can do in 2 hours.";
 var fillInValue = 4;
 
@@ -280,7 +280,7 @@ function onCellMouseLeaveNew(event) {
     if (event.target.classList.contains('specialEvent')) {
         hidePhantomActivity('date');
         hidePhantomActivity('hike');
-        setHelpfulText("Cool! Then we still have lots of time left. Click on what we can do in 7 hours.");
+        setHelpfulText("Cool! Then we still have lots of time left. Using the table. click on what we can do in 7 hours.");
         hidePhantomValue();
         hidePhantomHoursLeft();
         event.target.classList.remove('target-time-highlight');
@@ -439,7 +439,7 @@ function onCellClick(event) {
         event.target.removeEventListener('mouseleave', onCellMouseLeave);
         event.target.removeEventListener('click', onCellClick);
 
-        setHelpfulText("Is this the best we can do though? What if we don't go to the beach?");
+        setHelpfulText("Is this the best we can do though? What if we don't go to the beach? Remove it from the timeline.");
 
         document.getElementById('beach').classList.add('draggable');
         alreadyDropped = true;
@@ -701,7 +701,7 @@ function onDropDeactivateBeach() {
     let elem = document.getElementById('grid').rows[3].cells[2];
     elem.classList.remove('target-time-highlight');
     elem.classList.remove('highlight-border');
-    setHelpfulText("Cool! Then we still have so much time left. Click on what we can do in 7 hours.");
+    setHelpfulText("Cool! Then we still have so much time left. Using the table, click on what we can do in 7 hours.");
     addSpecialCellEvents(3, 7, true);
     highlightCellBorderAt(3, 7);
 

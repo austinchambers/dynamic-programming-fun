@@ -18,7 +18,7 @@ var instructionText = "Drag the activity to your timeline to get the most value.
 var initialHelpfulText = "Can we go on a date?";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "Awesome! The gym maximized your value when there is only one hour.";
-var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
+var doesntFitText = "That's right; it doesn't fit. Using the table, click on what we <em>can</em> do in an hour.";
 
 // Other stuff
 var selectedPhantomActivity;
