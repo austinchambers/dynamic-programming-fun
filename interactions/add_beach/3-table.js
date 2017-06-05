@@ -17,7 +17,7 @@ var highlightCellCol = 3;             // Row and column of cell to highlighjt
 var alreadyDropped = false;
 
 var instructionText = "Hover over the values in the table to recall how they were computed.";
-var initialHelpfulText = "Can we go on a date.";
+var initialHelpfulText = "Can we go on a date?";
 var doBetterText = "That's progress, but you could do better.";
 var optimalScheduleText = "It fits!";
 var doesntFitText = "That's right, it doesn't fit. Click on what we <em>can</em> do in an hour.";
@@ -386,7 +386,7 @@ function onCellMouseOver(event) {
         }
     }
     else if (cellValue == 6) {
-        setHelpfulText('Hike and date is best here.');
+        setHelpfulText('Hike and date are best here.');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -406,7 +406,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 8) {
-        setHelpfulText('Gym and beach is best here');
+        setHelpfulText('Gym and beach are best here');
         // Show phantom gym
         selectedPhantomActivity = activityArr[0];
         phantomValueSum += selectedPhantomActivity.value;
@@ -418,7 +418,7 @@ function onCellMouseOver(event) {
         phantomDurationSum += selectedPhantomActivity.duration;
     }
     else if (cellValue == 9) {
-        setHelpfulText('Date and hike is best here.');
+        setHelpfulText('Date and hike are best here.');
         // Show phantom date
         selectedPhantomActivity = activityArr[1];
         phantomValueSum += selectedPhantomActivity.value;

@@ -110,23 +110,23 @@
     <iframe src="interactions/scheduling/schedule.html" style="height:600px" scrolling="no" embedded></iframe>
 
     <p>
-        To solve the problem, schedule the date with the hike to get the maximum value of 9.  
+        To solve this, schedule the date with the hike to get the maximum value of 9.  
     </p>
     <p>
-        Now imagine if you were given 100 activities and many more hours to schedule.  This is a bigger problem and much harder to solve with all the activities at once.
+        Now imagine if you were given 100 activities and many more hours to schedule.  This is a much bigger and harder problem to solve with all the activities at once.
     </p>
      <p>
-        But instead of trying to consider all the activities at once, you could divide the larger problem into much smaller subproblems.  Let's start with the smallest subproblem which is just one activity in one hour.  Try it here:
+        But instead of trying to consider all the activities at once, we can divide the larger problem into much smaller subproblems.  Let's start with the smallest subproblem which is just one activity in 1 hour.  Try it here:
     </p>
 
     <!-- One Hour -->
     <iframe id="01-1" src="interactions/grid/01-1-hour.html" scrolling="no" embedded></iframe>
 
     <p>
-        Super Simple. Even though this seems incredibly easy to do, its important to start from the smallest subproblem and work your way up, by increasing either time or adding another activity.  
+        Super Simple. Even though this seems incredibly easy to do, its important to start from the smallest subproblem. We can work our way up, by increasing either time or adding another activity. 
     </p>
     <p>
-        We will increase time first, so try maximizing our total value with the same activity, but with two hours of time:
+        Let's increase time first, so try maximizing our total value with the same activity, but with 2 hours of time:
     </p>
 
     <!-- Two Hour -->
@@ -134,7 +134,7 @@
 
     <!--Three to Six Hour-->
     <p id="01-3">
-        Since we are increasing time first, we need to solve each subproblem for every hour before adding another activity.  You should notice that no matter what amount of time you have (3 hours, 4 hours, and so on), you will only get a max value of the one activity you are considering.  </p>
+        We need to solve each subproblem for every hour before adding another activity.  You should notice that no matter what amount of time you have (3 hours, 4 hours, and so on), you will only get a max value of the one activity you are considering (in this case 1).   </p>
         <p> Try this for 7 hours, the longest block of time we are scheduling:
     </p>
 
@@ -160,7 +160,7 @@
     </p>
 
     <p>
-        No matter how many hours you have, with only the gym, you get a max value of 1. We will save these values in a table so that we can reuse them later.
+        No matter how many hours you have, considering only the gym, you get a max value of 1. We will save these values in a table so that we can reuse them later.
     </p>
     <p>
         Now that we have considered one activity, let's add our second activity: going on a date.  We will start again with one hour.  Considering both the gym and a date, what can you do in one hour?
@@ -169,8 +169,8 @@
     <!-- Add date, 1 Hour -->
     <iframe src="interactions/add_date/1-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p>If you drag the "date" into the timeline, you will see that it does not fit. Instead, you can only select the gym. 
-    You previously already solved this problem, so you can just click on that value in your table to resue your previous solution.</p>
+    <p>Dragging the "date" into the timeline will not fit. Instead, you can only select the gym. 
+    You previously already solved this problem, so you can just click on that value in your table to reuse your previous solution.</p>
 
     <p> Let's try this again for two hours: </p>
 
@@ -184,14 +184,14 @@
     <!-- Add date, 3 Hour -->
     <iframe src="interactions/add_date/3-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p>You can now schedule a date and get a max value of 4. You do not have any remaining time to fit in the gym. </p>
+    <p>You can now schedule a date and get a max value of 4.  </p>
 
     <p> Let's try this again, but with 4 hours: </p>
 
     <!-- Add date, 4 Hour -->
     <iframe src="interactions/add_date/4-hour.html" style="height:600px" scrolling="no" embedded></iframe>
 
-    <p>When you schedule the date, you have one hour left. To get the maximum value for the time remaining, you go to the corresponding time left in the row above, since you previously already solved the maximum value for that amount of time! </p>
+    <p>After scheduling the date, there is one hour left. To get the maximum value for the time remaining, you reuse your previous solution from the corresponding time left in the row above. </p>
 
     <p> To visualize this better, play around with the following table that we continuned for you.  Notice how the optimal values for the remaining time are taken from the previous row. 
 
@@ -200,25 +200,42 @@
 
     <!-- Show table with 3 rows so far, explore! -->
 
-    <p>Suppose we have seven hours free. Should we go to the beach?</p>
+    <p> In the table above, hover over the bottom-right square on the value of 9. This value is created by first considering the hike (value 5), which takes 4 hours. You have 7 hours total, so the max value for the remaining time of 3 hours is calculated by reusing your solution from the row above (value 4). These two values (5 and 4) are added to get your current max value of 9. </p>
+
+    <p>Finally, let's consider the beach, our last activity.  Suppose we have seven hours free. Should we go to the beach?</p>
 
     <!-- Add beach, 7 Hour -->
     <iframe src="interactions/add_beach/7-hour.html" style="height:700px" scrolling="no" embedded></iframe>
 
-    <p>Now we have a full set of optimal values!</p>
+    <p>When we have 7 hours and all of our activities, going to the beach and the gym does not maximize our fun. Taking the beach out of our schedule allows us to scheudule the date and the hike, for a max value of 9 instead of 8. In this case, taking our previously solved solution for the entire 7 hours from the row above is our optimal solution.</p>
+
+    <p> Sadly, to maximize our fun, we don't go to the beach! <p/>
+
+    <p> Check out our table with all four activities: <p/>
 
     <iframe src="interactions/add_beach/full-table.html" style="height:660px;" scrolling="no" embedded></iframe>
 
-    <p>We've filled out our table! However, in order to complete the dynamic programming lesson
-    we need to talk about base cases...</p>
+    <p> Notice above how our optimal solution in the bottom right square of our table uses the previously solved value from the row above it. </p>
+
+    <p>Even though it seems that we've filled out our table, there is one more thing to complete the dynamic programming lesson...  Try this:</p>
 
     <!-- 0 Hour -->
     <iframe src="interactions/grid/01-0-hour.html" scrolling="no" embedded></iframe>
 
-    <p>Awesome, we now have our full dynamic programming table. Check it out below.</p>
+    <p> Completely obvious. With 0 time, you get 0 value. </p>
+
+    <p> This is actually a base case, something that can be solved without relying on a previously solved subproblem.  We can now complete our table by adding a column of zeros on the left. Check it out below:</p>
 
     <!-- Show full table, four rows -->
     <iframe src="interactions/add_beach/zero-table.html" style="height:660px" scrolling="no" embedded></iframe>
+
+      <p> As you hover over the table, notice that all the base cases are in the top row and left column. You do not need any other solutions to solve these.  However, all the other squares require other values other than themselves for their solutions, but only from their own row or the previous row of saved values. </p>
+
+      <p>We could continue adding time and activities, and using a Dynamic Programming approach, we would reach our optimal solution every time, even if we had hundreds of activities and many more hours.</p>
+
+      <p>These core concepts in Dynamic Programming are used in countless applications in computer science, mathematics, management science and bioinformatics.  They simply involve a method for solving a complex problem by breaking it down into a collection of simpler subproblems, solving each once, then saving and reusing each solution to solve a larger problem. </p>
+
+        <p>But more importantly, we want you to see how Dynamic Programming can be useful and easy to do, especially when it comes to maximizing your fun! </p>
 </div>
 
 
