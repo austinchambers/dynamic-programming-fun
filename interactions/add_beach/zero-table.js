@@ -335,11 +335,19 @@ function onCellMouseOver(event) {
         }
     }
 
-
+    // Highlight first reference
     if (lookRef1 != null) {
         console.log('Id: ' + lookRef1.id);
         var row_digit = parseInt((''+lookRef1)[0]);
         var col_digit = parseInt((''+lookRef1)[1]);
+        console.log('Highlighting: ' + row_digit + '-' + col_digit);
+        hintHighlightCellAt(row_digit, col_digit, false);
+    }
+    // Highlight second reference, if any.
+    if (lookRef2 != null) {
+        console.log('Id: ' + lookRef2.id);
+        var row_digit = parseInt((''+lookRef2)[0]);
+        var col_digit = parseInt((''+lookRef2)[1]);
         console.log('Highlighting: ' + row_digit + '-' + col_digit);
         hintHighlightCellAt(row_digit, col_digit, false);
     }
