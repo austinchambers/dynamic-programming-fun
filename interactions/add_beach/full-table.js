@@ -552,6 +552,7 @@ function updateScheduleValue(phantomValue) {
     elems[0].classList.remove('value-block3');
     elems[0].classList.remove('value-block4');
     elems[0].classList.remove('value-block5');
+    elems[0].classList.remove('value-block6');
     elems[0].classList.remove('value-block7');
     elems[0].classList.remove('value-block8');
     elems[0].classList.remove('value-block9');
