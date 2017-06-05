@@ -462,7 +462,7 @@ function displaySchedule() {
     // Update the scheduler width and height.
     var elem = document.getElementById('scheduler');
     elem.style.height = BLOCK_HEIGHT + 20 + 'px';
-    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 13 + 'px';
+    elem.style.width = BLOCK_WIDTH * schedulerMaxHours + 'px';
 
     // Update hours left if the corresponding ID element exists.
     elem = document.getElementById('hours-left');
