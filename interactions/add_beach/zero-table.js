@@ -33,6 +33,43 @@ var scheduleValue = 0;          // Tracks the current value accumulated in sched
 const BLOCK_WIDTH = 60;       // Tracks the current width used by the 'block' CSS. Things will probably break if you change this.
 const BLOCK_HEIGHT = 60;      // Tracks the current height used by the 'block' CSS. Things will probably break if you change this.
 var startPos = [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}];
+var lookUp = [                // Tracks which cells are built from other cells. If ref1 and ref2 both aren't null, then two cells are highlighted.
+    {   'id': 10,
+        'ref1': null,
+        'ref2': null
+    },
+    {'id': 11, 'ref1': null, 'ref2': null},
+    {'id': 12, 'ref1': 11, 'ref2': null},
+    {'id': 13, 'ref1': 12, 'ref2': null},
+    {'id': 14, 'ref1': 13, 'ref2': null},
+    {'id': 15, 'ref1': 14, 'ref2': null},
+    {'id': 16, 'ref1': 15, 'ref2': null},
+    {'id': 17, 'ref1': 16, 'ref2': null},
+    {'id': 20, 'ref1': 10, 'ref2': null},
+    {'id': 21, 'ref1': '11', 'ref2': null},
+    {'id': 22, 'ref1': 12, 'ref2': null},
+    {'id': 23, 'ref1': null, 'ref2': null},
+    {'id': 24, 'ref1': 23, 'ref2': 14},
+    {'id': 25, 'ref1': 23, 'ref2': 14},
+    {'id': 26, 'ref1': null, 'ref2': null},
+    {'id': 27, 'ref1': null, 'ref2': null},
+    {'id': 30, 'ref1': null, 'ref2': null},
+    {'id': 31, 'ref1': null, 'ref2': null},
+    {'id': 32, 'ref1': null, 'ref2': null},
+    {'id': 33, 'ref1': null, 'ref2': null},
+    {'id': 34, 'ref1': null, 'ref2': null},
+    {'id': 35, 'ref1': null, 'ref2': null},
+    {'id': 36, 'ref1': null, 'ref2': null},
+    {'id': 37, 'ref1': null, 'ref2': null},
+    {'id': 40, 'ref1': null, 'ref2': null},
+    {'id': 41, 'ref1': null, 'ref2': null},
+    {'id': 42, 'ref1': null, 'ref2': null},
+    {'id': 43, 'ref1': null, 'ref2': null},
+    {'id': 44, 'ref1': null, 'ref2': null},
+    {'id': 45, 'ref1': null, 'ref2': null},
+    {'id': 46, 'ref1': null, 'ref2': null},
+    {'id': 47, 'ref1': null, 'ref2': null},
+    ];
 var activityArr = [ // ORDER MATTERS
     {
         'name': 'gym',
@@ -73,6 +110,21 @@ function main() {
     if (tableEnabled == true) {
         initTable();
         displayTableUpTo(displayTableUpToRows, displayTableUpToCols, true);
+    }
+
+    for (var i = 0; i < lookUp.length; i++) {
+        console.log('Id: ' + lookUp[i].id);
+        var lookRef1 = lookUp[i].ref1;
+        var lookRef2 = lookUp[i].ref2;
+        if (lookRef1 != null) {
+            console.log('LookRef1: ' + lookRef1.id);
+        }
+        else {
+            console.log('LookRef1: null');
+        }
+        if (lookRef2 != null) {
+            console.log('LookRef2: ' + lookRef2.id);
+        }
     }
 
     setHelpfulText(instructionText);
@@ -138,11 +190,14 @@ function displayTableUpTo(maxRows, maxCols, addEventsToCells) {
             if (addEventsToCells == true) {
                 addCellEvents(i, j);
                 cell.classList.add('Row'.concat(i+1));
+                var cellId = (i+1) * 10;
                 if (showZeroTable == true) {
                     cell.classList.add('Col'.concat(j));
+                    cell.id = cellId + j;
                 }
                 else {
                     cell.classList.add('Col'.concat(j+1));
+                    cell.id = cellId + j+1;
                 }
             }
         }
@@ -199,6 +254,18 @@ function unhighlightCellAt(r, c) {
     cell.classList.remove('highlight');
 }
 
+function hintHighlightCellAt(r, c, removeHighlight) {
+    var grid = document.getElementById('grid');
+    var cell = grid.rows[r].cells[c];
+    if (removeHighlight == true) {
+        cell.classList.remove('value-block-reference');
+    }
+    else {
+        cell.classList.add('value-block-reference');
+    }
+}
+
+
 function addCellEvents(r, c) {
     let elem = document.getElementById('grid');
     let cell = elem.rows[r+1].cells[c+1];
@@ -226,10 +293,52 @@ function onCellMouseLeave(event) {
     event.target.style.display = 'table-cell';
 }
 
+function getCellId(target) {
+    var row = 0;
+    var col = 0;
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Row'.concat(i))) {
+            row = i;
+            break;
+        }
+    }
+
+    for (var i = 0; i <= 7; i++) {
+        if (target.classList.contains('Col'.concat(i))) {
+            col = i;
+            break;
+        }
+    }
+
+    return row * 10 + col;
+}
+
+
 function onCellMouseOver(event) {
     console.log('mouse over', event.target);
     var cellValue = event.target.innerHTML;
     event.target.classList.add('value-block'.concat(cellValue));
+
+    var cellId = getCellId(event.target);
+    console.log(cellId);
+    for (var i = 0; i < lookUp.length; i++) {
+        if (lookUp[i].id == cellId) {
+            var lookRef1 = lookUp[i].ref1;
+            var lookRef2 = lookUp[i].ref2;
+            console.log('This ID: ' + lookUp[i].id);
+            if (lookRef1 != null) {
+                console.log('This ID: ' + lookRef1.id);
+            }
+            break;
+        }
+    }
+    if (lookRef1 != null) {
+        console.log('Id: ' + lookRef1.id);
+        var row_digit = parseInt((''+lookRef1.id)[0]);
+        var col_digit = parseInt((''+lookRef1.id)[1]);
+        console.log(row_digit + '-' + col_digit);
+        //hintHighlightCellAt(row_digit, col_digit, false);
+    }
 
     for (var i = 0; i <= 7; i++) {
         if (event.target.classList.contains('Col'.concat(i))) {

@@ -138,6 +138,10 @@ td {
     text-align: center;
 }
 
+.value-block-reference {
+    background-color: #C9DAF8;
+}
+
 #scheduler-arrow {
     height:86px; /*height of your image*/
     width:20px;
