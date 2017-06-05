@@ -120,9 +120,11 @@ td {
     background-position: center center;
     color: rgba(0, 0, 0, 0.0);
 }
+
 #value-block-caption {
     text-align: center;
     margin-top: -24px;
+    color: rgba(0,0,0, 255) !important;
 }
 
 .value-block {
