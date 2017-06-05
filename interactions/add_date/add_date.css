@@ -51,6 +51,7 @@
     display: none;
     opacity:0.5;
     margin-left: -3px;
+    margin-top: 5px;
 }
 
 .target-time-highlight {
