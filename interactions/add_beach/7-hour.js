@@ -694,6 +694,10 @@ function onDropDeactivateBeach() {
     setHelpfulText("Cool! Then we still have so much time left. Click on what we can do in 7 hours.");
     addSpecialCellEvents(3, 7, true);
     highlightCellBorderAt(3, 7);
+
+    // Use opacity not display to prevent a big shift.
+    var elem2 = document.getElementById('beach');
+    elem2.style.opacity = 0.0;
 }
 
 interact('.draggable').snap({
